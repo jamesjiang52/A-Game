@@ -1,3 +1,3 @@
 # A-Game
 
-This is a game.
+This is a text-adventure game, made in collaboration with [Eric](https://github.com/ewen101).

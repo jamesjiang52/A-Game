@@ -5,16 +5,14 @@ Direction::Direction(std::string name, Location *destination) {
     this->destination = destination;
 }
 
+bool Direction::operator==(const Direction &direction) {
+    return(name == direction.getName());
+}
+
 std::string Direction::getName() const {
     return name;
 }
 
 Location *Direction::getDestination() const {
     return destination;
-}
-
-bool Direction::operator==(const Direction &direction) {
-    bool namesEqual = (name == direction.getName());
-    bool destinationsEqual = (destination == direction.getDestination());
-    return(namesEqual && destinationsEqual);
 }

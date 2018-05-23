@@ -8,7 +8,7 @@
 class Player;
 
 class GenericEnemy {
-    private:
+    protected:
         const int MAX_ARMOR = 100;  // armor is capped at this value
         const double MAX_ARMOR_DMG_REDUCTION = 0.8;  // between 0 and 1, higher is better
         int startingHealth;

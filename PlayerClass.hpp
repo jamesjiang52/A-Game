@@ -9,8 +9,8 @@ class GenericEnemy;
 
 class Player {
     private: 
-        const int MAX_ARMOR = 100; // armor is capped at this value
-        const double MAX_ARMOR_DMG_REDUCTION = 0.8; // between 0 and 1, higher is better
+        const int MAX_ARMOR = 100;  // armor is capped at this value
+        const double MAX_ARMOR_DMG_REDUCTION = 0.8;  // between 0 and 1, higher is better
         int startingHealth;
         int currentHealth;
         int armor;
@@ -26,6 +26,6 @@ class Player {
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);
-    };
+};
 
 #endif

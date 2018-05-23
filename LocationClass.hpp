@@ -14,7 +14,7 @@ class Location {
         
 	public:
         Location(std::string name, std::string description);
-		std::string getName() const;
+        std::string getName() const;
         std::string getDescription() const;
         std::vector<Direction>::iterator position(Direction direction);
         void addDirection(Direction direction);

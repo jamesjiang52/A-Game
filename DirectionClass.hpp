@@ -11,8 +11,8 @@ class Direction {
         Location *destination;
         
     public:
-		Direction(std::string name, Location *destination);
-		bool operator==(const Direction &direction);
+        Direction(std::string name, Location *destination);
+        bool operator==(const Direction &direction);
         std::string getName() const;
         Location *getDestination() const;
 };

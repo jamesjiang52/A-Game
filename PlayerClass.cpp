@@ -46,7 +46,7 @@ void Player::setLocation(Location *location) {
 
 std::vector<InteractableObject*> Player::getInventory() const {
     return inventory;
-)
+}
 
 std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableObject *object) {
     /* 
@@ -54,7 +54,7 @@ std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableOb
     if object is in the vector. Otherwise, returns the size of the inventory.
     */
     return std::find(inventory.begin(), inventory.end(), object);
-)
+}
 
 void Player::addToInventory(InteractableObject *object) {
     /*
@@ -64,12 +64,12 @@ void Player::addToInventory(InteractableObject *object) {
         inventory.push_back(object);
 }
 
-void Location::removeFromInventory(InteractableObject *object) {
+void Player::removeFromInventory(InteractableObject *object) {
     /*
     Removes object from inventory if it is in it
     Otherwise, does nothing
     */
     std::vector<InteractableObject*>::iterator position = objectPosition(object);
-    if (position != interactableObjects.end())
-        interactableObjects.erase(position);
+    if (position != inventory.end())
+        inventory.erase(position);
 }

@@ -9,10 +9,10 @@ bool InteractableObject::operator==(const InteractableObject &object) {
     return(name == object.getName());
 }
 
-std::string InteractableObject::getName() {
+std::string InteractableObject::getName() const {
     return name;
-)
+}
 
-std::String InteractableObject::getUseMessage() {
+std::string InteractableObject::getUseMessage() const {
     return useMessage;
-)
+}

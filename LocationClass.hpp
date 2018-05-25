@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "DirectionClass.hpp"
-#include "InteractableObject.hpp"
+#include "InteractableObjectClass.hpp"
 
 class Location {
     private:

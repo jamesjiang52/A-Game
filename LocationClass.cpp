@@ -17,7 +17,7 @@ std::vector<Direction> Location::getDirections() const {
     return allowedDirections;
 }
 
-std::vector<InteractableObject*> Locations::getObjects() const {
+std::vector<InteractableObject*> Location::getObjects() const {
     return interactableObjects;
 }
 
@@ -53,7 +53,7 @@ std::vector<InteractableObject*>::iterator Location::objectPosition(Interactable
     if object is in the vector. Otherwise, returns the size of interactableObjects.
     */
     return std::find(interactableObjects.begin(), interactableObjects.end(), object);
-)
+}
 
 void Location::addInteractableObject(InteractableObject *object) {
     /*

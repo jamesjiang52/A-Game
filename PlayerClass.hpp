@@ -5,7 +5,7 @@
 #include <vector>
 #include "GenericEnemyClass.hpp"
 #include "LocationClass.hpp"
-#include "InteractableObject.hpp"
+#include "InteractableObjectClass.hpp"
 
 class GenericEnemy;
 
@@ -29,7 +29,7 @@ class Player {
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);
-		std::vector<InteractableObject*> getInventory(InteractableObject *object) const;
+		std::vector<InteractableObject*> getInventory() const;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
 		void addToInventory(InteractableObject *object);
 		void removeFromInventory(InteractableObject *object);

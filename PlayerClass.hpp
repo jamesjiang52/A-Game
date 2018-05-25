@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <string>
+#include <vector>
 #include "GenericEnemyClass.hpp"
 #include "LocationClass.hpp"
 
@@ -18,6 +19,7 @@ class Player {
         int speed;
         Location *location;
         std::string name;
+		std::vector<Item*> invontory;
 
     public:
         Player(std::string name, int startingHealth, int armor, int attackDamage, Location *startingLocation);
@@ -26,6 +28,9 @@ class Player {
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);
+		std::vector<Item*>::iterator getInvontory(Item object) const;
+		void addToInvontory(Item object);
+		void removeFromInvontory(Item object);
 };
 
 #endif

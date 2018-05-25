@@ -23,8 +23,8 @@ std::vector<InteractableObject*> Locations::getObjects() const {
 
 std::vector<Direction>::iterator Location::directionPosition(Direction direction) {
     /* 
-    Returns a vector iterator, whose value is in the interval [0, size(allowedDirections)) if direction
-    is in allowedDirections, and size(allowedDirections) if direction is NOT in allowedDirections
+    Returns a vector iterator, with value corresponding to the index of the allowedDirections vector
+    if direction is in the vector. Otherwise, returns the size of allowedDirections.
     */
     return std::find(allowedDirections.begin(), allowedDirections.end(), direction);
 }
@@ -47,28 +47,28 @@ void Location::removeDirection(Direction direction) {
         allowedDirections.erase(position);
 }
 
-std::vector<InteractableObject*>::iterator Location::objectPosition(InteractableObject object) {
+std::vector<InteractableObject*>::iterator Location::objectPosition(InteractableObject *object) {
     /* 
-    Returns a vector iterator, whose value is in the interval [0, size(interactableObjects)) if object
-    is in interactableObjects, and size(interactableObjects) if object is NOT in interactableObjects
+    Returns a vector iterator, with value corresponding to the index of the interactableObjects vector
+    if object is in the vector. Otherwise, returns the size of interactableObjects.
     */
-    return std::find(interactableObjects.begin(), interactableObjects.end(), &object);
+    return std::find(interactableObjects.begin(), interactableObjects.end(), object);
 )
 
-void Location::addInteractableObject(InteractableObject object) {
+void Location::addInteractableObject(InteractableObject *object) {
     /*
     Adds new object to interactableObjects if it is not already in it
     */
     if (objectPosition(object) == interactableObjects.end())
-        interactableObjects.push_back(&object);
+        interactableObjects.push_back(object);
 }
 
-void Location::removeInteractableObject(InteractableObject object) {
+void Location::removeInteractableObject(InteractableObject *object) {
     /*
     Removes object from interactableObjects if it is in it
     Otherwise, does nothing
     */
-    std::vector<InteractableObject>::iterator position = objectPosition(object);
+    std::vector<InteractableObject*>::iterator position = objectPosition(object);
     if (position != interactableObjects.end())
         interactableObjects.erase(position);
 }

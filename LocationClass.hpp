@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "DirectionClass.hpp"
+#include "InteractableObject.hpp"
 
 class Location {
     private:
@@ -22,9 +23,9 @@ class Location {
         std::vector<Direction>::iterator directionPosition(Direction direction);
         void addDirection(Direction direction);
         void removeDirection(Direction direction);
-		std::vector<InteractableObject*>::iterator objectPosition(InteractableObject object);
-        void addInteractableObject(InteractableObject object);
-        void removeInteractableObject(InteractableObject object);
+		std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        void addInteractableObject(InteractableObject *object);
+        void removeInteractableObject(InteractableObject *object);
 };
 
 #endif

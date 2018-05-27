@@ -13,7 +13,7 @@ std::string Location::getDescription() const {
     return description;
 }
 
-std::vector<Direction> Location::getDirections() const {
+std::vector<Direction*> Location::getDirections() const {
     return allowedDirections;
 }
 
@@ -21,7 +21,7 @@ std::vector<InteractableObject*> Location::getObjects() const {
     return interactableObjects;
 }
 
-std::vector<Direction>::iterator Location::directionPosition(Direction direction) {
+std::vector<Direction*>::iterator Location::directionPosition(Direction *direction) {
     /* 
     Returns a vector iterator, with value corresponding to the index of the allowedDirections vector
     if direction is in the vector. Otherwise, returns the size of allowedDirections.
@@ -29,7 +29,7 @@ std::vector<Direction>::iterator Location::directionPosition(Direction direction
     return std::find(allowedDirections.begin(), allowedDirections.end(), direction);
 }
 
-void Location::addDirection(Direction direction) {
+void Location::addDirection(Direction *direction) {
     /*
     Adds new direction to allowedDirections if it is not already in it
     */
@@ -37,12 +37,12 @@ void Location::addDirection(Direction direction) {
         allowedDirections.push_back(direction);
 }
 
-void Location::removeDirection(Direction direction) {
+void Location::removeDirection(Direction *direction) {
     /*
     Removes direction from allowedDirections if it is in it
     Otherwise, does nothing
     */
-    std::vector<Direction>::iterator position = directionPosition(direction);
+    std::vector<Direction*>::iterator position = directionPosition(direction);
     if (position != allowedDirections.end())
         allowedDirections.erase(position);
 }

@@ -1,15 +1,12 @@
 #include "PlayerClass.hpp"
 
-Player::Player(std::string name, int startingHealth, int armor, int attackDamage, Location *startingLocation) {
+Player::Player(std::string name, int startingHealth, Location *startingLocation) {
     this->name = name;
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
-    this->attackDamage = attackDamage;
 
-    if (armor < MAX_ARMOR)
-        this->armor = armor;
-    else
-        this->armor = MAX_ARMOR;
+    this->weapon = new Weapon(NULL, NULL, 0);  // name, useMessage, damage
+    this->armor = new Armor(NULL, NULL, 0);  // name, useMessage, armor
 
     this->location = startingLocation;
 }
@@ -19,7 +16,7 @@ int Player::getCurrentHealth() const {
 }
 
 void Player::loseHealth(int amount) {
-    double damageReductionFraction = armor/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
+    double damageReductionFraction = armor->getArmor()/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
     int loseHealthAmount = amount*(1 - damageReductionFraction);
@@ -33,7 +30,7 @@ void Player::loseHealth(int amount) {
 }
 
 void Player::attack(GenericEnemy *enemy) {
-    enemy->loseHealth(attackDamage);
+    enemy->loseHealth(weapon->getDamage());
 }
 
 Location *Player::getLocation() const {
@@ -72,4 +69,20 @@ void Player::removeFromInventory(InteractableObject *object) {
     std::vector<InteractableObject*>::iterator position = objectPosition(object);
     if (position != inventory.end())
         inventory.erase(position);
+}
+
+Weapon *Player::getWeapon() const {
+    return weapon;
+}
+
+void Player::setWeapon(Weapon *weapon) {
+    this->weapon = weapon;
+}
+
+Armor *Player::getArmor() const {
+    return armor;
+}
+
+void Player::setArmor(Armor *armor) {
+    this->armor = armor;
 }

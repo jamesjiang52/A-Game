@@ -4,6 +4,8 @@
 #include <string>
 #include "PlayerClass.hpp"
 #include "LocationClass.hpp"
+#include "WeaponClass.hpp"
+#include "ArmorClass.hpp"
 
 class Player;
 
@@ -13,18 +15,22 @@ class GenericEnemy {
         const double MAX_ARMOR_DMG_REDUCTION = 0.8;  // between 0 and 1, higher is better
         int startingHealth;
         int currentHealth;
-        int armor;
-        int attackDamage;
+        Weapon *weapon;
+        Armor *armor;
         Location *location;
         std::string name;
         
     public:
-        GenericEnemy(std::string name, int startingHealth, int armor, int attackDamage, Location *startingLocation);
+        GenericEnemy(std::string name, int startingHealth, Location *startingLocation);
         int getCurrentHealth() const;
         void loseHealth(int amount);
         void attack(Player *player);
         Location *getLocation() const;
         void setLocation(Location *location);
+        Weapon *getWeapon() const;
+        void setWeapon(Weapon *weapon);
+        Armor *getArmor() const;
+        void setArmor(Armor *armor);
 };
 
 #endif

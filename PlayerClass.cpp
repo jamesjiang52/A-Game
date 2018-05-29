@@ -5,10 +5,14 @@ Player::Player(std::string name, int startingHealth, Location *startingLocation)
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon(NULL, NULL, 0);  // name, useMessage, damage
-    this->armor = new Armor(NULL, NULL, 0);  // name, useMessage, armor
+    this->weapon = new Weapon("", "", 0);  // name, useMessage, damage
+    this->armor = new Armor("", "", 0);  // name, useMessage, armor
 
     this->location = startingLocation;
+}
+
+std::string Player::getName() const {
+    return name;
 }
 
 int Player::getCurrentHealth() const {

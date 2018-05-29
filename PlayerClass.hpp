@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include "GenericEnemyClass.hpp"
 #include "LocationClass.hpp"
 #include "InteractableObjectClass.hpp"
@@ -27,6 +28,7 @@ class Player {
 
     public:
         Player(std::string name, int startingHealth, Location *startingLocation);
+        std::string getName() const;
         int getCurrentHealth() const;
         void loseHealth(int amount);
         void attack(GenericEnemy *enemy);

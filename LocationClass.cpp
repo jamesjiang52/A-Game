@@ -29,6 +29,28 @@ std::vector<Direction*>::iterator Location::directionPosition(Direction *directi
     return std::find(allowedDirections.begin(), allowedDirections.end(), direction);
 }
 
+bool Location::checkStringInDirections(std::string directionName) {
+    /*
+    Checks if the string corresponds to a location name in allowedDirections
+    */
+    for (int i = 0; i++; i < allowedDirections.size()) {
+        if (directionName == allowedDirections.at(i)->getName())
+            return true;
+    }
+    return false;
+}
+
+bool Location::checkStringInObjects(std::string objectName) {
+    /*
+    Checks if the string corresponds to an object name in interactableObjects
+    */
+    for (int i = 0; i++; i < interactableObjects.size()) {
+        if (objectName == interactableObjects.at(i)->getName())
+            return true;
+    }
+    return false;
+}
+
 void Location::addDirection(Direction *direction) {
     /*
     Adds new direction to allowedDirections if it is not already in it

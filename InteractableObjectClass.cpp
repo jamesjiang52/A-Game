@@ -13,6 +13,10 @@ std::string InteractableObject::getName() const {
     return name;
 }
 
+std::string InteractableObject::getDescription() const {
+    return description;
+}
+
 std::string InteractableObject::getUseMessage() const {
     return useMessage;
 }

@@ -9,12 +9,14 @@
 class InteractableObject {
     protected:
         std::string name;
-        std::string useMessage;  // shown when the player uses the object e.g. "Sword equipped!", "Health potion used!"
+        std::string description;  // shown when player looks at the object
+        std::string useMessage;  // shown when player uses the object e.g. "Sword equipped!", "Health potion used!"
     
     public:
         InteractableObject(std::string name, std::string useMessage);
         bool operator==(const InteractableObject &object);
         std::string getName() const;
+        std::string getDescription() const;
         std::string getUseMessage() const;
 };
 

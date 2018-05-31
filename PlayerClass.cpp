@@ -45,6 +45,11 @@ void Player::setLocation(Location *location) {
     this->location = location;
 }
 
+void Player::printLocationInfo() const {
+    std::cout << location->getName() << "\n\n";
+    std::cout << location->getDescription() << "\n\n";
+}
+
 std::vector<InteractableObject*> Player::getInventory() const {
     return inventory;
 }
@@ -52,7 +57,7 @@ std::vector<InteractableObject*> Player::getInventory() const {
 std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableObject *object) {
     /* 
     Returns a vector iterator, with value corresponding to the index of the inventory vector
-    if object is in the vector. Otherwise, returns the size of the inventory.
+    if object is in the vector. Otherwise, returns the iterator with the sizes of the inventory.
     */
     return std::find(inventory.begin(), inventory.end(), object);
 }

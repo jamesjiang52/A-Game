@@ -1,10 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include "GenericEnemyClass.hpp"
 #include "LocationClass.hpp"
 #include "InteractableObjectClass.hpp"
@@ -34,6 +34,7 @@ class Player {
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);
+        void printLocationInfo() const;
         std::vector<InteractableObject*> getInventory() const;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         void addToInventory(InteractableObject *object);

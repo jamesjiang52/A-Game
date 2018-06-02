@@ -22,7 +22,9 @@ class Location {
         std::vector<InteractableObject*> getObjects() const;
         std::vector<Direction*>::iterator directionPosition(Direction *direction);
         bool checkStringInDirections(std::string directionName);
+        Direction *getDirectionFromString(std::string directionName);
         bool checkStringInObjects(std::string objectName);
+        InteractableObject *getObjectFromString(std::string objectName);
         void addDirection(Direction *direction);
         void removeDirection(Direction *direction);
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);

@@ -5,17 +5,19 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "GenericEnemyClass.hpp"
-#include "LocationClass.hpp"
 #include "InteractableObjectClass.hpp"
+#include "LocationClass.hpp"
 #include "WeaponClass.hpp"
 #include "ArmorClass.hpp"
+#include "GenericEnemyClass.hpp"
 
 class GenericEnemy;
+class Armor;
+class Weapon;
 
 class Player {
     private: 
-        const int MAX_ARMOR = 100;  // armor is capped at this value
+        const double MAX_ARMOR = 100;  // armor is capped at this value
         const double MAX_ARMOR_DMG_REDUCTION = 0.8;  // between 0 and 1, higher is better
         int startingHealth;
         int currentHealth;
@@ -29,6 +31,7 @@ class Player {
     public:
         Player(std::string name, int startingHealth, Location *startingLocation);
         std::string getName() const;
+        int getStartingHealth() const;
         int getCurrentHealth() const;
         void loseHealth(int amount);
         void attack(GenericEnemy *enemy);
@@ -36,7 +39,10 @@ class Player {
         void setLocation(Location *location);
         void printLocationInfo() const;
         std::vector<InteractableObject*> getInventory() const;
+        void printInventory() const;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        bool checkStringInInventory(std::string objectName);
+        InteractableObject *getObjectFromString(std::string objectName);
         void addToInventory(InteractableObject *object);
         void removeFromInventory(InteractableObject *object);
         Weapon *getWeapon() const;

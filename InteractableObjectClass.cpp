@@ -1,6 +1,6 @@
 #include "InteractableObjectClass.hpp"
 
-InteractableObject::InteractableObject(std::string name, std::string useMessage) {
+InteractableObject::InteractableObject(std::string name, std::string description) {
     this->name = name;
     this->useMessage = useMessage;
 }
@@ -17,6 +17,6 @@ std::string InteractableObject::getDescription() const {
     return description;
 }
 
-std::string InteractableObject::getUseMessage() const {
-    return useMessage;
+void InteractableObject::use(Player *player) {
+    ;
 }

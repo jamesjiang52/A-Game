@@ -5,14 +5,18 @@ Player::Player(std::string name, int startingHealth, Location *startingLocation)
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("", "", 0);  // name, useMessage, damage
-    this->armor = new Armor("", "", 0);  // name, useMessage, armor
+    this->weapon = new Weapon("", "", "", 0);  // name, useMessage, damage
+    this->armor = new Armor("", "", "", 0);  // name, useMessage, armor
 
     this->location = startingLocation;
 }
 
 std::string Player::getName() const {
     return name;
+}
+
+int Player::getStartingHealth() const {
+    return startingHealth;
 }
 
 int Player::getCurrentHealth() const {
@@ -54,12 +58,41 @@ std::vector<InteractableObject*> Player::getInventory() const {
     return inventory;
 }
 
+void Player::printInventory() const {
+    std::cout << "I search my knapsack and find the following items: \n";
+    for (int i = 0; i < inventory.size(); i++) {
+        std::cout << "    " << inventory.at(i)->getName() << "\n";
+    }
+    std::cout << "\n";
+}
+
 std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableObject *object) {
     /* 
     Returns a vector iterator, with value corresponding to the index of the inventory vector
     if object is in the vector. Otherwise, returns the iterator with the sizes of the inventory.
     */
     return std::find(inventory.begin(), inventory.end(), object);
+}
+
+bool Player::checkStringInInventory(std::string objectName) {
+    /*
+    Checks if the string corresponds to an object name in inventory
+    */
+    for (int i = 0; i < inventory.size(); i++) {
+        if (objectName == inventory.at(i)->getName())
+            return true;
+    }
+    return false;
+}
+
+InteractableObject *Player::getObjectFromString(std::string objectName) {
+    /*
+    Returns a reference to the object given by objectName
+    */
+    for (int i = 0; i < inventory.size(); i++) {
+        if (objectName == inventory.at(i)->getName())
+            return inventory.at(i);
+    }
 }
 
 void Player::addToInventory(InteractableObject *object) {

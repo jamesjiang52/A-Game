@@ -33,22 +33,42 @@ bool Location::checkStringInDirections(std::string directionName) {
     /*
     Checks if the string corresponds to a location name in allowedDirections
     */
-    for (int i = 0; i++; i < allowedDirections.size()) {
+    for (int i = 0; i < allowedDirections.size(); i++) {
         if (directionName == allowedDirections.at(i)->getName())
             return true;
     }
     return false;
 }
 
+Direction *Location::getDirectionFromString(std::string directionName) {
+    /*
+    Returns a reference to the direction given by directionName
+    */
+    for (int i = 0; i < allowedDirections.size(); i++) {
+        if (directionName == allowedDirections.at(i)->getName())
+            return allowedDirections.at(i);
+    }
+}
+
 bool Location::checkStringInObjects(std::string objectName) {
     /*
     Checks if the string corresponds to an object name in interactableObjects
     */
-    for (int i = 0; i++; i < interactableObjects.size()) {
+    for (int i = 0; i < interactableObjects.size(); i++) {
         if (objectName == interactableObjects.at(i)->getName())
             return true;
     }
     return false;
+}
+
+InteractableObject *Location::getObjectFromString(std::string objectName) {
+    /*
+    Returns a reference to the object given by objectName
+    */
+    for (int i = 0; i < interactableObjects.size(); i++) {
+        if (objectName == interactableObjects.at(i)->getName())
+            return interactableObjects.at(i);
+    }
 }
 
 void Location::addDirection(Direction *direction) {

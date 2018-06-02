@@ -3,14 +3,18 @@
 
 #include <string>
 #include "InteractableObjectClass.hpp"
+#include "PlayerClass.hpp"
+
+class Player;
 
 class Armor: public InteractableObject {
     private:
         int armor;
     
     public:
-        Armor(std::string name, std::string useMessage, int armor);
+        Armor(std::string name, std::string description, int armor);
         int getArmor();
+        void use(Player *player);  // equips armor
 };
 
 #endif

@@ -1,0 +1,26 @@
+=====
+Description of in-game items
+=====
+
+//Swords
+
+Stone Sword:
+A slab of rock sharpened to carry a point
+
+Iron Sword:
+Your everyday sword found within castle armouries
+
+
+//Consumables
+
+Loaf of bread:
+Hungry? More bread is always the answer
+
+Bottle of mead:
+Nothing solves pain better than a dash of mead
+
+
+//Miscellaneous
+
+Lattern:
+And then there was light!

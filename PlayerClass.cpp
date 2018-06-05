@@ -49,21 +49,8 @@ void Player::setLocation(Location *location) {
     this->location = location;
 }
 
-void Player::printLocationInfo() const {
-    std::cout << location->getName() << "\n\n";
-    std::cout << location->getDescription() << "\n\n";
-}
-
 std::vector<InteractableObject*> Player::getInventory() const {
     return inventory;
-}
-
-void Player::printInventory() const {
-    std::cout << "I search my knapsack and find the following items: \n";
-    for (int i = 0; i < inventory.size(); i++) {
-        std::cout << "    " << inventory.at(i)->getName() << "\n";
-    }
-    std::cout << "\n";
 }
 
 std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableObject *object) {

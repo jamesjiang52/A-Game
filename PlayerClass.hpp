@@ -37,9 +37,7 @@ class Player {
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);
-        void printLocationInfo() const;
         std::vector<InteractableObject*> getInventory() const;
-        void printInventory() const;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         bool checkStringInInventory(std::string objectName);
         InteractableObject *getObjectFromString(std::string objectName);

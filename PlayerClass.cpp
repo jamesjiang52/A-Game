@@ -5,8 +5,8 @@ Player::Player(std::string name, int startingHealth, Location *startingLocation)
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("", "", "", 0);  // name, useMessage, damage
-    this->armor = new Armor("", "", "", 0);  // name, useMessage, armor
+    this->weapon = new Weapon("", "", 0);  // name, description, damage
+    this->armor = new Armor("", "", 0);  // name, description, armor
 
     this->location = startingLocation;
 }
@@ -35,6 +35,13 @@ void Player::loseHealth(int amount) {
         currentHealth = 0;
         // probably do something else as well (i.e. game over)
     }
+}
+
+void Player::gainHealth(int amount) {
+    if (currentHealth + amount < startingHealth)
+        currentHealth += amount;
+    else
+        currentHealth = startingHealth;
 }
 
 void Player::attack(GenericEnemy *enemy) {

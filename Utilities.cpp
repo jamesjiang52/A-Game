@@ -21,9 +21,7 @@ void getContinueFromPlayer() {
     std::string playerInput;
     std::cout << "--------------------------------------Press ENTER to continue--------------------------------------";
     std::getline(std::cin, playerInput);
-    
-    // erases the entire line printed above
-    std::cout << "\033[A\r\33[2K\n\n";
+    std::cout << "\n";
 }
 
 void getUserInput(Player *player) {
@@ -67,7 +65,6 @@ void getUserInput(Player *player) {
         if (player->checkStringInInventory(stripSpaces(playerInput.substr(4)))) {  // object is in inventory
             InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
             object->use(player);
-            // TODO: put the object use message in its own use() function
         } else {
             std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
         }
@@ -86,7 +83,7 @@ void printHelpMessage() {
     Called if user input is "help" (case insensitive, leading/trailing spaces are ignored). Displays valid user commands.
     */
     std::string validCommands[] = {"go ___", "take ___ ", "use ___", "look ___", "attack ___", "inventory"};
-    std::cout << "Valid commands: \n";
+    std::cout << "\nValid commands: \n";
     
     for (int i = 0; i < 6; i++) {
         std::cout << "    " << validCommands[i] << "\n";
@@ -97,12 +94,12 @@ void printHelpMessage() {
 
 void printLocationInfo(Player *player) {
     Location *location = player->getLocation();
-    std::cout << location->getName() << "\n\n";
-    std::cout << location->getDescription() << "\n\n";
+    std::cout << "\n-- " << location->getName() << " --\n\n";
+    std::cout << location->getDescription() << "\n";
 }
 
 void printInventory(Player *player) {
-    std::cout << "I search my knapsack and find the following items: \n";
+    std::cout << "\nI search my knapsack and find the following items: \n";
     std::vector<InteractableObject*> inventory = player->getInventory();
     for (int i = 0; i < inventory.size(); i++) {
         std::cout << "    " << inventory.at(i)->getName() << "\n";

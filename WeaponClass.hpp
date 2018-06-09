@@ -1,6 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include <iostream>
 #include <string>
 #include "InteractableObjectClass.hpp"
 #include "PlayerClass.hpp"

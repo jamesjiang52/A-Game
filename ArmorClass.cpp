@@ -10,4 +10,5 @@ int Armor::getArmor() {
 
 void Armor::use(Player *player) {
     player->setArmor(this);
+    std::cout << "I put on the " << name << " (" << armor << " armor).\n\n";
 }

@@ -10,4 +10,5 @@ int Weapon::getDamage() {
 
 void Weapon::use(Player *player) {
     player->setWeapon(this);
+    std::cout << "I equip the " << name << " (" << damage << " damage).\n\n";
 }

@@ -1,6 +1,7 @@
 #ifndef INTERACTABLE_OBJECT_H
 #define INTERACTABLE_OBJECT_H
 
+#include <iostream>
 #include <string>
 
 class Player;
@@ -12,12 +13,14 @@ class InteractableObject {
     protected:
         std::string name;
         std::string description;  // shown when player looks at the object
+        std::string useMessage;
     
     public:
         InteractableObject(std::string name, std::string description);
         bool operator==(const InteractableObject &object);
         std::string getName() const;
         std::string getDescription() const;
+        void setUseMessage(std::string useMessage);  // only use this function for instances of this base class
         virtual void use(Player *player);
 };
 

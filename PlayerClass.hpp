@@ -34,6 +34,7 @@ class Player {
         int getStartingHealth() const;
         int getCurrentHealth() const;
         void loseHealth(int amount);
+        void gainHealth(int amount);
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;
         void setLocation(Location *location);

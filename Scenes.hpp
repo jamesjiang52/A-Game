@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "PotionClass.hpp"
 #include "PlayerClass.hpp"
 #include "Utilities.hpp"
 #include "Journal.hpp"

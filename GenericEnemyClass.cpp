@@ -5,8 +5,8 @@ GenericEnemy::GenericEnemy(std::string name, int startingHealth, Location *start
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("", "", "", 0);  // name, useMessage, damage
-    this->armor = new Armor("", "", "", 0);  // name, useMessage, armor
+    this->weapon = new Weapon("", "", 0);  // name, description, damage
+    this->armor = new Armor("", "", 0);  // name, description, armor
     
     this->location = startingLocation;
 }

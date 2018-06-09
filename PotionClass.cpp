@@ -9,5 +9,10 @@ int Potion::getHealAmount() {
 }
 
 void Potion::use(Player *player) {
-    player->loseHealth(-healAmount);
+    player->gainHealth(healAmount);
+    std::cout << "I feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    
+    // destroy potion
+    player->removeFromInventory(this);
+    delete this;
 }

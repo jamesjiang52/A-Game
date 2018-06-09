@@ -8,6 +8,7 @@ Player *startGame(int startingHealth) {
     
     std::cout << "Welcome to <placeholder>!\nBefore we begin, tell us your name.\n";
     std::getline(std::cin, playerInput);
+    std::cout << "\n\n";
 
     Player *player = new Player(playerInput, startingHealth, NULL);  // null since the player does not have a location yet
     return player;
@@ -22,6 +23,8 @@ void outsideFortress(Player *player) {
     InteractableObject *bread = new Potion("loaf of bread", "", 5);  // name, description, healAmount
     InteractableObject *meadBottle = new Potion("bottle of mead", "", 8);
     InteractableObject *lantern = new InteractableObject("lantern", "");  // name, description
+
+    lantern->setUseMessage("I light the lantern. The flame bathes me in an ember glow.");
     
     player->addToInventory(ironSword);
     player->addToInventory(clothes);

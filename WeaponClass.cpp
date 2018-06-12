@@ -9,6 +9,10 @@ int Weapon::getDamage() {
 }
 
 void Weapon::use(Player *player) {
-    player->setWeapon(this);
-    std::cout << "I equip the " << name << " (" << damage << " damage).\n\n";
+    if (player->getWeapon != this) {
+        player->setWeapon(this);
+        std::cout << "I equip the " << name << " (" << damage << " damage).\n\n";
+    } else {
+        std::cout << "I already have the " << name << " equipped (" << damage << " damage).\n\n";
+    }
 }

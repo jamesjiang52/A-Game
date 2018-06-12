@@ -34,6 +34,9 @@ void outsideFortress(Player *player) {
     player->addToInventory(meadBottle);
     player->addToInventory(lantern);
     
+    player->setWeapon(ironSword);
+    player->setArmor(clothes);
+    
     // create locations
     Location *outsideFortressWalls = new Location(
         "Outside Fortress Walls", 

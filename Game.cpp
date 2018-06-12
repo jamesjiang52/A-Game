@@ -16,6 +16,6 @@
 #include "Journal.hpp"
 
 int main() {
-    Player *player = startGame("Reinbreaker", 100);  // starting health
+    Player *player = startGame("Epistle", 100);  // starting health
     outsideFortress(player);
 }

@@ -69,13 +69,19 @@ void getUserInput(Player *player) {
             std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
         }
     } else if (playerInput.substr(0, 6) == "attack") {  // player wants to attack
-        // I'll ignore this for now since I haven't thought about how to do combat yet
+        // ignore this for now since I haven't figured out how to do combat yet
+        //combat(player, enemy);
         ;
     } else if (playerInput == "inventory") {  // inventory
         printInventory(player);
     } else {  // command is not valid
         std::cout << "I do not know that action.\n\n";
     }
+}
+
+
+void combat(Player *player, GenericEnemy *enemy) {
+    ;
 }
 
 void printHelpMessage() {

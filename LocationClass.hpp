@@ -16,6 +16,7 @@ class Location {
         
     public:
         Location(std::string name, std::string description);
+        bool operator==(const Location &location);
         std::string getName() const;
         std::string getDescription() const;
         std::vector<Direction*> getDirections() const;

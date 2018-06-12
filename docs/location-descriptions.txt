@@ -1,27 +1,24 @@
-=====
-First line of location is the location name
-Subsequent one-liners are location - direction combos that lead to the location
-=====
-
 Outside Fortress Walls
-River Shore - back
 
 I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's
 walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just
-off the path and down the hill, the river roars its great presence, mighty and boisterous. To my
+off the path and down the hill, the river roars its great presence, mighty and boisterous. To the
 south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its
 serene nocturne against the fading light. The fortress calls me closer.
 
+Outside Fortress Walls
+
+I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand
+spectacle of amber and violet. I can see not a single cloud, not even a flurry. The fortress calls 
+me closer.
 
 Outside Fortress Walls
-Outside Fortress Walls – south
 
 I turn around and try to leave, but the stronghold beckons me closer. I cannot leave until the
 fortress is mine.
 
 
 River Shore
-Outside Fortress Walls – river
 
 I veer off the path and put my foot into the water. It is freezing cold. I do not dare go into the
 water with just my streets clothes, lest I lose my strength and become incapable of pulling myself
@@ -29,7 +26,6 @@ back to the safety of shore. I need to get back onto the path.
 
 
 Fortress Gate
-Outside Fortress Walls – north
 
 I approach the first of the fortress' triple walls. I am greeted by a closed gate as I am commanded
 to reveal what I carry. A standard issue iron sword, a lantern, a loaf of bread, a bottle of mead,

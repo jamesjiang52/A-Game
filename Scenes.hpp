@@ -8,7 +8,7 @@
 #include "Utilities.hpp"
 #include "Journal.hpp"
 
-Player *startGame(int startingHealth);
+Player *startGame(std::string gameName, int startingHealth);
 void outsideFortress(Player *player);
 
 #endif

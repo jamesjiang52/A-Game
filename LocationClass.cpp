@@ -5,6 +5,10 @@ Location::Location(std::string name, std::string description) {
     this->description = description;
 }
 
+bool Location::operator==(const Location &location) {
+    return(name == location.getName());
+}
+
 std::string Location::getName() const {
     return name;
 }

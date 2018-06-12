@@ -1,14 +1,12 @@
 #include "PlayerClass.hpp"
 
-Player::Player(std::string name, int startingHealth, Location *startingLocation) {
+Player::Player(std::string name, int startingHealth) {
     this->name = name;
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
     this->weapon = new Weapon("", "", 0);  // name, description, damage
     this->armor = new Armor("", "", 0);  // name, description, armor
-
-    this->location = startingLocation;
 }
 
 std::string Player::getName() const {

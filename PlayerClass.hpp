@@ -29,7 +29,7 @@ class Player {
         std::vector<InteractableObject*> inventory;
 
     public:
-        Player(std::string name, int startingHealth, Location *startingLocation);
+        Player(std::string name, int startingHealth);
         std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;

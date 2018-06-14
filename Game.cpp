@@ -3,6 +3,8 @@
 #include <vector>
 #include <algorithm>
 #include <regex>
+#include <cstdlib>
+#include <ctime>
 #include "DirectionClass.hpp"
 #include "InteractableObjectClass.hpp"
 #include "LocationClass.hpp"
@@ -16,6 +18,6 @@
 #include "Journal.hpp"
 
 int main() {
-    Player *player = startGame("Epistle", 100);  // starting health
+    Player *player = startGame("Epistle, the tale of Reinbreaker's end", 100);  // starting health
     outsideFortress(player);
 }

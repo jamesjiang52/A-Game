@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <cstdlib>
+#include <ctime>
 #include "InteractableObjectClass.hpp"
 #include "LocationClass.hpp"
 #include "GenericEnemyClass.hpp"
@@ -13,6 +15,7 @@ std::string addQuotes(std::string original);
 std::string stripSpaces(std::string original);
 void getContinueFromPlayer();
 void getUserInput(Player *player);
+std::string getEnemyCombatChoice(GenericEnemy *enemy);
 void combat(Player *player, GenericEnemy *enemy);
 void printHelpMessage();
 void printLocationInfo(Player *player);

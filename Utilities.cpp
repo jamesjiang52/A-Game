@@ -38,40 +38,61 @@ void getUserInput(Player *player) {
     if (stripSpaces(playerInput) == "help") {
         printHelpMessage();
     } else if (playerInput.substr(0, 2) == "go") {  // player wants to move in direction
-        if (player->getLocation()->checkStringInDirections(stripSpaces(playerInput.substr(3)))) {  // direction is valid
-            player->setLocation(player->getLocation()->getDirectionFromString(stripSpaces(playerInput.substr(3)))->getDestination());
-            printLocationInfo(player);
+        if (playerInput.length() > 3) {
+            if (player->getLocation()->checkStringInDirections(stripSpaces(playerInput.substr(3)))) {  // direction is valid
+                player->setLocation(player->getLocation()->getDirectionFromString(stripSpaces(playerInput.substr(3)))->getDestination());
+                printLocationInfo(player);
+            } else {
+                std::cout << addQuotes(stripSpaces(playerInput.substr(3))) << " does not look like a direction I can travel in.\n\n";
+            }
         } else {
-            std::cout << addQuotes(stripSpaces(playerInput.substr(3))) << " does not look like a direction I can travel in.\n\n";
-        }
+            std::cout << "\n\n";
     } else if (playerInput.substr(0, 4) == "take") {  // player wants to take object
-        if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is valid
-            InteractableObject *object = player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)));
-            player->addToInventory(object);
-            player->getLocation()->removeInteractableObject(object);
-            std::cout << "I pick up the " << stripSpaces(playerInput.substr(5)) << " and put it in my knapsack.\n\n";
+        if (playerInput.length() > 5) {
+            if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is valid
+                InteractableObject *object = player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)));
+                player->addToInventory(object);
+                player->getLocation()->removeInteractableObject(object);
+                std::cout << "I pick up the " << stripSpaces(playerInput.substr(5)) << " and put it in my knapsack.\n\n";
+            } else {
+                std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << ".\n\n";
+            }
         } else {
-            std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << ".\n\n";
+            std::cout << "\n\n";
         }
     } else if (playerInput.substr(0, 4) == "look") {  // player wants to look at object
-        if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is in current location
-            std::cout << player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
-        } else if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
-            std::cout << player->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
+        if (playerInput.length() > 5) {
+            if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is in current location
+                std::cout << player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
+            } else if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
+                std::cout << player->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
+            } else {
+                std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << " around me, nor can I find it in my knapsack.\n\n";
+            }
         } else {
-            std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << " around me, nor can I find it in my knapsack.\n\n";
+            std::cout << "\n\n";
         }
     } else if (playerInput.substr(0, 3) == "use") {  // player wants to use object
-        if (player->checkStringInInventory(stripSpaces(playerInput.substr(4)))) {  // object is in inventory
-            InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
-            object->use(player);
+        if (playerInput.length() > 4) {
+            if (player->checkStringInInventory(stripSpaces(playerInput.substr(4)))) {  // object is in inventory
+                InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
+                object->use(player);
+            } else {
+                std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
+            }
         } else {
-            std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
-        }
+            std::cout << "\n\n";
     } else if (playerInput.substr(0, 6) == "attack") {  // player wants to attack
-        // ignore this for now since I haven't figured out how to do combat yet
-        //combat(player, enemy);
-        ;
+        if (playerInput.length() > 7) {
+            if (player->getLocation()->checkStringInEnemies(stripSpaces(playerInput.substr(7)))) {  // enemy is in current location
+                GenericEnemy *enemy = player->getLocation()->getEnemyFromString(stripSpaces(playerInput.substr(7)));
+                combat(player, enemy);
+            } else {
+                std::cout << addQuotes(stripSpaces(playerInput.substr(7)))
+            }
+        } else {
+            std::cout << "\n\n";
+        }
     } else if (playerInput == "inventory") {  // inventory
         printInventory(player);
     } else {  // command is not valid
@@ -79,9 +100,173 @@ void getUserInput(Player *player) {
     }
 }
 
+std::string getEnemyCombatChoice(GenericEnemy *enemy) {
+    /*
+    This function is the entirety of enemy "AI" in the game
+    */
+    ;
+}
+
+int coinToss() {
+    std::srand(std::time(nullptr));
+    return(std::rand() % 2);
+}
 
 void combat(Player *player, GenericEnemy *enemy) {
-    ;
+    std::string playerInput;
+    
+    std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
+    
+    bool playerStaggered = false;  // true for one turn after player swings and enemy blocks
+    bool playerSurprised = false;  // true for one turn after player blocks and enemy feints
+    bool enemyStaggered = false;  // true for one turn after enemy swings and player blocks
+    bool enemySurprised = false;  // true for one turn after enemy blocks and player feints
+    bool playerFailed = false;
+    bool enemyFailed = false;
+    
+    while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
+        std::cout << "I can choose to swing, block, or feint with my sword. What do I do?\n";
+        std::getline(std::cin, playerInput);
+        std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
+        playerInput = stripSpaces(playerInput);
+        
+        std::string enemyChoice = getEnemyCombatChoice(enemy);
+        
+        if (playerStaggered || playerSurprised) {
+            if (coinToss()) {
+                playerFailed = true;
+            }
+            playerStaggered = false;
+            playerSurprised = false;
+        }
+        
+        if (enemyStaggered || enemySurprised) {
+            if (coinToss()) {
+                enemyFailed = true;
+            }
+            enemyStaggered = false;
+            enemySurprised = false;
+        }
+        
+        if (playerInput.substr(0, 3) == "use") {
+            std::cout << "I shouldn't try to open my knapsack while I'm in combat.\n\n";
+        } else if (playerInput == "swing") {
+            if (enemyChoice == "swing") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    player->loseHealth(enemy->getWeapon()->getDamage());
+                    enemy->loseHealth(player->getWeapon()->getDamage());
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "block") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    playerStaggered = true;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "feint") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    enemy->loseHealth(player->getWeapon()->getDamage());
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            }
+        } else if (playerInput == "block") {
+            if (enemyChoice == "swing") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    enemyStaggered = true;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "block") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "feint") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    playerSurprised = true;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            }
+        } else if (playerInput == "feint") {
+            if (enemyChoice == "swing") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    player->loseHealth(enemy->getWeapon()->getDamage());
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "block") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                    enemySurprised = true;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            } else if (enemyChoice == "feint") {
+                if (!playerFailed && !enemyFailed) {
+                    std::cout << ;
+                } else if (!playerFailed && enemyFailed) {
+                    
+                } else if (playerFailed && !enemyFailed) {
+                    
+                } else {
+                    
+                }
+            }
+        } else {  // invalid command
+            std::cout << ;
+        }
+        
+        playerFailed = false;
+        enemyFailed = false;
+    }
+    
+    if (!player->getCurrentHealth()) {  // player dies
+        
+    } else {  // enemy dies
+        
+    }
 }
 
 void printHelpMessage() {

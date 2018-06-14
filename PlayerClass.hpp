@@ -27,6 +27,7 @@ class Player {
         Location *location;
         std::string name;
         std::vector<InteractableObject*> inventory;
+        std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
 
     public:
         Player(std::string name, int startingHealth);
@@ -39,7 +40,6 @@ class Player {
         Location *getLocation() const;
         void setLocation(Location *location);
         std::vector<InteractableObject*> getInventory() const;
-        std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         bool checkStringInInventory(std::string objectName);
         InteractableObject *getObjectFromString(std::string objectName);
         void addToInventory(InteractableObject *object);

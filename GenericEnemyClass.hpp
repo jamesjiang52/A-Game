@@ -23,13 +23,11 @@ class GenericEnemy {
         std::string name;
         
     public:
-        GenericEnemy(std::string name, int startingHealth, Location *startingLocation);
+        GenericEnemy(std::string name, int startingHealth);
         int getStartingHealth() const;
         int getCurrentHealth() const;
         void loseHealth(int amount);
         void attack(Player *player);
-        Location *getLocation() const;
-        void setLocation(Location *location);
         Weapon *getWeapon() const;
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;

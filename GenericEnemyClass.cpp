@@ -1,14 +1,12 @@
 #include "GenericEnemyClass.hpp"
 
-GenericEnemy::GenericEnemy(std::string name, int startingHealth, Location *startingLocation) {
+GenericEnemy::GenericEnemy(std::string name, int startingHealth) {
     this->name = name;
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
     this->weapon = new Weapon("", "", 0);  // name, description, damage
     this->armor = new Armor("", "", 0);  // name, description, armor
-    
-    this->location = startingLocation;
 }
 
 int GenericEnemy::getStartingHealth() const {
@@ -35,14 +33,6 @@ void GenericEnemy::loseHealth(int amount) {
 
 void GenericEnemy::attack(Player *player) {
     player->loseHealth(weapon->getDamage());
-}
-
-Location *GenericEnemy::getLocation() const {
-    return location;
-}
-
-void GenericEnemy::setLocation(Location *location) {
-    this->location = location;
 }
 
 Weapon *GenericEnemy::getWeapon() const {

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "DirectionClass.hpp"
 #include "InteractableObjectClass.hpp"
+#include "GenericEnemyClass.hpp"
 
 class Location {
     private:
@@ -13,6 +14,10 @@ class Location {
         std::string description;
         std::vector<Direction*> allowedDirections;
         std::vector<InteractableObject*> interactableObjects;
+        std::vector<GenericEnemy*> enemies;
+        std::vector<Direction*>::iterator directionPosition(Direction *direction);
+        std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        std::vector<GenericEnemy*>::iterator enemyPosition(GenericEnemy *enemy);
         
     public:
         Location(std::string name, std::string description);
@@ -21,16 +26,19 @@ class Location {
         std::string getDescription() const;
         std::vector<Direction*> getDirections() const;
         std::vector<InteractableObject*> getObjects() const;
-        std::vector<Direction*>::iterator directionPosition(Direction *direction);
-        bool checkStringInDirections(std::string directionName);
-        Direction *getDirectionFromString(std::string directionName);
-        bool checkStringInObjects(std::string objectName);
-        InteractableObject *getObjectFromString(std::string objectName);
+        std::vector<GenericEnemy*> getEnemies() const;
         void addDirection(Direction *direction);
         void removeDirection(Direction *direction);
-        std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        bool checkStringInDirections(std::string directionName);
+        Direction *getDirectionFromString(std::string directionName);
         void addInteractableObject(InteractableObject *object);
         void removeInteractableObject(InteractableObject *object);
+        bool checkStringInObjects(std::string objectName);
+        InteractableObject *getObjectFromString(std::string objectName);
+        void addEnemy(GenericEnemy *enemy);
+        void removeEnemy(GenericEnemy *enemy);
+        bool checkStringInEnemies(std::string enemyName);
+        GenericEnemy *getEnemyFromString(std::string enemyName);
 };
 
 #endif

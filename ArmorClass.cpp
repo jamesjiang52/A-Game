@@ -9,10 +9,10 @@ int Armor::getArmor() {
 }
 
 void Armor::use(Player *player) {
-    if (player->getArmor != this) {
+    if (player->getArmor() != this) {
         player->setArmor(this);
         std::cout << "I put on the " << name << " (" << armor << " armor).\n\n";
     } else {
-        std::cout << "I'm already wearing the  " << name << " (" << armor << " armor).\n\n";
+        std::cout << "I'm already wearing the " << name << " (" << armor << " armor).\n\n";
     }
 }

@@ -9,6 +9,10 @@ GenericEnemy::GenericEnemy(std::string name, int startingHealth) {
     this->armor = new Armor("", "", 0);  // name, description, armor
 }
 
+std::string GenericEnemy::getName() const {
+    return name;
+}
+
 int GenericEnemy::getStartingHealth() const {
     return startingHealth;
 }

@@ -2,7 +2,6 @@
 #define GENERIC_ENEMY_H
 
 #include <string>
-#include "LocationClass.hpp"
 #include "WeaponClass.hpp"
 #include "ArmorClass.hpp"
 #include "PlayerClass.hpp"
@@ -19,11 +18,11 @@ class GenericEnemy {
         int currentHealth;
         Weapon *weapon;
         Armor *armor;
-        Location *location;
         std::string name;
         
     public:
         GenericEnemy(std::string name, int startingHealth);
+        std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;
         void loseHealth(int amount);

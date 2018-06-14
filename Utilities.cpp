@@ -46,7 +46,8 @@ void getUserInput(Player *player) {
                 std::cout << addQuotes(stripSpaces(playerInput.substr(3))) << " does not look like a direction I can travel in.\n\n";
             }
         } else {
-            std::cout << "\n\n";
+            std::cout << "\n";
+        }
     } else if (playerInput.substr(0, 4) == "take") {  // player wants to take object
         if (playerInput.length() > 5) {
             if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is valid
@@ -58,7 +59,7 @@ void getUserInput(Player *player) {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << ".\n\n";
             }
         } else {
-            std::cout << "\n\n";
+            std::cout << "\n";
         }
     } else if (playerInput.substr(0, 4) == "look") {  // player wants to look at object
         if (playerInput.length() > 5) {
@@ -70,7 +71,7 @@ void getUserInput(Player *player) {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << " around me, nor can I find it in my knapsack.\n\n";
             }
         } else {
-            std::cout << "\n\n";
+            std::cout << "\n";
         }
     } else if (playerInput.substr(0, 3) == "use") {  // player wants to use object
         if (playerInput.length() > 4) {
@@ -81,17 +82,18 @@ void getUserInput(Player *player) {
                 std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
             }
         } else {
-            std::cout << "\n\n";
+            std::cout << "\n";
+        }
     } else if (playerInput.substr(0, 6) == "attack") {  // player wants to attack
         if (playerInput.length() > 7) {
             if (player->getLocation()->checkStringInEnemies(stripSpaces(playerInput.substr(7)))) {  // enemy is in current location
                 GenericEnemy *enemy = player->getLocation()->getEnemyFromString(stripSpaces(playerInput.substr(7)));
                 combat(player, enemy);
             } else {
-                std::cout << addQuotes(stripSpaces(playerInput.substr(7)))
+                std::cout << addQuotes(stripSpaces(playerInput.substr(7))) << " does not look like something I can attack.\n\n";
             }
         } else {
-            std::cout << "\n\n";
+            std::cout << "\n";
         }
     } else if (playerInput == "inventory") {  // inventory
         printInventory(player);
@@ -153,109 +155,109 @@ void combat(Player *player, GenericEnemy *enemy) {
         } else if (playerInput == "swing") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     playerStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             }
         } else if (playerInput == "block") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     enemyStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     playerSurprised = true;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             }
         } else if (playerInput == "feint") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                     enemySurprised = true;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << ;
+                    // std::cout << ;
                 } else if (!playerFailed && enemyFailed) {
-                    
+                    ;
                 } else if (playerFailed && !enemyFailed) {
-                    
+                    ;
                 } else {
-                    
+                    ;
                 }
             }
         } else {  // invalid command
-            std::cout << ;
+            // std::cout << ;
         }
         
         playerFailed = false;
@@ -263,9 +265,9 @@ void combat(Player *player, GenericEnemy *enemy) {
     }
     
     if (!player->getCurrentHealth()) {  // player dies
-        
+        ;
     } else {  // enemy dies
-        
+        ;
     }
 }
 

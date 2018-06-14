@@ -8,6 +8,8 @@
 #include "InteractableObjectClass.hpp"
 #include "GenericEnemyClass.hpp"
 
+class GenericEnemy;
+
 class Location {
     private:
         std::string name;

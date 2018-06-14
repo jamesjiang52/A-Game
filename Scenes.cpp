@@ -20,10 +20,10 @@ void outsideFortress(Player *player) {
     getContinueFromPlayer();
     
     // create objects and add to player's inventory
-    InteractableObject *ironSword = new Weapon("iron sword", "", 10);  // name, description, damage
-    InteractableObject *clothes = new Armor("street clothes", "", 0);  // name, description, armor
-    InteractableObject *bread = new Potion("loaf of bread", "", 5);  // name, description, healAmount
-    InteractableObject *meadBottle = new Potion("bottle of mead", "", 8);
+    Weapon *ironSword = new Weapon("iron sword", "", 10);  // name, description, damage
+    Armor *clothes = new Armor("street clothes", "", 0);  // name, description, armor
+    Potion *bread = new Potion("loaf of bread", "", 5);  // name, description, healAmount
+    Potion *meadBottle = new Potion("bottle of mead", "", 8);
     InteractableObject *lantern = new InteractableObject("lantern", "");  // name, description
 
     lantern->setUseMessage("I light the lantern. The flame bathes me in an ember glow.");
@@ -52,6 +52,7 @@ void outsideFortress(Player *player) {
         "I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand\n"
         "spectacle of amber and violet. I can see not a single cloud, not even a flurry. The fortress calls\n"
         "me closer.\n"
+    );
 
     Location *outsideFortressWallsAway = new Location(  // if player chooses to go south
         "Outside Fortress Walls",
@@ -108,7 +109,7 @@ void outsideFortress(Player *player) {
     player->setLocation(outsideFortressWalls);
     printLocationInfo(player);
 
-    while (player->getLocation != fortressGate) {
+    while (player->getLocation() != fortressGate) {
         getUserInput(player);
     }
     

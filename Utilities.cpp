@@ -106,7 +106,10 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     /*
     This function is the entirety of enemy "AI" in the game
     */
-    ;
+    // just have it random for now
+    std::string choices[3] = {"swing", "block", "feint"};
+    std::srand(std::time(nullptr));
+    return(choices[std::rand() % 3]);
 }
 
 int coinToss() {
@@ -159,21 +162,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                     player->loseHealth(enemy->getWeapon()->getDamage());
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    ;
+                    // std::cout << ;
+                    enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
-                    ;
+                    // std::cout << ;
+                    player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                     playerStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    ;
+                    // std::cout << ;
+                    enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             } else if (enemyChoice == "feint") {
@@ -181,10 +184,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    ;
+                    // std::cout << ;
+                    enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             }
@@ -194,20 +197,20 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     enemyStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
-                    ;
+                    // std::cout << ;
+                    player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             } else if (enemyChoice == "feint") {
@@ -215,10 +218,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     playerSurprised = true;
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             }
@@ -228,31 +231,31 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
-                    ;
+                    // std::cout << ;
+                    player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                     enemySurprised = true;
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                 } else if (!playerFailed && enemyFailed) {
+                    // std::cout << ;
                     ;
                 } else if (playerFailed && !enemyFailed) {
-                    ;
-                } else {
+                    // std::cout << ;
                     ;
                 }
             }

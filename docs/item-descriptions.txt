@@ -8,19 +8,33 @@ Stone Sword:
 A slab of rock sharpened to carry a point
 
 Iron Sword:
-Your everyday sword found within castle armouries
+Your everyday sword found within castle armouries; stronger than stone but easily bent
+
+Steel Sword:
+Cold steel: strong and holds an edge like no other. Perfect for the stabbing of enemies
+
+War Rapier:
+A long thin blade is paired with a complex hilt, a nimble weapon that is most suited for dueling
+
+War Sabre:
+A curved blade that provides a large cutting edge, great for killing enimies that refuse to die
+
+
+//Armour
+
+Street Clothes: The uniform of a lowly soldier, coat, pants, and boots
 
 
 //Consumables
 
 Loaf of bread:
-Hungry? More bread is always the answer
+"Acquired" from your second favourite bakery, it was saved for a rainy day. It will soon rain - the tears of your enemies
 
 Bottle of mead:
-Nothing solves pain better than a dash of mead
+Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
 
 
 //Miscellaneous
 
 Lattern:
-And then there was light!
+The last embers glow faintly within 

@@ -97,6 +97,8 @@ void getUserInput(Player *player) {
         }
     } else if (playerInput == "inventory") {  // inventory
         printInventory(player);
+    } else if (playerInput == "health") {
+        printPlayerHealthInfo(player);
     } else {  // command is not valid
         std::cout << "I do not know that action.\n\n";
     }
@@ -107,7 +109,7 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     This function is the entirety of enemy "AI" in the game
     */
     // just have it random for now
-    std::string choices[3] = {"swing", "block", "feint"};
+    std::string choices[3] = {"swing", "parry", "feint"};
     std::srand(std::time(nullptr));
     return(choices[std::rand() % 3]);
 }
@@ -122,15 +124,16 @@ void combat(Player *player, GenericEnemy *enemy) {
     
     std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
     
-    bool playerStaggered = false;  // true for one turn after player swings and enemy blocks
-    bool playerSurprised = false;  // true for one turn after player blocks and enemy feints
-    bool enemyStaggered = false;  // true for one turn after enemy swings and player blocks
-    bool enemySurprised = false;  // true for one turn after enemy blocks and player feints
+    bool playerStaggered = false;  // true for one turn after player swings and enemy parries
+    bool playerSurprised = false;  // true for one turn after player parries and enemy feints
+    bool enemyStaggered = false;  // true for one turn after enemy swings and player parries
+    bool enemySurprised = false;  // true for one turn after enemy parries and player feints
     bool playerFailed = false;
     bool enemyFailed = false;
     
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
-        std::cout << "I can choose to swing, block, or feint with my sword. What do I do?\n";
+        printPlayerHealthInfo(player);
+        std::cout << "I can choose to swing, parry, or feint with my " << player->getWeapon()->getName() << ". What do I do?\n";
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
         playerInput = stripSpaces(playerInput);
@@ -153,12 +156,24 @@ void combat(Player *player, GenericEnemy *enemy) {
             enemySurprised = false;
         }
         
-        if (playerInput.substr(0, 3) == "use") {
+        if (playerInput.substr(0, 2) == "go") {
+            std::cout << "I should slay the " << enemy->getName() << " before I proceed.\n\n";
+        } else if (playerInput.substr(0, 3) == "take") {
+            std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n"
+        } else if (playerInput.substr(0, 3) == "look") {
+            std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n";
+        } else if (playerInput.substr(0, 3) == "use") {
             std::cout << "I shouldn't try to open my knapsack while I'm in combat.\n\n";
+        } else if (playerInput.substr(0, 5) == "attack") {
+            std::cout << "I am already in combat with the " << enemy->getName() << ".\n\n";
+        } else if (playerInput == "inventory") {
+            std::cout << "I shouldn't try to look inside my knapsack while I'm in combat.\n\n";
+        } else if (playerInput == "health") {
+            printPlayerHealthInfo(player);
         } else if (playerInput == "swing") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName();
                     player->loseHealth(enemy->getWeapon()->getDamage());
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
@@ -168,7 +183,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
-            } else if (enemyChoice == "block") {
+            } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                     playerStaggered = true;
@@ -191,7 +206,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     ;
                 }
             }
-        } else if (playerInput == "block") {
+        } else if (playerInput == "parry") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
@@ -203,7 +218,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
-            } else if (enemyChoice == "block") {
+            } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                 } else if (!playerFailed && enemyFailed) {
@@ -237,7 +252,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // std::cout << ;
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
-            } else if (enemyChoice == "block") {
+            } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
                     // std::cout << ;
                     enemySurprised = true;
@@ -260,7 +275,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else {  // invalid command
-            // std::cout << ;
+            std::cout << "I do not know that action.\n\n";
         }
         
         playerFailed = false;
@@ -278,10 +293,10 @@ void printHelpMessage() {
     /*
     Called if user input is "help" (case insensitive, leading/trailing spaces are ignored). Displays valid user commands.
     */
-    std::string validCommands[] = {"go ___", "take ___ ", "use ___", "look ___", "attack ___", "inventory"};
+    std::string validCommands[] = {"go ___", "take ___ ", "use ___", "look ___", "attack ___", "inventory", "health"};
     std::cout << "\nValid commands: \n";
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
         std::cout << "    " << validCommands[i] << "\n";
     }
     
@@ -301,4 +316,16 @@ void printInventory(Player *player) {
         std::cout << "    " << inventory.at(i)->getName() << "\n";
     }
     std::cout << "\n";
+}
+
+void printPlayerHealthInfo(Player *player) {
+    if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.9) {
+        std::cout << "I am in the best of spirits (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+    } else if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.5) {
+        std::cout << "I endure the pains and agonies of flesh, yet I stand steadfast (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+    } else if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.1) {
+        std::cout << "I feel my lifeforce weakened; my next breath is strenuous (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+    } else {
+        std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+    }
 }

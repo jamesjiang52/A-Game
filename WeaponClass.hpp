@@ -13,7 +13,7 @@ class Weapon: public InteractableObject {
         int damage;
     
     public:
-        Weapon(std::string name, std::string description, int damage);
+        Weapon(std::string name, std::string description, int encumbrance, int damage);
         int getDamage();
         void use(Player *player);  // equips weapon
 };

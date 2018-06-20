@@ -5,8 +5,8 @@ Player::Player(std::string name, int startingHealth) {
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("", "", 0);  // name, description, damage
-    this->armor = new Armor("", "", 0);  // name, description, armor
+    this->weapon = new Weapon("fists", "", 0, 1);  // name, description, encumbrance, damage
+    this->armor = new Armor("skin", "", 0, 0);  // name, description, encumbrance, armor
 }
 
 std::string Player::getName() const {
@@ -21,8 +21,21 @@ int Player::getCurrentHealth() const {
     return currentHealth;
 }
 
+const double getMaxEncumbrance() const {
+    return MAX_ENCUMBRANCE;
+}
+
+int Player::getTotalEncumbrance() const {
+    int sum = 0;
+    for (int i = 0; i < inventory.size(); i++) {
+        InteractableObject *object = inventory.at(i);
+        sum += object->getEncumbrance();
+    }
+    return sum;
+}
+
 void Player::loseHealth(int amount) {
-    double damageReductionFraction = armor->getArmor()/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
+    double damageReductionFraction = min(armor->getArmor(), MAX_ARMOR)/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
     int loseHealthAmount = amount*(1 - damageReductionFraction);

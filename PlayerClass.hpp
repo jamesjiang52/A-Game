@@ -19,11 +19,12 @@ class Player {
     private: 
         const double MAX_ARMOR = 100;  // armor is capped at this value
         const double MAX_ARMOR_DMG_REDUCTION = 0.8;  // between 0 and 1, higher is better
+        const double MAX_ENCUMBRANCE = 100;
         int startingHealth;
         int currentHealth;
+        int totalEncumbrance;
         Weapon *weapon;
         Armor *armor;
-        int speed;
         Location *location;
         std::string name;
         std::vector<InteractableObject*> inventory;
@@ -34,6 +35,8 @@ class Player {
         std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;
+        const double getMaxEncumbrance() const;
+        int getTotalEncumbrance() const;
         void loseHealth(int amount);
         void gainHealth(int amount);
         void attack(GenericEnemy *enemy);

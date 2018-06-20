@@ -1,6 +1,6 @@
 #include "PotionClass.hpp"
 
-Potion::Potion(std::string name, std::string description, int healAmount): InteractableObject(name, description) {
+Potion::Potion(std::string name, std::string description, int encumbrance, int healAmount): InteractableObject(name, description, encumbrance) {
     this->healAmount = healAmount;
 }
 

@@ -27,7 +27,6 @@ void getContinueFromPlayer() {
 void getUserInput(Player *player) {
     /*
     Gets and performs the player action
-    Right now, the program throws and error if the user input is "go", "take", "look", or "use" without a direction/object following the command
     */
     std::string playerInput;
     std::cout << "What do I do?\n";
@@ -57,6 +56,22 @@ void getUserInput(Player *player) {
                 std::cout << "I pick up the " << stripSpaces(playerInput.substr(5)) << " and put it in my knapsack.\n\n";
             } else {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << ".\n\n";
+            }
+        } else {
+            std::cout << "\n";
+        }
+    } else if (playerInput.substr(0, 4) == "drop") {  // player wants to drop object
+        if (playerInput.length() > 5) {
+            if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
+                InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
+                if (object == player->getWeapon()) {
+                    std::cout << "I shouldn't drop my currently equipped weapon, lest a foe take me by surprise.\n\n";
+                }
+                player->removeFromInventory(object);
+                player->getLocation()->addInteractableObject(object);
+                std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me.\n\n";
+            } else {
+                std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
             }
         } else {
             std::cout << "\n";
@@ -97,8 +112,8 @@ void getUserInput(Player *player) {
         }
     } else if (playerInput == "inventory") {  // inventory
         printInventory(player);
-    } else if (playerInput == "health") {
-        printPlayerHealthInfo(player);
+    } else if (playerInput == "stats") {
+        printStats(player);
     } else {  // command is not valid
         std::cout << "I do not know that action.\n\n";
     }
@@ -124,15 +139,13 @@ void combat(Player *player, GenericEnemy *enemy) {
     
     std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
     
-    bool playerStaggered = false;  // true for one turn after player swings and enemy parries
-    bool playerSurprised = false;  // true for one turn after player parries and enemy feints
-    bool enemyStaggered = false;  // true for one turn after enemy swings and player parries
-    bool enemySurprised = false;  // true for one turn after enemy parries and player feints
+    bool playerStaggered = false;  // true for one turn after player swings and enemy parries, or player parries and enemy feints
+    bool enemyStaggered = false;  // true for one turn after enemy swings and player parries, or enemy parries and player feints
     bool playerFailed = false;
     bool enemyFailed = false;
     
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
-        printPlayerHealthInfo(player);
+        printPlayerEmbellishedHealthInfo(player);
         std::cout << "I can choose to swing, parry, or feint with my " << player->getWeapon()->getName() << ". What do I do?\n";
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
@@ -140,138 +153,126 @@ void combat(Player *player, GenericEnemy *enemy) {
         
         std::string enemyChoice = getEnemyCombatChoice(enemy);
         
-        if (playerStaggered || playerSurprised) {
+        if (playerStaggered) {
             if (coinToss()) {
                 playerFailed = true;
             }
             playerStaggered = false;
-            playerSurprised = false;
         }
         
-        if (enemyStaggered || enemySurprised) {
+        if (enemyStaggered) {
             if (coinToss()) {
                 enemyFailed = true;
             }
             enemyStaggered = false;
-            enemySurprised = false;
         }
         
         if (playerInput.substr(0, 2) == "go") {
             std::cout << "I should slay the " << enemy->getName() << " before I proceed.\n\n";
-        } else if (playerInput.substr(0, 3) == "take") {
+        } else if (playerInput.substr(0, 4) == "take") {
             std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n"
-        } else if (playerInput.substr(0, 3) == "look") {
+        } else if (playerInput.substr(0, 4) == "drop") {
+            std::cout << "I shouldn't try to open my knapsack while I'm in combat.\n\n";
+        } else if (playerInput.substr(0, 4) == "look") {
             std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n";
         } else if (playerInput.substr(0, 3) == "use") {
             std::cout << "I shouldn't try to open my knapsack while I'm in combat.\n\n";
-        } else if (playerInput.substr(0, 5) == "attack") {
+        } else if (playerInput.substr(0, 6) == "attack") {
             std::cout << "I am already in combat with the " << enemy->getName() << ".\n\n";
         } else if (playerInput == "inventory") {
             std::cout << "I shouldn't try to look inside my knapsack while I'm in combat.\n\n";
-        } else if (playerInput == "health") {
-            printPlayerHealthInfo(player);
-        } else if (playerInput == "swing") {
+        } else if (playerInput == "stats") {
+            printStats(player);
+        } else if (playerInput.substr(0, 5)  == "swing") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    std::cout << "I swing at the " << enemy->getName();
+                    std::cout << "I swing at the " << enemy->getName() << ", but I am unable to parry the recoil attack. We exchange blows.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage());
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. It appears a recoil attack was attempted, but thankfully misses.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. I suffer a powerful attack in retaliation.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName() << ", but what would have been a devastating blow is blocked. Slightly staggered, I fear my next action may not be effective.\n\n";
                     playerStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName() << ". It appears a block was attempted, but I manage to sneak in a hit. Next time, I may not be so lucky.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation was attempted.\n\n";
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage());
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation is attempted.\n\n";
                 }
             }
-        } else if (playerInput == "parry") {
+        } else if (playerInput.substr(0, 5) == "parry") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "The " << enemy->getName() << " attacks me, but I parry what would have been a painful blow. I also appear to stagger the " << enemy->getName() << " in the process.\n\n";
                     enemyStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "The " << enemy->getName() << "tries to attack me, but misses. My preemptive parry was unnecessary, it seems.\n\n"; 
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "The " << enemy->getName() << " attacks me. I try to parry, but I suffer the blow before I can react.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "Both the " << enemy->getName() << " and I parry preemptively. Caution is the name of the game, it seems.\n\n";
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I preemptively parry an attack from the " << enemy->getName() << ", but it does not come.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "The " << enemy->getName() << " blocks preemptively. Had an attack been attempted instead, I would likely have been too slow to parry.\n\n";
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    playerSurprised = true;
+                    std::cout << "I parry what I thought was an attack from the " << enemy->getName() << ", but turned out to be a ruse. I stumble in my step, and I fear my next action may not be effective.";
+                    playerStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I preemptively parry an attack from the " << enemy->getName() << ", but it does not come.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "The " << enemy->getName() << " comes at me, and I am too slow to parry if it had been a real attack. Thankfully, it appears to have been a trick, and I quickly regain my step.\n\n";
                 }
             }
-        } else if (playerInput == "feint") {
+        } else if (playerInput.substr(0, 5) == "feint") {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ". Unfortunately, the " << enemy->getName() << " is not quite as generous, and I suffer a devastating blow.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ", who appears to have missed their real attack on me. Next time, I may not be so lucky.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", but I suffer a blow before I can regain my step.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    enemySurprised = true;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ", who falls for my ruse and tries to block. Surprised, the feint also appears to have staggered the " << enemy->getName() << " in the process.\n\n";
+                    enemyStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ". A parry is attempted, but I'm certain that if I had chosen to attack, I would have landed a strike.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", though admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n"
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    // std::cout << ;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ", who fakes their own attack on me as well. The game of trickery is afoot.\n\n";
                 } else if (!playerFailed && enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I fake a swing at the " << enemy->getName() << ". It appears that they attempted to fake an attack as well, though it was not terribly impressive.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    // std::cout << ;
-                    ;
+                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", thought admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n";
                 }
             }
         } else {  // invalid command
@@ -293,10 +294,10 @@ void printHelpMessage() {
     /*
     Called if user input is "help" (case insensitive, leading/trailing spaces are ignored). Displays valid user commands.
     */
-    std::string validCommands[] = {"go ___", "take ___ ", "use ___", "look ___", "attack ___", "inventory", "health"};
+    std::string validCommands[] = {"go ___", "take ___ ", "drop ___", "use ___", "look ___", "attack ___", "inventory", "stats"};
     std::cout << "\nValid commands: \n";
     
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         std::cout << "    " << validCommands[i] << "\n";
     }
     
@@ -310,22 +311,31 @@ void printLocationInfo(Player *player) {
 }
 
 void printInventory(Player *player) {
-    std::cout << "\nI search my knapsack and find the following items: \n";
+    std::cout << "\nI search my knapsack and find the following items (encumbrance in parentheses): \n";
     std::vector<InteractableObject*> inventory = player->getInventory();
     for (int i = 0; i < inventory.size(); i++) {
-        std::cout << "    " << inventory.at(i)->getName() << "\n";
+        InteractableObject *object = inventory.at(i);
+        std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
     }
     std::cout << "\n";
 }
 
-void printPlayerHealthInfo(Player *player) {
+void printStats(Player *player) {
+    std::cout << "\nHealth: " << player->getCurrentHealth() << "/" << player->getStartingHealth();
+    std::cout << "\nWeapon damage: " << player->getWeapon()->getDamage();
+    std::cout << "\nArmor rating: " << player->getArmor()->getArmor();
+    std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << player->getMaxEncumbrance();
+}
+
+void printPlayerEmbellishedHealthInfo(Player *player) {
     if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.9) {
-        std::cout << "I am in the best of spirits (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+        std::cout << "I am in the best of spirits, ready to fight";
     } else if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.5) {
-        std::cout << "I endure the pains and agonies of flesh, yet I stand steadfast (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+        std::cout << "I endure the pains and agonies of flesh, yet I stand steadfast";
     } else if (player->getCurrentHealth()/(double)player->getStartingHealth() >= 0.1) {
-        std::cout << "I feel my lifeforce weakened; my next breath is strenuous (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+        std::cout << "I feel my lifeforce weakened; my next breath is strenuous";
     } else {
-        std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+        std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away";
     }
+    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
 }

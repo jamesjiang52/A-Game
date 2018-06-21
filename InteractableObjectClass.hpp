@@ -13,13 +13,15 @@ class InteractableObject {
     protected:
         std::string name;
         std::string description;  // shown when player looks at the object
+        std::string encumbrance;
         std::string useMessage;
     
     public:
-        InteractableObject(std::string name, std::string description);
+        InteractableObject(std::string name, std::string description, int encumbrance);
         bool operator==(const InteractableObject &object);
         std::string getName() const;
         std::string getDescription() const;
+        int getEncumbrance() const;
         void setUseMessage(std::string useMessage);  // only use this function for instances of this base class
         virtual void use(Player *player);
 };

@@ -1,8 +1,9 @@
 #include "InteractableObjectClass.hpp"
 
-InteractableObject::InteractableObject(std::string name, std::string description) {
+InteractableObject::InteractableObject(std::string name, std::string description, int encumbrance) {
     this->name = name;
     this->description = description;
+    this->encumbrance = encumbrance;
 }
 
 bool InteractableObject::operator==(const InteractableObject &object) {
@@ -15,6 +16,10 @@ std::string InteractableObject::getName() const {
 
 std::string InteractableObject::getDescription() const {
     return description;
+}
+
+int InteractableObject::getEncumbrance() const {
+    return encumbrance;
 }
 
 void InteractableObject::setUseMessage(std::string useMessage) {  // only use this function for instances of this base class

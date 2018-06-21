@@ -21,6 +21,7 @@ void combat(Player *player, GenericEnemy *enemy);
 void printHelpMessage();
 void printLocationInfo(Player *player);
 void printInventory(Player *player);
-void printPlayerHealthInfo(Player *player);
+void printStats(Player *player);
+void printPlayerEmbellishedHealthInfo(Player *player);
 
 #endif

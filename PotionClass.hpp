@@ -12,7 +12,7 @@ class Potion: public InteractableObject {
         int healAmount;
     
     public:
-        Potion(std::string name, std::string description, int healAmount);
+        Potion(std::string name, std::string description, int encumbrance, int healAmount);
         int getHealAmount();
         void use(Player *player);  // use potion
 };

@@ -12,7 +12,7 @@ class Armor: public InteractableObject {
         int armor;
     
     public:
-        Armor(std::string name, std::string description, int armor);
+        Armor(std::string name, std::string description, int encumbrance, int armor);
         int getArmor();
         void use(Player *player);  // equips armor
 };

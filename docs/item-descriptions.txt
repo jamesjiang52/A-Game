@@ -22,13 +22,25 @@ A curved blade that provides a large cutting edge, great for killing enimies tha
 
 //Armour
 
-Street Clothes: The uniform of a lowly soldier, coat, pants, and boots
+Street Clothes: 
+The uniform of a lowly soldier, coat, pants, and boots
+
+Leather Jacket: 
+Impressive looking, but unable to withstand much
+
+Chainmail:
+Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
+
+Plate Armor:
+Made of guilded steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
+
+
 
 
 //Consumables
 
 Loaf of bread:
-"Acquired" from your second favourite bakery, it was saved for a rainy day. It will soon rain - the tears of your enemies
+"Acquired" from my second favourite bakery, it was saved for a rainy day. It will soon rain - the tears of my enemies
 
 Bottle of mead:
 Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
@@ -37,4 +49,4 @@ Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
 //Miscellaneous
 
 Lattern:
-The last embers glow faintly within 
+The last embers glow faintly within

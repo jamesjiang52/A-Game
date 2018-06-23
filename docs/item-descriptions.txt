@@ -2,28 +2,49 @@
 Description of in-game items
 =====
 
-//Swords
+//Weapons
 
 Stone Sword:
-A slab of rock sharpened to carry a point
+A slab of rock sharpened to carry a point, it is awkward to handle and difficult to maneuver
+
+Bronze Sword:
+Approximately sixty centimetres in length, this blade is adorned with a crude wooden hilt  
 
 Iron Sword:
-Your everyday sword found within castle armouries; stronger than stone but easily bent
-
-Steel Sword:
-Cold steel: strong and holds an edge like no other. Perfect for the stabbing of enemies
+Your everyday sword found within castle armouries; it bends rather easily but does not break
 
 War Rapier:
-A long thin blade is paired with a complex hilt, a nimble weapon that is most suited for dueling
+A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thursting attacks rather than sweeping cuts.
 
 War Sabre:
-A curved blade that provides a large cutting edge, great for killing enimies that refuse to die
+A curved blade that provides a large cutting edge, great for killing enimies that refuse to die. The hilt is adorned with gemstones that glow in the darkness
+
+Fire Sword:
+Flame flickers constantly along the blade; I wonder how the fire doesnt burn out?
+
+Rusty Mace:
+Once a formiddable weapon, its spiked head is slowly rusting away, leaving behind a mess of iron and flakes
+
+Two-handed Mace:
+This fearsome weapon, almost a metre and a half long, and a spiked steel head that can smash through even the most sturdy of armor
+
+Battle Axe:
+With a creasent shaped head and a long thick handle, this axe was modified from its wood cutting cousin to become a terror on the battlefield
+
+Wooden Dagger:
+Crudely carved into a point with an handle: I guess it can still be used as a disctraction?
+
+Diamond Dagger:
+Extremely hard but perpetually blunt. In theory a good weapon, but more suited for ceremonial purposes
+
+Osbedian Dagger:
+Sharp beyond immagination, and with a golden plated hilt, it is worth fortunes
 
 
 //Armour
 
 Street Clothes: 
-The uniform of a lowly soldier, coat, pants, and boots
+The uniform of a lowly soldier: navy coat, black pants, and sturdy boots
 
 Leather Jacket: 
 Impressive looking, but unable to withstand much
@@ -32,10 +53,10 @@ Chainmail:
 Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
 
 Plate Armor:
-Made of guilded steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
+Made of joined plates of thick steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
 
-
-
+Wooden Shield:
+More mobile than armors and can be descarded when neccesairy
 
 //Consumables
 
@@ -44,6 +65,9 @@ Loaf of bread:
 
 Bottle of mead:
 Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
+
+Mysterious white powder:
+I was told that a couple pinches will invigorate me from even the deapest of stupors
 
 
 //Miscellaneous

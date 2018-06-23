@@ -21,6 +21,15 @@ int GenericEnemy::getCurrentHealth() const {
     return currentHealth;
 }
 
+int Player::getTotalEncumbrance() const {
+    int sum = 0;
+    for (int i = 0; i < inventory.size(); i++) {
+        InteractableObject *object = inventory.at(i);
+        sum += object->getEncumbrance();
+    }
+    return sum;
+}
+
 void GenericEnemy::loseHealth(int amount) {
     double damageReductionFraction = min(armor->getArmor(), MAX_ARMOR)/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
@@ -37,6 +46,28 @@ void GenericEnemy::loseHealth(int amount) {
 
 void GenericEnemy::attack(Player *player) {
     player->loseHealth(weapon->getDamage());
+}
+
+std::vector<InteractableObject*> GenericEnemy::getInventory() const {
+    return inventory;
+}
+
+void GenericEnemy::addToInventory(InteractableObject *object) {
+    /*
+    Adds new object to inventory if it is not already in it
+    */
+    if (objectPosition(object) == inventory.end())
+        inventory.push_back(object);
+}
+
+void GenericEnemy::removeFromInventory(InteractableObject *object) {
+    /*
+    Removes object from inventory if it is in it
+    Otherwise, does nothing
+    */
+    std::vector<InteractableObject*>::iterator position = objectPosition(object);
+    if (position != inventory.end())
+        inventory.erase(position);
 }
 
 Weapon *GenericEnemy::getWeapon() const {

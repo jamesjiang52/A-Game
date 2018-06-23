@@ -64,12 +64,21 @@ void getUserInput(Player *player) {
         if (playerInput.length() > 5) {
             if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
                 InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
-                if (object == player->getWeapon()) {
+                if (object == player->getWeapon()) {  // don't let player drop their equipped weapon
                     std::cout << "I shouldn't drop my currently equipped weapon, lest a foe take me by surprise.\n\n";
+                } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() != "street clothes")) {  // don't let player take off clothes while wearing armor
+                    std::cout << "Try as I might, I cannot take off my street clothes while wearing armor over it.\n\n";
+                } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() == "street clothes") {  // don't let player take off clothes
+                    std::cout << "I dare not take off all my clothes in public, lest someone call me a madman and attack me on sight.\n\n";
+                } else if (object == player->getArmor()) {
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me.\n\n"; 
+                } else {
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me.\n\n";
                 }
-                player->removeFromInventory(object);
-                player->getLocation()->addInteractableObject(object);
-                std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me.\n\n";
             } else {
                 std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
             }
@@ -129,9 +138,16 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     return(choices[std::rand() % 3]);
 }
 
-int coinToss() {
+bool playerCoinToss(Player *player) {
     std::srand(std::time(nullptr));
-    return(std::rand() % 2);
+    int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*player->getTotalEncumbrance()/MAX_ENCUMBRANCE);
+    return((std::rand() % 100) < threshold);
+}
+
+bool enemyCoinToss(GenericEnemy *enemy) {
+    std::srand(std::time(nullptr));
+    int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*enemy->getTotalEncumbrance()/MAX_ENCUMBRANCE);
+    return((std::rand() % 100) < threshold);
 }
 
 void combat(Player *player, GenericEnemy *enemy) {
@@ -154,14 +170,14 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::string enemyChoice = getEnemyCombatChoice(enemy);
         
         if (playerStaggered) {
-            if (coinToss()) {
+            if (playerCoinToss(player)) {
                 playerFailed = true;
             }
             playerStaggered = false;
         }
         
         if (enemyStaggered) {
-            if (coinToss()) {
+            if (enemyCoinToss(enemy)) {
                 enemyFailed = true;
             }
             enemyStaggered = false;
@@ -272,7 +288,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ". It appears that they attempted to fake an attack as well, though it was not terribly impressive.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", thought admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n";
+                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", though admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n";
                 }
             }
         } else {  // invalid command
@@ -284,9 +300,20 @@ void combat(Player *player, GenericEnemy *enemy) {
     }
     
     if (!player->getCurrentHealth()) {  // player dies
-        ;
+        throw 10;  // this is the only way I could think of to save/load checkpoints
     } else {  // enemy dies
-        ;
+        std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";
+        std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items (encumbrance in parentheses):\n";
+        
+        for (int i = 0; i < enemy->getInventory().size; i++) {
+            InteractableObject *object = enemy->getInventory.at(i);
+            std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
+            enemy->removeFromInventory(object);
+            player->getLocation()->addInteractableObject(object);
+        }
+        std::cout << "\n";
+        
+        delete enemy;
     }
 }
 
@@ -300,7 +327,6 @@ void printHelpMessage() {
     for (int i = 0; i < 8; i++) {
         std::cout << "    " << validCommands[i] << "\n";
     }
-    
     std::cout << "\n";
 }
 
@@ -324,7 +350,7 @@ void printStats(Player *player) {
     std::cout << "\nHealth: " << player->getCurrentHealth() << "/" << player->getStartingHealth();
     std::cout << "\nWeapon damage: " << player->getWeapon()->getDamage();
     std::cout << "\nArmor rating: " << player->getArmor()->getArmor();
-    std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << player->getMaxEncumbrance();
+    std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << MAX_ENCUMBRANCE;
 }
 
 void printPlayerEmbellishedHealthInfo(Player *player) {

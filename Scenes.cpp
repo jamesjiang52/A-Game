@@ -24,7 +24,7 @@ void outsideFortress(Player *player) {
     Armor *clothes = new Armor("street clothes", "", 4, 1);  // name, description, encumbrance, armor
     Potion *bread = new Potion("loaf of bread", "", 1, 5);  // name, description, encumbrance, healAmount
     Potion *meadBottle = new Potion("bottle of mead", "", 2, 8);
-    InteractableObject *lantern = new InteractableObject("lantern", "");  // name, description, encumbrance
+    InteractableObject *lantern = new InteractableObject("lantern", "", 3);  // name, description, encumbrance
 
     lantern->setUseMessage("I light the lantern. The flame bathes me in an ember glow.");
     
@@ -114,4 +114,5 @@ void outsideFortress(Player *player) {
     }
     
     // functions terminates when player reaches the fortress gate (ready for next scene)
+    std::cout << "Checkpoint created!\n\n"
 }

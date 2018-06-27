@@ -20,7 +20,6 @@ class Player {
     private:
         int startingHealth;
         int currentHealth;
-        int totalEncumbrance;
         Weapon *weapon;
         Armor *armor;
         Location *location;

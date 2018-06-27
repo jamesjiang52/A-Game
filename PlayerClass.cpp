@@ -31,11 +31,11 @@ int Player::getTotalEncumbrance() const {
 }
 
 bool Player::isOverEncumbered() const {
-    return(encumbrance > MAX_ENCUMBRANCE);
+    return(getTotalEncumbrance() > MAX_ENCUMBRANCE);
 }
 
 void Player::loseHealth(int amount) {
-    double damageReductionFraction = min(armor->getArmor(), MAX_ARMOR)/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
+    double damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
     int loseHealthAmount = amount*(1 - damageReductionFraction);

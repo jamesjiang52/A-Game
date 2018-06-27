@@ -18,11 +18,11 @@ class GenericEnemy {
     protected:
         int startingHealth;
         int currentHealth;
-        int totalEncumbrance;
         Weapon *weapon;
         Armor *armor;
         std::string name;
         std::vector<InteractableObject*> inventory;
+        std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         
     public:
         GenericEnemy(std::string name, int startingHealth);

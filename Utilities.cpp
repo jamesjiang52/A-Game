@@ -37,7 +37,9 @@ void getUserInput(Player *player) {
     if (stripSpaces(playerInput) == "help") {
         printHelpMessage();
     } else if (playerInput.substr(0, 2) == "go") {  // player wants to move in direction
-        if (playerInput.length() > 3) {
+        if (player->isOverEncumbered()) {
+            std::cout << "I am carrying too much. I need to drop something before I can move.\n\n";
+        } else if (playerInput.length() > 3) {
             if (player->getLocation()->checkStringInDirections(stripSpaces(playerInput.substr(3)))) {  // direction is valid
                 player->setLocation(player->getLocation()->getDirectionFromString(stripSpaces(playerInput.substr(3)))->getDestination());
                 printLocationInfo(player);
@@ -48,12 +50,14 @@ void getUserInput(Player *player) {
             std::cout << "\n";
         }
     } else if (playerInput.substr(0, 4) == "take") {  // player wants to take object
-        if (playerInput.length() > 5) {
+        if (player->isOverEncumbered()) {
+            std::cout << "I am carrying too much. I need to drop something before I pick up anything else.\n\n";
+        } else if (playerInput.length() > 5) {
             if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is valid
                 InteractableObject *object = player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)));
                 player->addToInventory(object);
                 player->getLocation()->removeInteractableObject(object);
-                std::cout << "I pick up the " << stripSpaces(playerInput.substr(5)) << " and put it in my knapsack.\n\n";
+                std::cout << "I pick up the " << stripSpaces(playerInput.substr(5)) << " and put it in my knapsack (+" << object->getEncumbrance() << " encumbrance).\n\n";
             } else {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << ".\n\n";
             }
@@ -68,16 +72,16 @@ void getUserInput(Player *player) {
                     std::cout << "I shouldn't drop my currently equipped weapon, lest a foe take me by surprise.\n\n";
                 } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() != "street clothes")) {  // don't let player take off clothes while wearing armor
                     std::cout << "Try as I might, I cannot take off my street clothes while wearing armor over it.\n\n";
-                } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() == "street clothes") {  // don't let player take off clothes
+                } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() == "street clothes")) {  // don't let player take off clothes
                     std::cout << "I dare not take off all my clothes in public, lest someone call me a madman and attack me on sight.\n\n";
                 } else if (object == player->getArmor()) {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
-                    std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me.\n\n"; 
+                    std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me (-" << player->getArmor()->getEncumbrance() << " encumbrance).\n\n"; 
                 } else {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
-                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me.\n\n";
+                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me (-" << object->getEncumbrance() << " encumbrance).\n\n";
                 }
             } else {
                 std::cout << "I cannot find " << addQuotes(stripSpaces(playerInput.substr(4))) << " in my knapsack.\n\n";
@@ -95,7 +99,7 @@ void getUserInput(Player *player) {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << " around me, nor can I find it in my knapsack.\n\n";
             }
         } else {
-            std::cout << "\n";
+            printLocationInfo(player);
         }
     } else if (playerInput.substr(0, 3) == "use") {  // player wants to use object
         if (playerInput.length() > 4) {
@@ -109,7 +113,9 @@ void getUserInput(Player *player) {
             std::cout << "\n";
         }
     } else if (playerInput.substr(0, 6) == "attack") {  // player wants to attack
-        if (playerInput.length() > 7) {
+        if (player->isOverEncumbered()) {
+            std::cout << "I am carrying too much. I need to drop something before I can prepare myself for combat.\n\n";
+        } else if (playerInput.length() > 7) {
             if (player->getLocation()->checkStringInEnemies(stripSpaces(playerInput.substr(7)))) {  // enemy is in current location
                 GenericEnemy *enemy = player->getLocation()->getEnemyFromString(stripSpaces(playerInput.substr(7)));
                 combat(player, enemy);
@@ -186,7 +192,7 @@ void combat(Player *player, GenericEnemy *enemy) {
         if (playerInput.substr(0, 2) == "go") {
             std::cout << "I should slay the " << enemy->getName() << " before I proceed.\n\n";
         } else if (playerInput.substr(0, 4) == "take") {
-            std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n"
+            std::cout << "I should focus on slaying the " << enemy->getName() << " first.\n\n";
         } else if (playerInput.substr(0, 4) == "drop") {
             std::cout << "I shouldn't try to open my knapsack while I'm in combat.\n\n";
         } else if (playerInput.substr(0, 4) == "look") {
@@ -280,7 +286,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ". A parry is attempted, but I'm certain that if I had chosen to attack, I would have landed a strike.\n\n";
                 } else if (playerFailed && !enemyFailed) {
-                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", though admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n"
+                    std::cout << "I try to fake a swing at the " << enemy->getName() << ", though admittedly I was not very convincing. Thankfully, no retaliation is attempted.\n\n";
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -303,10 +309,10 @@ void combat(Player *player, GenericEnemy *enemy) {
         throw 10;  // this is the only way I could think of to save/load checkpoints
     } else {  // enemy dies
         std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";
-        std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items (encumbrance in parentheses):\n";
+        std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items:\n";
         
-        for (int i = 0; i < enemy->getInventory().size; i++) {
-            InteractableObject *object = enemy->getInventory.at(i);
+        for (int i = 0; i < enemy->getInventory().size(); i++) {
+            InteractableObject *object = enemy->getInventory().at(i);
             std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
             enemy->removeFromInventory(object);
             player->getLocation()->addInteractableObject(object);
@@ -331,9 +337,39 @@ void printHelpMessage() {
 }
 
 void printLocationInfo(Player *player) {
+    // general location info
     Location *location = player->getLocation();
     std::cout << "\n-- " << location->getName() << " --\n\n";
-    std::cout << location->getDescription() << "\n";
+    std::cout << location->getDescription();
+    
+    // directions
+    std::vector<Direction*> directions = location->getDirections();
+    if (directions.size() > 0) {
+        std::cout << "\nIt appears I can move in these directions:" << "\n";
+        for (int i = 0; i < directions.size(); i++) {
+            std::cout << "    " << directions.at(i)->getName() << "\n";
+        }
+    }
+    
+    // interactable objects
+    std::vector<InteractableObject*> objects = location->getObjects();
+    if (objects.size() > 0) {
+        std::cout << "\nI can spot these items that might be of interest to me:" << "\n";
+        for (int i = 0; i < objects.size(); i++) {
+            std::cout << "    " << objects.at(i)->getName() << "\n";
+        }
+    }
+    
+    // enemies
+    std::vector<GenericEnemy*> enemies = location->getEnemies();
+    if (enemies.size() > 0) {
+        std::cout << "\nI should tread carefully; there are potential hostiles here:\n";
+        for (int i = 0; i < enemies.size(); i++) {
+            std::cout << "    " << enemies.at(i)->getName() << "\n";
+        }
+    }
+    
+    std::cout << "\n";
 }
 
 void printInventory(Player *player) {
@@ -351,6 +387,7 @@ void printStats(Player *player) {
     std::cout << "\nWeapon damage: " << player->getWeapon()->getDamage();
     std::cout << "\nArmor rating: " << player->getArmor()->getArmor();
     std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << MAX_ENCUMBRANCE;
+    std::cout << "\n\n";
 }
 
 void printPlayerEmbellishedHealthInfo(Player *player) {

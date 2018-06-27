@@ -62,7 +62,7 @@ void outsideFortress(Player *player) {
 
     Location *riverShore = new Location(
         "River Shore",
-        "I veer off the path and put my foot into the water. It is freezing cold. I do not dare go into the\n"
+        "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the\n"
         "water with just my streets clothes, lest I lose my strength and become incapable of pulling myself\n"
         "back to the safety of shore. I need to get back onto the path.\n"
     );
@@ -76,33 +76,26 @@ void outsideFortress(Player *player) {
 
     // create directions (that player can use to travel to certain locations)
     Direction *outsideFortressWallsNorth = new Direction("north", outsideFortressWallsCloser);
-    Direction *outsideFortressWallsFortress = new Direction("fortress", outsideFortressWallsCloser);  // treated same as direction on previous line
     Direction *outsideFortressWallsSouth = new Direction("south", outsideFortressWallsAway);
     Direction *outsideFortressWallsDummy = new Direction("south", outsideFortressWallsAway);  // if player chooses to go south twice
     Direction *outsideFortressWallsRiver = new Direction("river", riverShore);
-    Direction *riverShoreBack = new Direction("back", outsideFortressWalls);
-    Direction *riverShorePath = new Direction("path", outsideFortressWalls);  // treated same as direction on previous line
+    Direction *riverShorePath = new Direction("path", outsideFortressWalls);
     Direction *outsideFortressWallsCloserNorth = new Direction("north", fortressGate);
-    Direction *outsideFortressWallsCloserFortress = new Direction("fortress", fortressGate);  // treated same as direction on previous line
     Direction *outsideFortressWallsCloserSouth = new Direction("south", outsideFortressWalls);
 
     // add directions to locations
     outsideFortressWalls->addDirection(outsideFortressWallsNorth);
-    outsideFortressWalls->addDirection(outsideFortressWallsFortress);
     outsideFortressWalls->addDirection(outsideFortressWallsRiver);
     outsideFortressWalls->addDirection(outsideFortressWallsSouth);
     
     outsideFortressWallsAway->addDirection(outsideFortressWallsNorth);
-    outsideFortressWallsAway->addDirection(outsideFortressWallsFortress);
     outsideFortressWallsAway->addDirection(outsideFortressWallsRiver);
     outsideFortressWallsAway->addDirection(outsideFortressWallsDummy);
     
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserFortress);
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserSouth);
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
     
-    riverShore->addDirection(riverShoreBack);
     riverShore->addDirection(riverShorePath);
 
     // play scene
@@ -114,5 +107,5 @@ void outsideFortress(Player *player) {
     }
     
     // functions terminates when player reaches the fortress gate (ready for next scene)
-    std::cout << "Checkpoint created!\n\n"
+    std::cout << "Checkpoint created!\n\n";
 }

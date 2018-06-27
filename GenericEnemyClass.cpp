@@ -21,7 +21,7 @@ int GenericEnemy::getCurrentHealth() const {
     return currentHealth;
 }
 
-int Player::getTotalEncumbrance() const {
+int GenericEnemy::getTotalEncumbrance() const {
     int sum = 0;
     for (int i = 0; i < inventory.size(); i++) {
         InteractableObject *object = inventory.at(i);
@@ -31,7 +31,7 @@ int Player::getTotalEncumbrance() const {
 }
 
 void GenericEnemy::loseHealth(int amount) {
-    double damageReductionFraction = min(armor->getArmor(), MAX_ARMOR)/MAX_ARMOR*MAX_ARMOR_DMG_REDUCTION;
+    double damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
     int loseHealthAmount = amount*(1 - damageReductionFraction);
@@ -50,6 +50,14 @@ void GenericEnemy::attack(Player *player) {
 
 std::vector<InteractableObject*> GenericEnemy::getInventory() const {
     return inventory;
+}
+
+std::vector<InteractableObject*>::iterator GenericEnemy::objectPosition(InteractableObject *object) {
+    /* 
+    Returns a vector iterator, with value corresponding to the index of the inventory vector
+    if object is in the vector. Otherwise, returns the iterator with the sizes of the inventory.
+    */
+    return std::find(inventory.begin(), inventory.end(), object);
 }
 
 void GenericEnemy::addToInventory(InteractableObject *object) {

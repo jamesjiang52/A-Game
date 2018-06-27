@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Parameters.hpp"
+#include "DirectionClass.hpp"
 #include "InteractableObjectClass.hpp"
 #include "LocationClass.hpp"
 #include "GenericEnemyClass.hpp"

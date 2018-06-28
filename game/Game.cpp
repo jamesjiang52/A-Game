@@ -23,16 +23,28 @@ int main() {
     Player playerData = *player;
     Player *playerCopy = &playerData;  // for loading checkpoints
     
-    // this is the only way I could think of to save/load checkpoints
     while (1) {
         try {
             outsideFortress(player);  // throws an exception if player dies
-        } catch (int e) {  // if player dies, copy original player data and loop
+        } catch (int e) {  // if player dies and wants to retry
             Player *temp = player;
             player = playerCopy;
             delete temp;
+            
+            playerData = *player;
+            playerCopy = &playerData;
+            
+            printCheckpointLoaded();
+            getContinueFromPlayer();
             continue;
+        } catch (char e) {  // if player dies and wants to exit
+            return 0;
         }
+        playerData = *player;
+        playerCopy = &playerData;
         break;
     }
+    
+    printCheckpointCreated();
+    getContinueFromPlayer();
 }

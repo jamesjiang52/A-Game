@@ -6,10 +6,11 @@ Player *startGame(std::string gameName, int startingHealth) {
     */
     std::string playerInput;
     
-    std::cout << "Welcome to " << gameName << "!\nBefore we begin, tell us your name.\n";
+    std::cout << "What is my name?\n";
     std::getline(std::cin, playerInput);
     std::cout << "\n\n";
 
+    getContinueFromPlayer();
     Player *player = new Player(playerInput, startingHealth);
     return player;
 }
@@ -77,7 +78,6 @@ void outsideFortress(Player *player) {
     // create directions (that player can use to travel to certain locations)
     Direction *outsideFortressWallsNorth = new Direction("north", outsideFortressWallsCloser);
     Direction *outsideFortressWallsSouth = new Direction("south", outsideFortressWallsAway);
-    Direction *outsideFortressWallsDummy = new Direction("south", outsideFortressWallsAway);  // if player chooses to go south twice
     Direction *outsideFortressWallsRiver = new Direction("river", riverShore);
     Direction *riverShorePath = new Direction("path", outsideFortressWalls);
     Direction *outsideFortressWallsCloserNorth = new Direction("north", fortressGate);
@@ -90,11 +90,10 @@ void outsideFortress(Player *player) {
     
     outsideFortressWallsAway->addDirection(outsideFortressWallsNorth);
     outsideFortressWallsAway->addDirection(outsideFortressWallsRiver);
-    outsideFortressWallsAway->addDirection(outsideFortressWallsDummy);
+    outsideFortressWallsAway->addDirection(outsideFortressWallsSouth);
     
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserSouth);
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
     
     riverShore->addDirection(riverShorePath);
 
@@ -105,7 +104,5 @@ void outsideFortress(Player *player) {
     while (player->getLocation() != fortressGate) {
         getUserInput(player);
     }
-    
-    // functions terminates when player reaches the fortress gate (ready for next scene)
-    std::cout << "Checkpoint created!\n\n";
+    // function terminates when player reaches the fortress gate (ready for next scene)
 }

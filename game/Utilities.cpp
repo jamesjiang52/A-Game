@@ -24,6 +24,25 @@ void getContinueFromPlayer() {
     std::cout << "\n";
 }
 
+void getUserRetryOrQuit() {
+    std::string playerInput;
+    std::cout << "You have died. Type \"retry\" to load from the last checkpoint or \"quit\" to exit the game.\n";
+    do {
+        std::getline(std::cin, playerInput);
+        std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
+        playerInput = stripSpaces(playerInput);
+        if (playerInput == "retry") {
+            std::cout << "\n";
+            throw 10;  // another function catches this integer exception
+        } else if (playerInput == "quit") {
+            std::cout << "\n";
+            throw 'e';  // another function catches this char exception
+        } else {
+            std::cout << "\n";
+        }
+    } while ((playerInput != "retry") && (playerInput != "quit"));
+}
+
 void getUserInput(Player *player) {
     /*
     Gets and performs the player action
@@ -306,7 +325,8 @@ void combat(Player *player, GenericEnemy *enemy) {
     }
     
     if (!player->getCurrentHealth()) {  // player dies
-        throw 10;  // this is the only way I could think of to save/load checkpoints
+        std::cout << "The strike staggers me, and the " << enemy->getName() << ", seeing an opportune moment, lunges at me and steals away the last remnants of my lifeforce with a quick series of swings. I fall to the ground elated, terrified, and broken.\n\n";
+        getUserRetryOrQuit();
     } else {  // enemy dies
         std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";
         std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items:\n";
@@ -321,6 +341,14 @@ void combat(Player *player, GenericEnemy *enemy) {
         
         delete enemy;
     }
+}
+
+void printCheckpointCreated() {
+    std::cout << "Checkpoint created!\n\n";
+}
+
+void printCheckpointLoaded() {
+    std::cout << "Last checkpoint loaded!\n\n";
 }
 
 void printHelpMessage() {

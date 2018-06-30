@@ -13,7 +13,7 @@ class InteractableObject {
     protected:
         std::string name;
         std::string description;  // shown when player looks at the object
-        std::string encumbrance;
+        int encumbrance;
         std::string useMessage;
     
     public:

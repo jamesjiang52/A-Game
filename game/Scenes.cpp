@@ -6,10 +6,11 @@ Player *startGame(std::string gameName, int startingHealth) {
     */
     std::string playerInput;
     
-    std::cout << "Welcome to " << gameName << "!\nBefore we begin, tell us your name.\n";
+    std::cout << "What is my name?\n";
     std::getline(std::cin, playerInput);
     std::cout << "\n\n";
 
+    getContinueFromPlayer();
     Player *player = new Player(playerInput, startingHealth);
     return player;
 }
@@ -24,7 +25,7 @@ void outsideFortress(Player *player) {
     Armor *clothes = new Armor("street clothes", "", 4, 1);  // name, description, encumbrance, armor
     Potion *bread = new Potion("loaf of bread", "", 1, 5);  // name, description, encumbrance, healAmount
     Potion *meadBottle = new Potion("bottle of mead", "", 2, 8);
-    InteractableObject *lantern = new InteractableObject("lantern", "");  // name, description, encumbrance
+    InteractableObject *lantern = new InteractableObject("lantern", "", 3);  // name, description, encumbrance
 
     lantern->setUseMessage("I light the lantern. The flame bathes me in an ember glow.");
     
@@ -62,7 +63,7 @@ void outsideFortress(Player *player) {
 
     Location *riverShore = new Location(
         "River Shore",
-        "I veer off the path and put my foot into the water. It is freezing cold. I do not dare go into the\n"
+        "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the\n"
         "water with just my streets clothes, lest I lose my strength and become incapable of pulling myself\n"
         "back to the safety of shore. I need to get back onto the path.\n"
     );
@@ -76,33 +77,24 @@ void outsideFortress(Player *player) {
 
     // create directions (that player can use to travel to certain locations)
     Direction *outsideFortressWallsNorth = new Direction("north", outsideFortressWallsCloser);
-    Direction *outsideFortressWallsFortress = new Direction("fortress", outsideFortressWallsCloser);  // treated same as direction on previous line
     Direction *outsideFortressWallsSouth = new Direction("south", outsideFortressWallsAway);
-    Direction *outsideFortressWallsDummy = new Direction("south", outsideFortressWallsAway);  // if player chooses to go south twice
     Direction *outsideFortressWallsRiver = new Direction("river", riverShore);
-    Direction *riverShoreBack = new Direction("back", outsideFortressWalls);
-    Direction *riverShorePath = new Direction("path", outsideFortressWalls);  // treated same as direction on previous line
+    Direction *riverShorePath = new Direction("path", outsideFortressWalls);
     Direction *outsideFortressWallsCloserNorth = new Direction("north", fortressGate);
-    Direction *outsideFortressWallsCloserFortress = new Direction("fortress", fortressGate);  // treated same as direction on previous line
     Direction *outsideFortressWallsCloserSouth = new Direction("south", outsideFortressWalls);
 
     // add directions to locations
     outsideFortressWalls->addDirection(outsideFortressWallsNorth);
-    outsideFortressWalls->addDirection(outsideFortressWallsFortress);
     outsideFortressWalls->addDirection(outsideFortressWallsRiver);
     outsideFortressWalls->addDirection(outsideFortressWallsSouth);
     
     outsideFortressWallsAway->addDirection(outsideFortressWallsNorth);
-    outsideFortressWallsAway->addDirection(outsideFortressWallsFortress);
     outsideFortressWallsAway->addDirection(outsideFortressWallsRiver);
-    outsideFortressWallsAway->addDirection(outsideFortressWallsDummy);
+    outsideFortressWallsAway->addDirection(outsideFortressWallsSouth);
     
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserFortress);
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserSouth);
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
     
-    riverShore->addDirection(riverShoreBack);
     riverShore->addDirection(riverShorePath);
 
     // play scene
@@ -112,6 +104,5 @@ void outsideFortress(Player *player) {
     while (player->getLocation() != fortressGate) {
         getUserInput(player);
     }
-    
-    // functions terminates when player reaches the fortress gate (ready for next scene)
+    // function terminates when player reaches the fortress gate (ready for next scene)
 }

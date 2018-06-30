@@ -25,6 +25,10 @@ std::vector<InteractableObject*> Location::getObjects() const {
     return interactableObjects;
 }
 
+std::vector<GenericEnemy*> Location::getEnemies() const {
+    return enemies;
+}
+
 std::vector<Direction*>::iterator Location::directionPosition(Direction *direction) {
     /* 
     Returns a vector iterator, with value corresponding to the index of the allowedDirections vector

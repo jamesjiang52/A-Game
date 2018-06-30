@@ -17,35 +17,44 @@ Iron Sword:
 Your everyday sword found within castle armouries; it bends rather easily but does not break
 
 War Rapier:
-40 dmg, -5% stagger
+50 dmg, -5% stagger
 A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thursting attacks rather than sweeping cuts.
 
 War Sabre:
-50 dmg, +5% stagger
+60 dmg, +5% stagger
 A curved blade that provides a large cutting edge, great for killing enimies that refuse to die. The hilt is adorned with gemstones that glow in the darkness
 
 Fire Sword:
 15 dmg, +5% stagger, +5% enemy stagger
 Flame flickers constantly along the blade; I wonder how the fire doesnt burn out?
 
+Spear:
+15 dmg, -5% stagger
+A long handle of polished wood with a sharp tip; an idea weapon to keep the enemy at a distance
+
 Rusty Mace:
-20 dmg, +15% stagger, 10% enemy armor reduction
+20 dmg, +15% stagger, 10% enemy armour reduction, unable to use shield
 Once a formiddable weapon, its spiked head is slowly rusting away, leaving behind a mess of iron and flakes
 
 Two-handed Mace:
-60 dmg, +15% stagger, 15% enemy armor reduction
+60 dmg, +20% stagger, 15% enemy armour reduction, unable to use shield
 This fearsome weapon, almost a metre and a half long, and a spiked steel head that can smash through even the most sturdy of armor
 
 Battle Axe:
-60 dmg, +10% stagger, 10% enemy armor reduction
+60 dmg, +15% stagger, 10% enemy armour reduction, unable to use shield
 With a creasent shaped head and a long thick handle, this axe was modified from its wood cutting cousin to become a terror on the battlefield
 
+Morningstar:
+Regular: 40 dmg, +10% stagger, 10% enemy armour reduction, unable to use shield
+Against Shields: 40 dmg, +10% stagger, +25% enemy stagger, 50% enemy armour reduction
+A cruel spiked ball is connected by chain to the head of a wooden rod
+
 Wooden Dagger:
-0 dmg, +1% enemy stagger
+1 dmg, +1% enemy stagger
 Crudely carved into a point with an handle: I guess it can still be used as a disctraction?
 
 Diamond Dagger:
-1 dmg, +1% enemy stagger (first usage +20% enemy stagger)
+2 dmg, +1% enemy stagger (first usage +20% enemy stagger)
 Extremely hard but perpetually blunt. In theory a good weapon, but more suited for ceremonial purposes
 
 Obsedian Dagger:
@@ -57,43 +66,56 @@ Trident:
 A magestic three pronged head mounted on a long handle full of lifelike carved sea creatures
 
 Whip:
-10 dmg, -5% armor, +10% enemy stagger
+15 dmg, +10% enemy stagger, +50% enemy armor effectiveness
 Glowing a sinister red in the torchlight, any hit from this must be painful...
 
 Stone:
 0 dmg
-This is impressively round ... and grey .. and circular ... who am I kidding atleast I wont miss it when I throw it
+This is impressively round ... and grey .. and smooth ... who am I kidding at least I won't miss it when I throw it
+
+Excalibur:
+Without rainbow stone:
+	55 dmg
+	Could this be? The legendary sword of King Arthur? I can't seem to place it but something seems slightly off.. 
+With rainbow stone:
+	80 dmg
+	The legendary sword of King Arthur - complete with the rainbow stone in its pommel!
 
 
-//Armour
+//Defensive Items
 
 Street Clothes:
-0 armor
+1 armor
 The uniform of a lowly soldier: navy coat, black pants, and sturdy boots
 
 Leather Jacket: 
-1 armor, +1% enemy stagger
+2 armour, +1% enemy stagger
 Impressive looking, but unable to withstand much
 
 Chainmail:
-20 armor, +20% stagger
+20 armour, +20% stagger
 Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
 
 Plate Armor:
-40 armor, +20% stagger
+40 armour, +20% stagger
 Made of joined plates of thick steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
 
+Paper Shield:
+1 armour
+They actually make these things? I thought it was just a metaphor
+
 Wooden Shield:
-10 armor
+10 armour
 More mobile than armors and can be descarded when neccesairy
 
 Metal Shield:
-15 armor, +5% stagger, +1% enemy stagger
-More versitle, but also for cumbersome. But perhaps the enemy may be dazzled by its shiny surface?
+15 armour, +5% stagger, +1% enemy stagger
+More versitle, but also more cumbersome. Perhaps the enemy may be dazzled by its shiny surface?
 
-Aegis:
-20 armor, +5% stagger, +100% enemy stagger first term 50% afterwards
+Aegis Replica:
+15 armour, +1% stagger, +100% enemy stagger first turn 50% afterwards
 This cannot be the real aegis as I am not stone, but this is a most terrifying replica
+
 
 //Consumables
 
@@ -102,19 +124,33 @@ Heal 20%
 "Acquired" from my second favourite bakery, it was saved for a rainy day. It will soon rain - the tears of my enemies
 
 Bottle of mead:
-Heat 20%
+Heal 20%
 Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
 
-Mysterious white powder:
-Random Effect: (Heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns +50% stagger(hidden effect)
-I was told that a couple pinches will invigorate me from even the deapest of stupors
+Square of Chocolate:
+Heal 10%
+Theres nothing like the gooey wonderfulness of this brown coloured delicacy
 
-The Art of War - Sun Tzu:
--5% stagger(passive effect)
-I am hit with stunning epiphany... 
+Ambrosia:
+Random Effect: (heal 20%, heal 50%, drain 20% )
+The food of the gods - or so it is said. I'm sure they wont be angry if I just take a little bite
+
+Mysterious white powder:
+Random Effect: (heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns hidden effect(+50% stagger)
+I was told that a couple pinches will invigorate me from even the deapest of stupors
 
 
 //Miscellaneous
 
 Lattern:
 The last embers glow faintly within
+
+The Art of War - Sun Tzu:
+Passive effect: -5% stagger
+I am hit with stunning epiphany... 
+
+Rainbow stone:
+I hope this stone is more usefull than the first one ...
+
+Quill:
+If only I had something to write on

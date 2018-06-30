@@ -5,69 +5,113 @@ Description of in-game items
 //Weapons
 
 Stone Sword:
+1 dmg, +10% stagger
 A slab of rock sharpened to carry a point, it is awkward to handle and difficult to maneuver
 
 Bronze Sword:
+5 dmg
 Approximately sixty centimetres in length, this blade is adorned with a crude wooden hilt  
 
 Iron Sword:
+10 dmg, +5% stagger
 Your everyday sword found within castle armouries; it bends rather easily but does not break
 
 War Rapier:
+40 dmg, -5% stagger
 A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thursting attacks rather than sweeping cuts.
 
 War Sabre:
+50 dmg, +5% stagger
 A curved blade that provides a large cutting edge, great for killing enimies that refuse to die. The hilt is adorned with gemstones that glow in the darkness
 
 Fire Sword:
+15 dmg, +5% stagger, +5% enemy stagger
 Flame flickers constantly along the blade; I wonder how the fire doesnt burn out?
 
 Rusty Mace:
+20 dmg, +15% stagger, 10% enemy armor reduction
 Once a formiddable weapon, its spiked head is slowly rusting away, leaving behind a mess of iron and flakes
 
 Two-handed Mace:
+60 dmg, +15% stagger, 15% enemy armor reduction
 This fearsome weapon, almost a metre and a half long, and a spiked steel head that can smash through even the most sturdy of armor
 
 Battle Axe:
+60 dmg, +10% stagger, 10% enemy armor reduction
 With a creasent shaped head and a long thick handle, this axe was modified from its wood cutting cousin to become a terror on the battlefield
 
 Wooden Dagger:
+0 dmg, +1% enemy stagger
 Crudely carved into a point with an handle: I guess it can still be used as a disctraction?
 
 Diamond Dagger:
+1 dmg, +1% enemy stagger (first usage +20% enemy stagger)
 Extremely hard but perpetually blunt. In theory a good weapon, but more suited for ceremonial purposes
 
-Osbedian Dagger:
+Obsedian Dagger:
+20 dmg, -10% stagger, +1% enemy stagger(first usage +20% enemy stagger)
 Sharp beyond immagination, and with a golden plated hilt, it is worth fortunes
+
+Trident:
+30 dmg, +5% enemy stagger
+A magestic three pronged head mounted on a long handle full of lifelike carved sea creatures
+
+Whip:
+10 dmg, -5% armor, +10% enemy stagger
+Glowing a sinister red in the torchlight, any hit from this must be painful...
+
+Stone:
+0 dmg
+This is impressively round ... and grey .. and circular ... who am I kidding atleast I wont miss it when I throw it
 
 
 //Armour
 
-Street Clothes: 
+Street Clothes:
+0 armor
 The uniform of a lowly soldier: navy coat, black pants, and sturdy boots
 
 Leather Jacket: 
+1 armor, +1% enemy stagger
 Impressive looking, but unable to withstand much
 
 Chainmail:
+20 armor, +20% stagger
 Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
 
 Plate Armor:
+40 armor, +20% stagger
 Made of joined plates of thick steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
 
 Wooden Shield:
+10 armor
 More mobile than armors and can be descarded when neccesairy
+
+Metal Shield:
+15 armor, +5% stagger, +1% enemy stagger
+More versitle, but also for cumbersome. But perhaps the enemy may be dazzled by its shiny surface?
+
+Aegis:
+20 armor, +5% stagger, +100% enemy stagger first term 50% afterwards
+This cannot be the real aegis as I am not stone, but this is a most terrifying replica
 
 //Consumables
 
 Loaf of bread:
+Heal 20%
 "Acquired" from my second favourite bakery, it was saved for a rainy day. It will soon rain - the tears of my enemies
 
 Bottle of mead:
+Heat 20%
 Nothing soothes pain like a dash of mead, a single gulp and all is forgotten
 
 Mysterious white powder:
+Random Effect: (Heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns +50% stagger(hidden effect)
 I was told that a couple pinches will invigorate me from even the deapest of stupors
+
+The Art of War - Sun Tzu:
+-5% stagger(passive effect)
+I am hit with stunning epiphany... 
 
 
 //Miscellaneous

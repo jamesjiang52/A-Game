@@ -150,7 +150,8 @@ Passive effect: -5% stagger
 I am hit with stunning epiphany... 
 
 Rainbow stone:
-I hope this stone is more usefull than the first one ...
+I hope this stone is more useful than the first one ...
+
 
 Quill:
 If only I had something to write on

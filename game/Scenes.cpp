@@ -21,8 +21,8 @@ void outsideFortress(Player *player) {
     getContinueFromPlayer();
     
     // create objects and add to player's inventory
-    Weapon *ironSword = new Weapon("iron sword", "", 3, 10);  // name, description, encumbrance, damage
-    Armor *clothes = new Armor("street clothes", "", 4, 1);  // name, description, encumbrance, armor
+    Weapon *ironSword = new Weapon("iron sword", "", 3, 10, 5, 0);  // name, description, encumbrance, damage, player stagger chance increase, enemy stagger chance increase
+    Armor *clothes = new Armor("street clothes", "", 4, 1, 0, 0);  // name, description, encumbrance, armor, player stagger chance increase, enemy stagger chance increase
     Potion *bread = new Potion("loaf of bread", "", 1, 5);  // name, description, encumbrance, healAmount
     Potion *meadBottle = new Potion("bottle of mead", "", 2, 8);
     InteractableObject *lantern = new InteractableObject("lantern", "", 3);  // name, description, encumbrance

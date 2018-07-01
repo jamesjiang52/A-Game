@@ -1,11 +1,21 @@
 #include "ArmorClass.hpp"
 
-Armor::Armor(std::string name, std::string description, int encumbrance, int armor): InteractableObject(name, description, encumbrance) {
+Armor::Armor(std::string name, std::string description, int encumbrance, int armor, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease): InteractableObject(name, description, encumbrance) {
     this->armor = armor;
+    this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
+    this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
 }
 
 int Armor::getArmor() {
     return armor;
+}
+
+int Armor::getPlayerStaggerPercentIncrease() {
+    return playerStaggerPercentIncrease;
+}
+
+int Armor::getEnemyStaggerPercentIncrease() {
+    return enemyStaggerPercentIncrease;
 }
 
 void Armor::use(Player *player) {

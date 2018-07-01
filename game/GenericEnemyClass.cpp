@@ -5,8 +5,8 @@ GenericEnemy::GenericEnemy(std::string name, int startingHealth) {
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("", "", 0, 0);  // name, description, encumbrance, damage
-    this->armor = new Armor("", "", 0, 0);  // name, description, encumbrance, armor
+    this->weapon = NULL;
+    this->armor = NULL;
 }
 
 std::string GenericEnemy::getName() const {

@@ -1,11 +1,21 @@
 #include "WeaponClass.hpp"
 
-Weapon::Weapon(std::string name, std::string description, int encumbrance, int damage): InteractableObject(name, description, encumbrance) {
+Weapon::Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease): InteractableObject(name, description, encumbrance) {
     this->damage = damage;
+    this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
+    this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
 }
 
 int Weapon::getDamage() {
     return damage;
+}
+
+int Weapon::getPlayerStaggerPercentIncrease() {
+    return playerStaggerPercentIncrease;
+}
+
+int Weapon::getEnemyStaggerPercentIncrease() {
+    return enemyStaggerPercentIncrease;
 }
 
 void Weapon::use(Player *player) {

@@ -5,8 +5,8 @@ Player::Player(std::string name, int startingHealth) {
     this->startingHealth = startingHealth;
     this->currentHealth = startingHealth;
 
-    this->weapon = new Weapon("iron sword", "", 3, 10);  // name, description, encumbrance, damage
-    this->armor = new Armor("street clothes", "", 4, 1);  // name, description, encumbrance, armor
+    this->weapon = NULL;
+    this->armor = NULL;
 }
 
 std::string Player::getName() const {

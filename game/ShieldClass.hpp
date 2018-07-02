@@ -1,5 +1,5 @@
-#ifndef ARMOR_H
-#define ARMOR_H
+#ifndef SHIELD_H
+#define SHIELD_H
 
 #include <string>
 #include "InteractableObjectClass.hpp"
@@ -7,7 +7,7 @@
 
 class Player;
 
-class Armor: public InteractableObject {
+class Shield: public InteractableObject {
     private:
         int armor;
         int playerStaggerPercentIncrease;
@@ -18,7 +18,7 @@ class Armor: public InteractableObject {
         int getArmor() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;
-        void use(Player *player);  // equips armor
+        void use(Player *player);  // equips shield
 };
 
 #endif

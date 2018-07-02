@@ -22,10 +22,12 @@ class Player {
         int currentHealth;
         Weapon *weapon;
         Armor *armor;
+        Shield *shield;
         Location *location;
         std::string name;
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        bool canUseShield;
 
     public:
         Player(std::string name, int startingHealth);
@@ -48,6 +50,9 @@ class Player {
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;
         void setArmor(Armor *armor);
+        Shield *getShield() const;
+        void setShield(Shield *shield);
+        bool canUseShield() const;
 };
 
 #endif

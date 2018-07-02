@@ -13,12 +13,14 @@ class Weapon: public InteractableObject {
         int damage;
         int playerStaggerPercentIncrease;
         int enemyStaggerPercentIncrease;
+        bool isTwoHanded;
     
     public:
-        Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease);
-        int getDamage();
-        int getPlayerStaggerPercentIncrease();
-        int getEnemyStaggerPercentIncrease();
+        Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease, bool isTwoHanded);
+        int getDamage() const;
+        int getPlayerStaggerPercentIncrease() const;
+        int getEnemyStaggerPercentIncrease() const;
+        bool isTwoHanded() const;
         void use(Player *player);  // equips weapon
 };
 

@@ -38,7 +38,7 @@ void getUserRetryOrQuit() {
             std::cout << "\n";
             throw 'e';  // another function catches this char exception
         } else {
-            std::cout << "\n";
+            std::cout << "\n\n";
         }
     } while ((playerInput != "retry") && (playerInput != "quit"));
 }
@@ -96,7 +96,8 @@ void getUserInput(Player *player) {
                 } else if (object == player->getArmor()) {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
-                    std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me (-" << player->getArmor()->getEncumbrance() << " encumbrance).\n\n"; 
+                    std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me (-" << player->getArmor()->getEncumbrance() << " encumbrance).\n\n";
+                    player->setArmor(player->getObjectFromString("street clothes");
                 } else {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
@@ -413,7 +414,7 @@ void printInventory(Player *player) {
 void printStats(Player *player) {
     std::cout << "\nHealth: " << player->getCurrentHealth() << "/" << player->getStartingHealth();
     std::cout << "\nWeapon damage: " << player->getWeapon()->getDamage();
-    std::cout << "\nArmor rating: " << player->getArmor()->getArmor();
+    std::cout << "\nArmor rating: " << player->getArmor()->getArmor() + player->getShield()->getArmor();
     std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << MAX_ENCUMBRANCE;
     std::cout << "\n\n";
 }

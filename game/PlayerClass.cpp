@@ -7,6 +7,7 @@ Player::Player(std::string name, int startingHealth) {
 
     this->weapon = NULL;
     this->armor = NULL;
+    this->canUseShield = true;
 }
 
 std::string Player::getName() const {
@@ -35,7 +36,7 @@ bool Player::isOverEncumbered() const {
 }
 
 void Player::loseHealth(int amount) {
-    double damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION/MAX_ARMOR;
+    double damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
     int loseHealthAmount = amount*(1 - damageReductionFraction);
@@ -124,6 +125,12 @@ Weapon *Player::getWeapon() const {
 
 void Player::setWeapon(Weapon *weapon) {
     this->weapon = weapon;
+    
+    if (weapon->isTwoHanded()) {
+        canUseShield = false;
+    } else {
+        canUseShield = true;
+    }
 }
 
 Armor *Player::getArmor() const {
@@ -132,4 +139,16 @@ Armor *Player::getArmor() const {
 
 void Player::setArmor(Armor *armor) {
     this->armor = armor;
+}
+
+Shield *Player::getShield() const {
+    return shield;
+}
+
+void Player::setShield(Shield *shield) {
+    this->shield = shield;
+}
+
+bool Player::canUseShield() {
+    return canUseShield;
 }

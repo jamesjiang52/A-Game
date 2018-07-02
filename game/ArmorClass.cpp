@@ -6,24 +6,27 @@ Armor::Armor(std::string name, std::string description, int encumbrance, int arm
     this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
 }
 
-int Armor::getArmor() {
+int Armor::getArmor() const {
     return armor;
 }
 
-int Armor::getPlayerStaggerPercentIncrease() {
+int Armor::getPlayerStaggerPercentIncrease() const {
     return playerStaggerPercentIncrease;
 }
 
-int Armor::getEnemyStaggerPercentIncrease() {
+int Armor::getEnemyStaggerPercentIncrease() const {
     return enemyStaggerPercentIncrease;
 }
 
 void Armor::use(Player *player) {
-    if (player->getArmor() != this) {
-        if (player->getArmor()->getName() == "street clothes")
-            std::cout << "I slip on the " << name << " over my clothes (" << armor << " armor).\n\n";
-        else
-            std::cout << "I take off the " << player->getArmor()->getName() << " and put on the " << name << " (" << armor << " armor).\n\n";
+    if (name == "street clothes") {
+        if (player->getArmor() == this) {
+            std::cout << "I'm already wearing the street clothes.\n\n";
+        } else {
+            std::cout << "I'm already wearing the street clothes inside my " << player->getArmor()->getName() << ".\n\n";
+        }
+    } else if (player->getArmor() != this) {
+        std::cout << "I take off the " << player->getArmor()->getName() << " and put on the " << name << " (" << armor << " armor).\n\n";
         player->setArmor(this);
     } else {
         std::cout << "I'm already wearing the " << name << " (" << armor << " armor).\n\n";

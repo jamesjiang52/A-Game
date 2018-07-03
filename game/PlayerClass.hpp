@@ -10,11 +10,13 @@
 #include "LocationClass.hpp"
 #include "WeaponClass.hpp"
 #include "ArmorClass.hpp"
+#include "ShieldClass.hpp"
 #include "GenericEnemyClass.hpp"
 
 class GenericEnemy;
 class Armor;
 class Weapon;
+class Shield;
 
 class Player {
     private:
@@ -27,7 +29,7 @@ class Player {
         std::string name;
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
-        bool canUseShield;
+        bool oneHanded;
 
     public:
         Player(std::string name, int startingHealth);

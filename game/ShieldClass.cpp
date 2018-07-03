@@ -25,7 +25,7 @@ void Shield::use(Player *player) {
         std::cout << "I equip the " << name << " in my off hand (" << armor <<  " armor).\n\n";
         player->setShield(this);
     } else if (player->getShield() != this) {
-        std::cout << "I put the " << player->getShield()->getName << " back into my knapsack and equip the " << name << " in my off hand (" << armor << " armor).\n\n";
+        std::cout << "I put the " << player->getShield()->getName() << " back into my knapsack and equip the " << name << " in my off hand (" << armor << " armor).\n\n";
     } else {  // shield is already equipped
         std::cout << "I already have the " << name << " equipped (" << armor << " armor).\n\n";
     }

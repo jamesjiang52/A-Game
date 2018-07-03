@@ -14,7 +14,7 @@ class Shield: public InteractableObject {
         int enemyStaggerPercentIncrease;
     
     public:
-        Armor(std::string name, std::string description, int encumbrance, int armor, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease);
+        Shield(std::string name, std::string description, int encumbrance, int armor, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease);
         int getArmor() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;

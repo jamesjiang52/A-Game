@@ -97,7 +97,11 @@ void getUserInput(Player *player) {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
                     std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me (-" << player->getArmor()->getEncumbrance() << " encumbrance).\n\n";
-                    player->setArmor(player->getObjectFromString("street clothes");
+                    player->setArmor(player->getObjectFromString("street clothes"));
+                } else if (object == player->getShield()) {
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I drop the " << stripSpaces(playerInput.substr(5)) << ", leaving my off hand free (-" << object->getEncumbrance() << " encumbrance).\n\n";
                 } else {
                     player->removeFromInventory(object);
                     player->getLocation()->addInteractableObject(object);
@@ -112,9 +116,9 @@ void getUserInput(Player *player) {
     } else if (playerInput.substr(0, 4) == "look") {  // player wants to look at object
         if (playerInput.length() > 5) {
             if (player->getLocation()->checkStringInObjects(stripSpaces(playerInput.substr(5)))) {  // object is in current location
-                std::cout << player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
+                std::cout << player->getLocation()->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription() << "\n\n";
             } else if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
-                std::cout << player->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription();
+                std::cout << player->getObjectFromString(stripSpaces(playerInput.substr(5)))->getDescription() << "\n\n";
             } else {
                 std::cout << "I do not see " << addQuotes(stripSpaces(playerInput.substr(5))) << " around me, nor can I find it in my knapsack.\n\n";
             }

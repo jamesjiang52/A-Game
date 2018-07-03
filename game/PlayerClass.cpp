@@ -7,7 +7,8 @@ Player::Player(std::string name, int startingHealth) {
 
     this->weapon = NULL;
     this->armor = NULL;
-    this->canUseShield = true;
+    
+    oneHanded = true;
 }
 
 std::string Player::getName() const {
@@ -127,9 +128,9 @@ void Player::setWeapon(Weapon *weapon) {
     this->weapon = weapon;
     
     if (weapon->isTwoHanded()) {
-        canUseShield = false;
+        oneHanded = false;
     } else {
-        canUseShield = true;
+        oneHanded = true;
     }
 }
 
@@ -149,6 +150,6 @@ void Player::setShield(Shield *shield) {
     this->shield = shield;
 }
 
-bool Player::canUseShield() {
-    return canUseShield;
+bool Player::canUseShield() const {
+    return oneHanded;
 }

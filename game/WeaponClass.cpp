@@ -1,9 +1,10 @@
 #include "WeaponClass.hpp"
 
-Weapon::Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease, bool isTwoHanded): InteractableObject(name, description, encumbrance) {
+Weapon::Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease, bool twoHanded): InteractableObject(name, description, encumbrance) {
     this->damage = damage;
     this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
     this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
+    this->twoHanded = twoHanded;
 }
 
 int Weapon::getDamage() const {
@@ -19,20 +20,20 @@ int Weapon::getEnemyStaggerPercentIncrease() const {
 }
 
 bool Weapon::isTwoHanded() const {
-    return isTwoHanded;
+    return twoHanded;
 }
 
 void Weapon::use(Player *player) {
     if (player->getWeapon() != this) {
-        if (player->getWeapon()->isTwoHanded() && isTwoHanded) {  // both previous weapon and current weapon are two-handed
+        if (player->getWeapon()->isTwoHanded() && twoHanded) {  // both previous weapon and current weapon are two-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << " (" << damage << " damage).\n\n";
-        } else if (!player->getWeapon()->isTwoHanded() && isTwoHanded) {  // previous weapon is one-handed but current weapon is two-handed
+        } else if (!player->getWeapon()->isTwoHanded() && twoHanded) {  // previous weapon is one-handed but current weapon is two-handed
             if (player->getShield()) {  // player has shield equipped
                 std::cout << "I sheathe the " << player->getWeapon()->getName() << ", put the " << player->getShield()->getName() << " back into my knapsack, and equip the " << name << " (" << damage << " damage).\n\n";
             } else {
                 std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << " (" << damage << " damage).\n\n";
             }
-        } else if (player->getWeapon()->isTwoHanded() && !isTwoHanded) {  // previous weapon is two-handed but current weapon is one-handed
+        } else if (player->getWeapon()->isTwoHanded() && !twoHanded) {  // previous weapon is two-handed but current weapon is one-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ", freeing up my off hand (" << damage << " damage).\n\n";
         } else {  // both previous weapon and current weapon are one-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << " (" << damage << " damage).\n\n";

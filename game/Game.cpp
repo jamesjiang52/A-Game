@@ -11,6 +11,7 @@
 #include "LocationClass.hpp"
 #include "WeaponClass.hpp"
 #include "ArmorClass.hpp"
+#include "ShieldClass.hpp"
 #include "PotionClass.hpp"
 #include "GenericEnemyClass.hpp"
 #include "PlayerClass.hpp"

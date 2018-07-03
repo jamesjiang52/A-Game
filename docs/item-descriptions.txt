@@ -18,7 +18,7 @@ Your everyday sword found within castle armouries, it bends rather easily but do
 
 War Rapier:
 50 dmg, -5% stagger
-A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thursting attacks rather than sweeping cuts.
+A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thrusting attacks rather than sweeping cuts.
 
 War Sabre:
 60 dmg, +5% stagger
@@ -26,7 +26,7 @@ A curved blade that provides a large cutting edge, great for finishing off enemi
 
 Fire Sword:
 15 dmg, +5% stagger, +5% enemy stagger
-Flame flickers constantly along the blade; I wonder how the fire doesnt burn out?
+Flame flickers constantly along the blade; I wonder how the fire doesn't burn out?
 
 Spear:
 15 dmg, -5% stagger
@@ -58,7 +58,7 @@ Diamond Dagger:
 Extremely hard but perpetually blunt, it is in theory a good weapon, but is more suited for ceremonial purposes.
 
 Obsidian Dagger:
-20 dmg, -10% stagger, +1% enemy stagger(first usage +20% enemy stagger)
+20 dmg, -10% stagger, +1% enemy stagger (first usage +20% enemy stagger)
 Sharp beyond imagination, and with a gold-plated hilt, it is worth fortunes.
 
 Trident:
@@ -89,31 +89,31 @@ Street Clothes:
 The uniform of a lowly soldier consists of a navy coat, black pants, and sturdy boots.
 
 Leather Jacket: 
-2 armour, +1% enemy stagger
+2 armor, +1% enemy stagger
 While impressive looking, it is not able to withstand much
 
 Chainmail:
-20 armour, +20% stagger
+20 armor, +20% stagger
 Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
 
 Plate Armor:
-40 armour, +20% stagger
-Made of joined plates of thick steel, it convers the body from head to toe and is inpenetrable outside well positioned blows.
+40 armor, +20% stagger
+Made of joined plates of thick steel, it convers the body from head to toe and is impenetrable outside well positioned blows.
 
 Paper Shield:
-1 armour
+1 armor
 They actually make these things? I thought it was just a metaphor.
 
 Wooden Shield:
-10 armour
+10 armor
 Light and mobile, it can be easily discarded when necessary.
 
 Metal Shield:
-15 armour, +5% stagger, +1% enemy stagger
+15 armor, +5% stagger, +1% enemy stagger
 It is more versatile than a wooden shield, but also more cumbersome. Perhaps the enemy may be dazzled by its shiny surface?
 
 Aegis Replica:
-15 armour, +1% stagger, +100% enemy stagger first turn 50% afterwards
+15 armor, +1% stagger, +100% enemy stagger first turn 50% afterwards
 This cannot be the real Aegis as I am not stone, but this is a most terrifying replica.
 
 
@@ -132,17 +132,17 @@ Heal 10%
 There's nothing like the gooey wonderfulness of this brown-coloured delicacy.
 
 Ambrosia:
-Random Effect: (heal 20%, heal 50%, drain 20% )
+Random Effect: (heal 20%, heal 50%, drain 20%)
 It is the food of the gods, or so it is said. I'm sure they wont be angry if I take just a little bite.
 
 Mysterious White Powder:
-Random Effect: (heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns hidden effect(+50% stagger)
-I was told that a couple of pinches will invigorate me from even the deapest of stupors.
+Random Effect: (heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns hidden effect (+50% stagger)
+I was told that a couple of pinches will invigorate me from even the deepest of stupors.
 
 
 //Miscellaneous
 
-Lattern:
+Lantern:
 The last embers glow faintly within.
 
 The Art of War - Sun Tzu:

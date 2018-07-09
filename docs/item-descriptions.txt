@@ -5,114 +5,146 @@ Description of in-game items
 //Weapons
 
 Stone Sword:
-1 dmg, +10% stagger
-A slab of rock sharpened to carry a point, it is awkward to handle and difficult to maneuver.
+3 lbs
+3 dmg, +10% stagger
+A slab of rock sharpened to carry a point, it is awkward to handle and difficult to maneuver. It is more akin to a club than a blade
 
 Bronze Sword:
-5 dmg
+4 lbs
+4 dmg
 Approximately sixty centimetres in length, this blade is adorned with a crude wooden hilt.
 
 Iron Sword:
-10 dmg, +5% stagger
+5 lbs
+8 dmg, +5% stagger
 Your everyday sword found within castle armouries, it bends rather easily but does not break.
 
 War Rapier:
-50 dmg, -5% stagger
+3 lbs
+14 dmg, -5% stagger
 A long thin blade with a very sharp tip, it has an intricately complex hilt that wraps around to protect the hand of its user. Due to its slenderness it is much more suited for nimble thrusting attacks rather than sweeping cuts.
 
 War Sabre:
-60 dmg, +5% stagger
+5 lbs
+16 dmg, +5% stagger
 A curved blade that provides a large cutting edge, great for finishing off enemies that refuse to die. The hilt is adorned with gemstones that glow in the darkness.
 
+Star Sword:
+3 lbs
+12 dmg, -5% stagger, 2 hp enemy drain per turn once hit
+Made of from the remains of a fallen star, the blade is as pale as glass, impossibly sharp, and inflicts a cool burn to those who are cut by it
+
 Fire Sword:
-15 dmg, +5% stagger, +5% enemy stagger
+5 lbs
+12 dmg, +10% enemy stagger, 1 hp drain per turn, 3 hp enemy drain per turn once hit
 Flame flickers constantly along the blade; I wonder how the fire doesn't burn out?
 
 Spear:
-15 dmg, -5% stagger
+1 lbs
+7 dmg, -5% stagger
 A long handle of polished wood with a sharp tip; an ideal weapon to keep the enemy at a distance.
 
 Rusty Mace:
-20 dmg, +15% stagger, 10% enemy armour reduction, unable to use shield
+8 lbs
+6 dmg, +15% stagger, 10% enemy armor reduction, unable to use shield
 Once a formidable weapon, its spiked head is slowly rusting away, leaving behind a mess of iron and flakes.
 
 Two-handed Mace:
-60 dmg, +20% stagger, 15% enemy armour reduction, unable to use shield
+7 lbs
+13 dmg, +20% stagger, 15% enemy armor reduction, unable to use shield
 This fearsome weapon is almost a metre-and-a-half long and carries a spiked steel head capable of smashing through even the sturdiest of armor.
 
 Battle Axe:
-60 dmg, +15% stagger, 10% enemy armour reduction, unable to use shield
+7 lbs
+13 dmg, +15% stagger, 10% enemy armor reduction, unable to use shield
 With a crescent-shaped head and a long thick handle, this axe was modified from its woodcutting cousin to become a terror on the battlefield.
 
 Morningstar:
-Regular: 40 dmg, +10% stagger, 10% enemy armour reduction, unable to use shield
-Against Shields: 40 dmg, +10% stagger, +25% enemy stagger, 50% enemy armour reduction
+6 lbs
+Regular: 10 dmg, +10% stagger, 10% enemy armour reduction, unable to use shield
+Against Shields: 10 dmg, +10% stagger, +25% enemy stagger, 50% enemy armour reduction
 A cruel spiked ball is connected by chain to the head of a wooden rod.
 
 Wooden Dagger:
+0 lb
 1 dmg, +1% enemy stagger
 Crudely carved into a point with a handle, I guess it can be used as a distraction.
 
 Diamond Dagger:
+0 lb
 2 dmg, +1% enemy stagger (first usage +20% enemy stagger)
 Extremely hard but perpetually blunt, it is in theory a good weapon, but is more suited for ceremonial purposes.
 
 Obsidian Dagger:
-20 dmg, -10% stagger, +1% enemy stagger (first usage +20% enemy stagger)
+0 lb
+6 dmg, -10% stagger, +1% enemy stagger (first usage +20% enemy stagger)
 Sharp beyond imagination, and with a gold-plated hilt, it is worth fortunes.
 
 Trident:
-30 dmg, +5% enemy stagger
+5 lbs
+8 dmg, +5% enemy stagger
 A majestic three-pronged head is mounted on a long handle adorned with life-like carved sea creatures.
 
 Whip:
-15 dmg, +10% enemy stagger, +50% enemy armor effectiveness
+2 lbs
+6 dmg, +10% enemy stagger, +50% enemy armor effectiveness
 Glowing a sinister red in the torchlight, any hit from this must be painful.
 
 Stone:
+0 lbs
 0 dmg
 This is impressively round... and grey... and smooth ... who am I kidding at least I won't miss it when I throw it.
 
 Excalibur:
 Without rainbow stone:
-	55 dmg
+	6 lbs
+	12 dmg, unable to use shield
 	Could this be... the legendary sword of King Arthur? Something seems slightly off, but I can't seem to put my finger on it...
 With rainbow stone:
-	80 dmg
+	6 lbs
+	24 dmg, unable to use shield
 	The legendary sword of King Arthur is complete with the rainbow stone in its pommel!
 
 
 //Defensive Items
 
 Street Clothes:
+1 lbs
 1 armor
 The uniform of a lowly soldier consists of a navy coat, black pants, and sturdy boots.
 
 Leather Jacket: 
+1 lbs
 2 armor, +1% enemy stagger
 While impressive looking, it is not able to withstand much
 
 Chainmail:
+20 lbs
 20 armor, +20% stagger
 Made of interlocking iron rings that are welded shut, it can withstand blows but has several vulnerable areas. It is also exceedingly heavy.
 
 Plate Armor:
+40 lbs
 40 armor, +20% stagger
 Made of joined plates of thick steel, it convers the body from head to toe and is impenetrable outside well positioned blows.
 
 Paper Shield:
+1 lb
 1 armor
 They actually make these things? I thought it was just a metaphor.
 
 Wooden Shield:
+5 lbs
 10 armor
 Light and mobile, it can be easily discarded when necessary.
 
 Metal Shield:
+10 lbs
 15 armor, +5% stagger, +1% enemy stagger
 It is more versatile than a wooden shield, but also more cumbersome. Perhaps the enemy may be dazzled by its shiny surface?
 
 Aegis Replica:
+10 lbs
 15 armor, +1% stagger, +100% enemy stagger first turn 50% afterwards
 This cannot be the real Aegis as I am not stone, but this is a most terrifying replica.
 
@@ -120,23 +152,23 @@ This cannot be the real Aegis as I am not stone, but this is a most terrifying r
 //Consumables
 
 Loaf of Bread:
-Heal 20%
+Heal 15 hp
 "Acquired" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies.
 
 Bottle of Mead:
-Heal 20%
+Heal 15 hp
 Nothing soothes pain like a dash of mead - a single gulp and all is forgotten.
 
 Square of Chocolate:
-Heal 10%
+Heal 10 hp
 There's nothing like the gooey wonderfulness of this brown-coloured delicacy.
 
 Ambrosia:
-Random Effect: (heal 20%, heal 50%, drain 20%)
+Random Effect: (heal 15 hp, heal 25 hp, drain 20 hp)
 It is the food of the gods, or so it is said. I'm sure they wont be angry if I take just a little bite.
 
 Mysterious White Powder:
-Random Effect: (heal 10%, heal 20%, heal 50%, -10% stagger, or -20% stagger), after five turns hidden effect (+50% stagger)
+Random Effect: (heal 5 hp, heal 15 hp, heal 25 hp, -10% stagger, or -20% stagger), after five turns hidden effect (+50% stagger)
 I was told that a couple of pinches will invigorate me from even the deepest of stupors.
 
 

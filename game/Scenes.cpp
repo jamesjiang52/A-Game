@@ -1,6 +1,6 @@
 #include "Scenes.hpp"
 
-Player *startGame(std::string gameName, int startingHealth) {
+Player *startGame() {
     /*
     Starts the game. Returns a reference to the player.
     */
@@ -11,7 +11,7 @@ Player *startGame(std::string gameName, int startingHealth) {
     std::cout << "\n\n";
 
     getContinueFromPlayer();
-    Player *player = new Player(playerInput, startingHealth);
+    Player *player = new Player(playerInput, PLAYER_STARTING_HEALTH);
     return player;
 }
 
@@ -104,5 +104,5 @@ void outsideFortress(Player *player) {
     while (player->getLocation() != fortressGate) {
         getUserInput(player);
     }
-    // function terminates when player reaches the fortress gate (ready for next scene)
+    // function terminates when player reaches fortress gate
 }

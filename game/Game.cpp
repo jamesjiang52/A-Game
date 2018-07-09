@@ -20,7 +20,7 @@
 #include "Journal.hpp"
 
 int main() {
-    Player *player = startGame("Epistle, the tale of Reinbreaker's end", 100);  // starting health
+    Player *player = startGame();
     Player playerData = *player;
     Player *playerCopy = &playerData;  // for loading checkpoints
     

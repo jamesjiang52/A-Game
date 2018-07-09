@@ -8,6 +8,7 @@ Weapon *createBronzeSword();
 Weapon *createIronSword();
 Weapon *createWarRapier();
 Weapon *createWarSabre();
+Weapon *createStarSword();
 Weapon *createFireSword();
 Weapon *createSpear();
 Weapon *createRustyMace();

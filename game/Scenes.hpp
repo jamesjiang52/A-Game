@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <string>
+#include "Parameters.hpp"
 #include "PotionClass.hpp"
 #include "PlayerClass.hpp"
 #include "Utilities.hpp"
 #include "Journal.hpp"
 
-Player *startGame(std::string gameName, int startingHealth);
+Player *startGame();
 void outsideFortress(Player *player);
 
 #endif

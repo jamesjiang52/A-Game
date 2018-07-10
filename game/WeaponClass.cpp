@@ -1,9 +1,23 @@
 #include "WeaponClass.hpp"
 
-Weapon::Weapon(std::string name, std::string description, int encumbrance, int damage, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease, bool twoHanded): InteractableObject(name, description, encumbrance) {
+Weapon::Weapon(
+        std::string name, 
+        std::string description,
+        int encumbrance,
+        int damage,
+        int playerStaggerPercentIncrease,
+        int enemyStaggerPercentIncrease,
+        int enemyArmorReductionPercent,
+        int playerHealthBleed,
+        int enemyHealthBleed,
+        bool twoHanded
+    ): InteractableObject(name, description, encumbrance) {
     this->damage = damage;
     this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
     this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
+    this->enemyArmorReductionPercent = enemyArmorReductionPercent;
+    this->playerHealthBleed = playerHealthBleed;
+    this->enemyHealthBleed = enemyHealthBleed;
     this->twoHanded = twoHanded;
 }
 

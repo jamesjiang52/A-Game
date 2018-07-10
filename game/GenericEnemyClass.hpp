@@ -30,7 +30,7 @@ class GenericEnemy {
         int getStartingHealth() const;
         int getCurrentHealth() const;
         int getTotalEncumbrance() const;
-        void loseHealth(int amount);
+        void loseHealth(int amount, bool ignoreArmor=false);
         void attack(Player *player);
         std::vector<InteractableObject*> getInventory() const;
         void addToInventory(InteractableObject *object);

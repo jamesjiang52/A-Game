@@ -1,6 +1,7 @@
 #ifndef SHIELD_H
 #define SHIELD_H
 
+#include <iostream>
 #include <string>
 #include "InteractableObjectClass.hpp"
 #include "PlayerClass.hpp"
@@ -18,6 +19,7 @@ class Shield: public InteractableObject {
         int getArmor() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;
+        std::string getStatString() const;
         void use(Player *player);  // equips shield
 };
 

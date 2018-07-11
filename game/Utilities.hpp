@@ -35,5 +35,6 @@ void printLocationInfo(Player *player);
 void printInventory(Player *player);
 void printStats(Player *player);
 void printPlayerEmbellishedHealthInfo(Player *player);
+void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy);
 
 #endif

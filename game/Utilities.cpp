@@ -125,6 +125,7 @@ void inputDrop(Player *player, std::string playerInput) {
                 player->setArmor(player->getObjectFromString("street clothes"));
             } else if (object == player->getShield()) {
                 player->removeFromInventory(object);
+                player->setShield(NULL);
                 player->getLocation()->addInteractableObject(object);
                 std::cout << "I drop the " << stripSpaces(playerInput.substr(5)) << ", leaving my off hand free (-" << object->getEncumbrance() << " encumbrance).\n\n";
             } else {
@@ -195,12 +196,30 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
 bool playerCoinToss(Player *player) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*player->getTotalEncumbrance()/MAX_ENCUMBRANCE);
+    
+    // stat modifiers
+    if (player->getWeapon()) threshold += player->getWeapon()->getPlayerStaggerPercentIncrease();
+    if (enemy->getWeapon()) threshold += enemy->getWeapon()->getEnemyStaggerPercentIncrease();
+    if (player->getArmor()) threshold += player->getArmor()->getPlayerStaggerPercentIncrease();
+    if (enemy->getArmor()) threshold += enemy->getArmor()->getEnemyStaggerPercentIncrease();
+    if (player->getShield()) threshold += player->getShield()->getPlayerStaggerPercentIncrease();
+    if (enemy->getShield()) threshold += enemy->getShield()->getEnemyStaggerPercentIncrease();
+    
     return((std::rand() % 100) < threshold);
 }
 
 bool enemyCoinToss(GenericEnemy *enemy) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*enemy->getTotalEncumbrance()/MAX_ENCUMBRANCE);
+    
+    // stat modifiers
+    if (player->getWeapon()) threshold += player->getWeapon()->getEnemyStaggerPercentIncrease();
+    if (enemy->getWeapon()) threshold += enemy->getWeapon()->getPlayerStaggerPercentIncrease();
+    if (player->getArmor()) threshold += player->getArmor()->getEnemyStaggerPercentIncrease();
+    if (enemy->getArmor()) threshold += enemy->getArmor()->getPlayerStaggerPercentIncrease();
+    if (player->getShield()) threshold += player->getShield()->getEnemyStaggerPercentIncrease();
+    if (enemy->getShield()) threshold += enemy->getShield()->getPlayerStaggerPercentIncrease();
+    
     return((std::rand() % 100) < threshold);
 }
 
@@ -216,6 +235,7 @@ void combat(Player *player, GenericEnemy *enemy) {
     
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
+        printEnemyEmbellishedHealthInfo(enemy);
         std::cout << "I can choose to swing, parry, or feint with my " << player->getWeapon()->getName() << ". What do I do?\n";
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
@@ -257,14 +277,14 @@ void combat(Player *player, GenericEnemy *enemy) {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", but I am unable to parry the recoil attack. We exchange blows.\n\n";
-                    player->loseHealth(enemy->getWeapon()->getDamage());
-                    enemy->loseHealth(player->getWeapon()->getDamage());
+                    player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. It appears a recoil attack was attempted, but thankfully misses.\n\n";
-                    enemy->loseHealth(player->getWeapon()->getDamage());
+                    enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. I suffer a powerful attack in retaliation.\n\n";
-                    player->loseHealth(enemy->getWeapon()->getDamage());
+                    player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -272,17 +292,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ". It appears a block was attempted, but I manage to sneak in a hit. Next time, I may not be so lucky.\n\n";
-                    enemy->loseHealth(player->getWeapon()->getDamage());
+                    enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation was attempted.\n\n";
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
-                    enemy->loseHealth(player->getWeapon()->getDamage());
+                    enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
-                    enemy->loseHealth(player->getWeapon()->getDamage());
+                    enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation is attempted.\n\n";
                 }
@@ -296,7 +316,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     std::cout << "The " << enemy->getName() << "tries to attack me, but misses. My preemptive parry was unnecessary, it seems.\n\n"; 
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "The " << enemy->getName() << " attacks me. I try to parry, but I suffer the blow before I can react.\n\n";
-                    player->loseHealth(enemy->getWeapon()->getDamage());
+                    player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -320,12 +340,12 @@ void combat(Player *player, GenericEnemy *enemy) {
             if (enemyChoice == "swing") {
                 if (!playerFailed && !enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ". Unfortunately, the " << enemy->getName() << " is not quite as generous, and I suffer a devastating blow.\n\n";
-                    player->loseHealth(enemy->getWeapon()->getDamage());
+                    player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ", who appears to have missed their real attack on me. Next time, I may not be so lucky.\n\n";
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to fake a swing at the " << enemy->getName() << ", but I suffer a blow before I can regain my step.\n\n";
-                    player->loseHealth(enemy->getWeapon()->getDamage());
+                    player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -441,9 +461,16 @@ void printInventory(Player *player) {
 
 void printStats(Player *player) {
     std::cout << "\nHealth: " << player->getCurrentHealth() << "/" << player->getStartingHealth();
-    std::cout << "\nWeapon damage: " << player->getWeapon()->getDamage();
-    std::cout << "\nArmor rating: " << player->getArmor()->getArmor() + player->getShield()->getArmor();
     std::cout << "\nEncumbrance: " << player->getTotalEncumbrance() << "/" << MAX_ENCUMBRANCE;
+    std::cout << "\nWeapon: " << player->getWeapon()->getName() << "\n" << player->getWeapon()->getStatString();
+    std::cout << "\nArmor: " << player->getArmor()->getName() << "\n" << player->getArmor()->getStatString();
+
+    if (!player->getShield())
+        std::cout << "\nShield: none";
+    else {
+        std::cout << "\nShield: " << player->getShield()->getName() << "\n" << player->getShield()->getStatString();
+    }
+
     std::cout << "\n\n";
 }
 
@@ -458,4 +485,8 @@ void printPlayerEmbellishedHealthInfo(Player *player) {
         std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away";
     }
     std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+}
+
+void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy) {
+    // write this function later
 }

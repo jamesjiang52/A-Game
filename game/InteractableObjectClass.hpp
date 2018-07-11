@@ -21,6 +21,7 @@ class InteractableObject {
         bool operator==(const InteractableObject &object);
         std::string getName() const;
         std::string getDescription() const;
+        void appendToDescription(std::string string);  // use for appending the item stats to the end of the description after construction
         int getEncumbrance() const;
         void setUseMessage(std::string useMessage);  // only use this function for instances of this base class
         virtual void use(Player *player);

@@ -18,6 +18,10 @@ std::string InteractableObject::getDescription() const {
     return description;
 }
 
+void InteractableObject::appendToDescription(std::string string) {
+    description += string;
+}
+
 int InteractableObject::getEncumbrance() const {
     return encumbrance;
 }

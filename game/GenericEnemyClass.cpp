@@ -30,15 +30,11 @@ int GenericEnemy::getTotalEncumbrance() const {
     return sum;
 }
 
-void GenericEnemy::loseHealth(int amount, bool ignoreArmor=false) {
-    if (!ignoreArmor) {
-        double damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION/MAX_ARMOR;
-        // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
+void GenericEnemy::loseHealth(int amount, int armorReductionPercent=0) {
+    float damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
+    // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
-        int loseHealthAmount = amount*(1 - damageReductionFraction);
-    } else {
-        int loseHealthAmount = amount;
-    }
+    int loseHealthAmount = std::max(amount*(1 - damageReductionFraction), 0);  // don't let damage go below 0
     
     if (currentHealth - loseHealthAmount > 0)
         currentHealth -= loseHealthAmount;

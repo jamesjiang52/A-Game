@@ -34,6 +34,10 @@ class Weapon: public InteractableObject {
         int getDamage() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;
+        int getEnemyArmorReductionPercent() const;
+        int getPlayerHealthBleed() const;
+        int getEnemyHealthBleed() const;
+        std::string getStatString() const;
         bool isTwoHanded() const;
         void use(Player *player);  // equips weapon
 };

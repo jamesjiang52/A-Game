@@ -1,6 +1,7 @@
 #ifndef ARMOR_H
 #define ARMOR_H
 
+#include <iostream>
 #include <string>
 #include "InteractableObjectClass.hpp"
 #include "PlayerClass.hpp"
@@ -18,6 +19,7 @@ class Armor: public InteractableObject {
         int getArmor() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;
+        std::string getStatString() const;
         void use(Player *player);  // equips armor
 };
 

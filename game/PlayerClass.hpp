@@ -38,7 +38,7 @@ class Player {
         int getCurrentHealth() const;
         int getTotalEncumbrance() const;
         bool isOverEncumbered() const;
-        void loseHealth(int amount, bool ignoreArmor=false);
+        void loseHealth(int amount, int armorReductionPercent=0);
         void gainHealth(int amount);
         void attack(GenericEnemy *enemy);
         Location *getLocation() const;

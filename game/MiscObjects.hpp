@@ -7,6 +7,7 @@ InteractableObject *createLanternUnlit();
 InteractableObject *createLantern();
 InteractableObject *createTheArtOfWar();
 InteractableObject *createRainbowStone();
+InteractableObject *createRainbowStoneWithoutExcalibur();
 InteractableObject *createQuill();
 
 #endif

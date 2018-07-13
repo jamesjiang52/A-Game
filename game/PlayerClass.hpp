@@ -30,6 +30,7 @@ class Player {
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         bool oneHanded;
+        Armor *createStreetClothes();  // I need this
 
     public:
         Player(std::string name, int startingHealth);
@@ -52,6 +53,7 @@ class Player {
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;
         void setArmor(Armor *armor);
+        void setArmorToStreetClothes();
         Shield *getShield() const;
         void setShield(Shield *shield);
         bool canUseShield() const;

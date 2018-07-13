@@ -18,6 +18,11 @@
 #include "Utilities.hpp"
 #include "Scenes.hpp"
 #include "Journal.hpp"
+#include "MiscObjects.hpp"
+#include "Weapons.hpp"
+#include "Armors.hpp"
+#include "Shields.hpp"
+#include "Potions.hpp"
 
 int main() {
     Player *player = startGame();

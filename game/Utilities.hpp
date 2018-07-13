@@ -12,6 +12,11 @@
 #include "LocationClass.hpp"
 #include "GenericEnemyClass.hpp"
 #include "PlayerClass.hpp"
+#include "MiscObjects.hpp"
+#include "Weapons.hpp"
+#include "Armors.hpp"
+#include "Shields.hpp"
+#include "Potions.hpp"
 
 std::string addQuotes(std::string original);
 std::string stripSpaces(std::string original);

@@ -46,13 +46,14 @@ void Player::loseHealth(int amount, int armorReductionPercent=0) {
         currentHealth -= loseHealthAmount;
     else {  // player loses
         currentHealth = 0;
-        // probably do something else as well (i.e. game over)
     }
 }
 
 void Player::gainHealth(int amount) {
     if (currentHealth + amount < startingHealth)
         currentHealth += amount;
+    else if (currentHealth + amount <= 0)
+        currentHealth = 0;
     else
         currentHealth = startingHealth;
 }
@@ -140,6 +141,25 @@ Armor *Player::getArmor() const {
 
 void Player::setArmor(Armor *armor) {
     this->armor = armor;
+}
+
+Armor *createStreetClothes() {
+    Armor *armor = new Armor(
+        "street clothes",
+        "The uniform of a lowly soldier consists of a navy coat, black pants, and sturdy boots.\n",
+        1, 1, 0, 0
+    );
+    armor->appendToDescription(armor->getStatString());
+    return armor;
+}
+
+void Player::setArmorToStreetClothes() {
+    InteractableObject *oldStreetClothes = getObjectFromString("street clothes");
+    removeFromInventory(oldStreetClothes);
+    
+    Armor *newStreetClothes = createStreetClothes();
+    addToInventory(newStreetClothes);
+    this->armor = newStreetClothes;
 }
 
 Shield *Player::getShield() const {

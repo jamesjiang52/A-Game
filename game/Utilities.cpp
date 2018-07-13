@@ -122,7 +122,7 @@ void inputDrop(Player *player, std::string playerInput) {
                 player->removeFromInventory(object);
                 player->getLocation()->addInteractableObject(object);
                 std::cout << "I take off the " << player->getArmor()->getName() << ", dropping it on the ground beside me (-" << player->getArmor()->getEncumbrance() << " encumbrance).\n\n";
-                player->setArmor(player->getObjectFromString("street clothes"));
+                player->setArmorToStreetClothes();
             } else if (object == player->getShield()) {
                 player->removeFromInventory(object);
                 player->setShield(NULL);
@@ -484,9 +484,18 @@ void printPlayerEmbellishedHealthInfo(Player *player) {
     } else {
         std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away";
     }
-    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n\n";
+    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n";
 }
 
 void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy) {
-    // write this function later
+    if (enemy->getCurrentHealth()/(double)enemy->getStartingHealth() >= 0.9) {
+        std::cout << "The " << enemy->getName() << " faces me with unbroken courage and vigor";
+    } else if (enemy->getCurrentHealth()/(double)enemy->getStartingHealth() >= 0.5) {
+        std::cout << "It appears the " << enemy->getName() << " is wavering, though the fire still burns in their eyes";
+    } else if (enemy->getCurrentHealth()/(double)enemy->getStartingHealth() >= 0.1) {
+        std::cout << "The " << enemy->getName() << " is visibly tormented by the wounds I have inflicted";
+    } else {
+        std::cout << "It appears the " << enemy->getName() << " is on its last legs";
+    }
+    std::cout << " (" << enemy->getCurrentHealth() << "/" << enemy->getStartingHealth() << "health).\n\n";
 }

@@ -39,37 +39,37 @@ void outsideFortress(Player *player) {
     // create locations
     Location *outsideFortressWalls = new Location(
         "Outside Fortress Walls", 
-        "I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's"
-        "walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just"
-        "off the path and down the hill, the river roars its great presence, mighty and boisterous. To the"
-        "south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its"
+        "I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's "
+        "walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just "
+        "off the path and down the hill, the river roars its great presence, mighty and boisterous. To the "
+        "south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its "
         "serene nocturne against the fading light. The fortress calls me closer.\n"
     );
     
     Location *outsideFortressWallsCloser = new Location(
         "Outside Fortress Walls",
-        "I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand"
-        "spectacle of amber and violet. I can see not a single cloud, not even a flurry. The fortress calls"
+        "I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand "
+        "spectacle of amber and violet. I can see not a single cloud, not even a flurry. The fortress calls "
         "me closer.\n"
     );
 
     Location *outsideFortressWallsAway = new Location(  // if player chooses to go south
         "Outside Fortress Walls",
-        "I turn around and try to leave, but the stronghold beckons me closer. I cannot leave until the"
+        "I turn around and try to leave, but the stronghold beckons me closer. I cannot leave until the "
         "fortress is mine.\n"
     );
 
     Location *riverShore = new Location(
         "River Shore",
-        "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the"
-        "water with just my streets clothes, lest I lose my strength and become incapable of pulling myself"
+        "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the "
+        "water with just my streets clothes, lest I lose my strength and become incapable of pulling myself "
         "back to the safety of shore. I need to get back onto the path.\n"
     );
 
     Location *fortressGate = new Location(
         "Fortress Gate",
-        "I approach the first of the fortress' triple walls. I am greeted by a closed gate as I am commanded"
-        "to reveal what I carry. A standard issue iron sword, a lantern, a loaf of bread, a bottle of mead,"
+        "I approach the first of the fortress' triple walls. I am greeted by a closed gate as I am commanded "
+        "to reveal what I carry. A standard issue iron sword, a lantern, a loaf of bread, a bottle of mead, "
         "and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised. Fools.\n"
     );
 

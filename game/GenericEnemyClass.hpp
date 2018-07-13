@@ -8,11 +8,13 @@
 #include "InteractableObjectClass.hpp"
 #include "WeaponClass.hpp"
 #include "ArmorClass.hpp"
+#include "ShieldClass.hpp"
 #include "PlayerClass.hpp"
 
 class Player;
 class Weapon;
 class Armor;
+class Shield;
 
 class GenericEnemy {
     protected:
@@ -20,12 +22,14 @@ class GenericEnemy {
         int currentHealth;
         Weapon *weapon;
         Armor *armor;
+        Shield *shield;
         std::string name;
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
         
     public:
         GenericEnemy(std::string name, int startingHealth);
+        bool isBleeding = false;
         std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;
@@ -39,6 +43,8 @@ class GenericEnemy {
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;
         void setArmor(Armor *armor);
+        Shield *getShield() const;
+        void setShield(Shield *shield);
 };
 
 #endif

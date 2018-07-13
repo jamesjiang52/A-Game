@@ -13,7 +13,7 @@ InteractableObject *createLanternUnlit() {
 InteractableObject *createLantern() {
     InteractableObject *object = new InteractableObject(
         "lantern",
-        "The warm flame bathes me in an amber glow.\n"
+        "The warm flame bathes me in an amber glow.\n",
         1
     );
     object->setUseMessage("The lantern is already lit.");

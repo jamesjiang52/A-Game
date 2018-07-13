@@ -193,7 +193,7 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     return(choices[std::rand() % 3]);
 }
 
-bool playerCoinToss(Player *player) {
+bool playerCoinToss(Player *player, GenericEnemy *enemy) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*player->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -208,7 +208,7 @@ bool playerCoinToss(Player *player) {
     return((std::rand() % 100) < threshold);
 }
 
-bool enemyCoinToss(GenericEnemy *enemy) {
+bool enemyCoinToss(Player *player, GenericEnemy *enemy) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*enemy->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -228,6 +228,9 @@ void combat(Player *player, GenericEnemy *enemy) {
     
     std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
     
+    player->isBleeding = false;
+    enemy->isBleeding = true;
+    
     bool playerStaggered = false;  // true for one turn after player swings and enemy parries, or player parries and enemy feints
     bool enemyStaggered = false;  // true for one turn after enemy swings and player parries, or enemy parries and player feints
     bool playerFailed = false;
@@ -236,6 +239,18 @@ void combat(Player *player, GenericEnemy *enemy) {
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
         printEnemyEmbellishedHealthInfo(enemy);
+        
+        player->loseHealth(player->getWeapon()->getPlayerHealthBleed(), 100);
+        enemy->loseHealth(enemy->getWeapon()->getPlayerHealthBleed(), 100);
+        
+        if (player->isBleeding)
+            player->loseHealth(enemy->getWeapon()->getEnemyHealthBleed(), 100);
+        if (enemy->isBleeding)
+            enemy->loseHealth(player->getWeapon()->getEnemyHealthBleed(), 100);
+        
+        if (!player->getCurrentHealth()) break;
+        if (!enemy->getCurrentHealth()) break;
+        
         std::cout << "I can choose to swing, parry, or feint with my " << player->getWeapon()->getName() << ". What do I do?\n";
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
@@ -244,16 +259,14 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::string enemyChoice = getEnemyCombatChoice(enemy);
         
         if (playerStaggered) {
-            if (playerCoinToss(player)) {
+            if (playerCoinToss(player, enemy))
                 playerFailed = true;
-            }
             playerStaggered = false;
         }
         
         if (enemyStaggered) {
-            if (enemyCoinToss(enemy)) {
+            if (enemyCoinToss(player, enemy))
                 enemyFailed = true;
-            }
             enemyStaggered = false;
         }
         
@@ -279,12 +292,16 @@ void combat(Player *player, GenericEnemy *enemy) {
                     std::cout << "I swing at the " << enemy->getName() << ", but I am unable to parry the recoil attack. We exchange blows.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
                     enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
+                    player->isBleeding = true;
+                    enemy->isBleeding = true;
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. It appears a recoil attack was attempted, but thankfully misses.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->isBleeding = true;
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. I suffer a powerful attack in retaliation.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    player->isBleeding = true;
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -293,6 +310,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ". It appears a block was attempted, but I manage to sneak in a hit. Next time, I may not be so lucky.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->isBleeding = true;
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation was attempted.\n\n";
                 }
@@ -300,9 +318,11 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->isBleeding = true;
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I swing at the " << enemy->getName() << ", getting in a powerful strike. I suffer no blow in exchange.\n\n";
                     enemy->loseHealth(player->getWeapon()->getDamage(), player->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->isBleeding = true;
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to swing at the " << enemy->getName() << ", but unfortunately miss. Luckily, no retaliation is attempted.\n\n";
                 }
@@ -317,6 +337,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "The " << enemy->getName() << " attacks me. I try to parry, but I suffer the blow before I can react.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    player->isBleeding = true;
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -341,11 +362,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ". Unfortunately, the " << enemy->getName() << " is not quite as generous, and I suffer a devastating blow.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    player->isBleeding = true;
                 } else if (!playerFailed && enemyFailed) {
                     std::cout << "I fake a swing at the " << enemy->getName() << ", who appears to have missed their real attack on me. Next time, I may not be so lucky.\n\n";
                 } else if (playerFailed && !enemyFailed) {
                     std::cout << "I try to fake a swing at the " << enemy->getName() << ", but I suffer a blow before I can regain my step.\n\n";
                     player->loseHealth(enemy->getWeapon()->getDamage(), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    player->isBleeding = true;
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -374,7 +397,7 @@ void combat(Player *player, GenericEnemy *enemy) {
     }
     
     if (!player->getCurrentHealth()) {  // player dies
-        std::cout << "The strike staggers me, and the " << enemy->getName() << ", seeing an opportune moment, lunges at me and steals away the last remnants of my lifeforce with a quick series of swings. I fall to the ground elated, terrified, and broken.\n\n";
+        std::cout << "The " << enemy->getName() << ", seeing an opportune moment, lunges at me and steals away the last remnants of my lifeforce with a quick series of swings. I fall to the ground elated, terrified, and broken.\n\n";
         getUserRetryOrQuit();
     } else {  // enemy dies
         std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";

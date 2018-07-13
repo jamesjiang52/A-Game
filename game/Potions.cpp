@@ -2,7 +2,7 @@
 
 void loafOfBreadUseFunction(Player *player) {
     player->gainHealth(15);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createLoafOfBread() {
@@ -17,7 +17,7 @@ Potion *createLoafOfBread() {
 
 void bottleOfMeadUseFunction(Player *player) {
     player->gainHealth(15);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createBottleOfMead() {
@@ -32,7 +32,7 @@ Potion *createBottleOfMead() {
 
 void squareOfChocolateUseFunction(Player *player) {
     player->gainHealth(10);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createSquareOfChocolate() {
@@ -52,11 +52,11 @@ void ambrosiaUseFunction(Player *player) {
     player->gainHealth(choice);
     
     if (choice > 0)
-        std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth << " health).\n\n";
+        std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     else if (!player->getCurrentHealth())  // player dies from eating ambrosia
         ;
     else
-       std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth << " health).\n\n"; 
+       std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n"; 
 }
 
 Potion *createAmbrosia() {

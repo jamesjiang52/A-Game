@@ -36,11 +36,11 @@ bool Player::isOverEncumbered() const {
     return(getTotalEncumbrance() > MAX_ENCUMBRANCE);
 }
 
-void Player::loseHealth(int amount, int armorReductionPercent=0) {
+void Player::loseHealth(int amount, int armorReductionPercent) {
     float damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
 
-    int loseHealthAmount = std::max(amount*(1 - damageReductionFraction), 0);  // don't let damage go below 0
+    int loseHealthAmount = std::max((int)(amount*(1 - damageReductionFraction)), 0);  // don't let damage go below 0
 
     if (currentHealth - loseHealthAmount > 0)
         currentHealth -= loseHealthAmount;
@@ -143,7 +143,7 @@ void Player::setArmor(Armor *armor) {
     this->armor = armor;
 }
 
-Armor *createStreetClothes() {
+Armor *Player::createStreetClothes() {
     Armor *armor = new Armor(
         "street clothes",
         "The uniform of a lowly soldier consists of a navy coat, black pants, and sturdy boots.\n",
@@ -156,6 +156,7 @@ Armor *createStreetClothes() {
 void Player::setArmorToStreetClothes() {
     InteractableObject *oldStreetClothes = getObjectFromString("street clothes");
     removeFromInventory(oldStreetClothes);
+    delete oldStreetClothes;
     
     Armor *newStreetClothes = createStreetClothes();
     addToInventory(newStreetClothes);

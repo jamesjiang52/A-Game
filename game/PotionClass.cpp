@@ -1,6 +1,6 @@
 #include "PotionClass.hpp"
 
-Potion::Potion(std::string name, std::string description, int encumbrance, const function<void()>& useFunction): InteractableObject(name, description, encumbrance), useFunction(useFunction) {}
+Potion::Potion(std::string name, std::string description, int encumbrance, std::function<void(Player *player)> useFunction): InteractableObject(name, description, encumbrance), useFunction(useFunction) {}
 
 void Potion::use(Player *player) {
     useFunction(player);

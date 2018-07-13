@@ -10,10 +10,10 @@ class Player;
 
 class Potion: public InteractableObject {
     private:
-        function<void()> useFunction(Player *player);
+        std::function<void(Player *player)> useFunction;
     
     public:
-        Potion(std::string name, std::string description, int encumbrance, const function<void()>& useFunction(Player *player));
+        Potion(std::string name, std::string description, int encumbrance, std::function<void(Player *player)> useFunction);
         void use(Player *player);  // use potion
 };
 

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "PotionsClass.hpp"
+#include "PotionClass.hpp"
 #include "PlayerClass.hpp"
 
 void loafOfBreadUseFunction(Player *player);

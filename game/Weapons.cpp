@@ -160,7 +160,7 @@ Weapon *createWoodenDagger() {
     Weapon *weapon = new Weapon(
         "wooden dagger",
         "Crudely carved into a point with a handle, I guess it can be used as a distraction.\n",
-        0, 1, 0, 1,
+        1, 1, 0, 1,
         0, 0, 0,
         false
     );
@@ -172,7 +172,7 @@ Weapon *createDiamondDagger() {
     Weapon *weapon = new Weapon(
         "diamond dagger",
         "Extremely hard but perpetually blunt, it is in theory a good weapon, but is more suited for ceremonial purposes.\n",
-        0, 2, 0, 1,
+        1, 2, 0, 1,
         0, 0, 0,
         false
     );
@@ -184,7 +184,7 @@ Weapon *createObsidianDagger() {
     Weapon *weapon = new Weapon(
         "obsidian dagger",
         "Sharp beyond imagination, and with a gold-plated hilt, it is worth fortunes.\n",
-        0, 6, -10, 1,
+        1, 6, -10, 1,
         0, 0, 0,
         false
     );
@@ -220,7 +220,7 @@ Weapon *createStone() {
     Weapon *weapon = new Weapon(
         "stone",
         "This is impressively round... and grey... and smooth... who am I kidding at least I won't miss it when I throw it.\n",
-        0, 0, 0, 0,
+        1, 0, 0, 0,
         0, 0, 0,
         false
     );

@@ -53,10 +53,11 @@ void ambrosiaUseFunction(Player *player) {
     
     if (choice > 0)
         std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
-    else if (!player->getCurrentHealth())  // player dies from eating ambrosia
-        ;
+    else if (!player->getCurrentHealth())  // player (almost) dies from eating ambrosia
+        player->gainHealth(1);
+        std::cout << "The ambrosia puts me on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n"; 
     else
-       std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n"; 
+        std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n"; 
 }
 
 Potion *createAmbrosia() {

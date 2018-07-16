@@ -21,13 +21,13 @@ void outsideFortress(Player *player) {
     getContinueFromPlayer();
     
     // create objects and add to player's inventory
-    Weapon *ironSword = createIronSword();
+    Weapon *bronzeSword = createBronzeSword();
     Armor *clothes = createStreetClothes();
     Potion *bread = createLoafOfBread();
     Potion *meadBottle = createBottleOfMead();
     InteractableObject *lantern = createLanternUnlit();
     
-    player->addToInventory(ironSword);
+    player->addToInventory(bronzeSword);
     player->addToInventory(clothes);
     player->addToInventory(bread);
     player->addToInventory(meadBottle);
@@ -69,8 +69,9 @@ void outsideFortress(Player *player) {
     Location *fortressGate = new Location(
         "Fortress Gate",
         "I approach the first of the fortress' triple walls. I am greeted by a closed gate as I am commanded "
-        "to reveal what I carry. A standard issue iron sword, a lantern, a loaf of bread, a bottle of mead, "
-        "and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised. Fools.\n"
+        "to reveal what I carry. A stolen bronze sword, a lantern, a loaf of bread, a bottle of mead, "
+        "and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised. Fools. "
+        "This is the beginning of the end.\n"
     );
 
     // create directions (that player can use to travel to certain locations)
@@ -94,6 +95,14 @@ void outsideFortress(Player *player) {
     outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserSouth);
     
     riverShore->addDirection(riverShorePath);
+    
+    // test enemy (will remove later)
+    Weapon *stoneSword = createStoneSword();
+    GenericEnemy *guard = new GenericEnemy("castle guard", 20);
+    guard->setWeapon(stoneSword);
+    guard->setArmor(clothes);
+    
+    outsideFortressWallsCloser->addEnemy(guard);
 
     // play scene
     player->setLocation(outsideFortressWalls);

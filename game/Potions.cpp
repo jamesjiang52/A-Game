@@ -123,9 +123,24 @@ void lemonUseFunction(Player *player) {
 Potion *createLemon() {
     Potion *potion = new Potion(
         "lemon",
-        "placeholder description (+5 health).\n",
+        "Only when you have eaten a lemon do you appreciate what sweet is (+5 health).\n",
         1,
         lemonUseFunction
+    );
+    return potion;
+}
+
+void peachUseFunction(Player *player) {
+    player->gainHealth(10);
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+}
+
+Potion *createPeach() {
+    Potion *potion = new Potion(
+        "peach",
+        "A man should never refuse to taste a peach. He may never get the chance again (+10 health).\n",
+        1,
+        peachUseFunction
     );
     return potion;
 }

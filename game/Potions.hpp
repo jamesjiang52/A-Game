@@ -23,6 +23,8 @@ void durrianUseFunction(Player *player);
 Potion *createDurrian();
 void lemonUseFunction(Player *player);
 Potion *createLemon();
+void peachUseFunction(Player *player);
+Potion *createPeach();
 void ambrosiaUseFunction(Player *player);
 Potion *createAmbrosia();
 void mysteriousWhitePowderUseFunction(Player *player);

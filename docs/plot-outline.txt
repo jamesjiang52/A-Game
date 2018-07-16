@@ -1,0 +1,43 @@
+Outside the Fortress:
+I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's
+walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just
+off the path and down the hill, the river roars its great presence, mighty and boisterous. To the
+south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its
+serene nocturne against the fading light. 
+ - River Shore
+ - South
+ - By the Fortress Walls:
+
+River Shore:
+I veer off the path and dip my foot into the water. It is freezing cold. I do not dare going further, 
+lest I lose my strength and become incapable of pulling myself back to the safety of shore.
+ - Outside the Fortress
+
+South:
+I turn around and try to leave, but I must remember my purpose. I cannot leave until the fortress is mine.
+ - Outside the Fortress
+
+By the Fortress Walls:
+I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand
+spectacle of amber and violet. I can see not a single cloud, not even a flurry.
+ - Outside the Fortress
+ - The Moat
+
+The Moat:
+I approach the first of the fortress' triple walls. I am greeted by a deep ditch and a raised bridge. I look
+down to see a rush of inky black water at least two meters deep. Accross stands two watchmen that guard the gate,
+one of whom greets me and commands me to reveal what I carry. A bronze sword, a lantern, a loaf of bread, 
+a bottle of mead, and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised. 
+ - The Gate
+
+The Gate:
+I step accross the wooden bridge, careful to mind my steps and not trip. As I step off the other side a curious stone
+catches my interest, impossibly smooth and round. Onwards, I am greeted by the two watchmen. Is it time for their reign
+to end and mines to begin?
+ - Object of interest: Stone
+ - Fight: The two guardsmen
+ - Inside the Gate
+
+Inside the gate:
+The first step of my masterplan is now complete with my gaining access to the fortress.
+

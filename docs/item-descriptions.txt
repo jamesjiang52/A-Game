@@ -155,7 +155,7 @@ Whole Wheat Bread:
 Heal 20 hp
 This is only available from my favourite bakery
 
-Loaf of Bread:
+White Bread:
 Heal 15 hp
 "Acquired" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies.
 
@@ -180,7 +180,7 @@ Random Effect: (drain 5 hp, heal 10 hp)
 Tastes like heaven ... smells like hell
 
 Lemon:
-Heal 5 hp, after 5 turns hidden effect(heal 10 hp)
+Heal 5 hp, after 5 turns hidden effect (heal 10 hp)
 
 Ambrosia:
 Random Effect: (heal 15 hp, heal 25 hp, drain 20 hp)

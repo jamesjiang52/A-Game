@@ -22,19 +22,19 @@ void outsideFortress(Player *player) {
     
     // create objects and add to player's inventory
     Weapon *bronzeSword = createBronzeSword();
-    Armor *clothes = createStreetClothes();
-    Potion *bread = createLoafOfBread();
+    Armor *streetClothes = createStreetClothes();
+    Potion *whiteBread = createWhiteBread();
     Potion *meadBottle = createBottleOfMead();
     InteractableObject *lantern = createLanternUnlit();
     
     player->addToInventory(bronzeSword);
-    player->addToInventory(clothes);
-    player->addToInventory(bread);
+    player->addToInventory(streetClothes);
+    player->addToInventory(whiteBread);
     player->addToInventory(meadBottle);
     player->addToInventory(lantern);
     
-    player->setWeapon(ironSword);
-    player->setArmor(clothes);
+    player->setWeapon(bronzeSword);
+    player->setArmor(streetClothes);
     
     // create locations
     Location *outsideFortressWalls = new Location(
@@ -100,7 +100,7 @@ void outsideFortress(Player *player) {
     Weapon *stoneSword = createStoneSword();
     GenericEnemy *guard = new GenericEnemy("castle guard", 20);
     guard->setWeapon(stoneSword);
-    guard->setArmor(clothes);
+    guard->setArmor(streetClothes);
     
     outsideFortressWallsCloser->addEnemy(guard);
 

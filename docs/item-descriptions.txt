@@ -181,6 +181,11 @@ Tastes like heaven ... smells like hell
 
 Lemon:
 Heal 5 hp, after 5 turns hidden effect(heal 10 hp)
+Only when you have eaten a lemon do you appreciate what sweet is
+
+Peach:
+Heal 10 hp
+A man should never refuse to taste a peach. He may never get the chance again
 
 Ambrosia:
 Random Effect: (heal 15 hp, heal 25 hp, drain 20 hp)

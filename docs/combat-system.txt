@@ -1,0 +1,73 @@
+There are nominally six different combat options:
+Powerful Strike
+Lithe Probe
+Attempt Parry
+Dodge
+Feint 
+False Retreat
+
+Powerful Strike:
+ - Signifiant Victory: Attempt Parry (Damage + Opponent Stagger)
+ - Slight Victory: Feint (Damage)
+ - Slight Defeat: False Retreat (Stagger)
+ - Significant Defeat: Dodge (Significant Stagger)
+ - Draws: Lithe probe (Damage + Take Damage)
+
+Lithe Probe:
+ - Significant Victory: Dodge (Significant Damage)
+ - Slight Victory: Feint (Damage)
+ - Slight Defeat: False Retreat (Stagger)
+ - Significant Defeat: Attempt Parry (Significant Stagger)
+ - Draws: Powerful Strike (Damage + Take Damage)
+
+Attempt Parry:
+ - Significant Victory: Lithe Probe (Significant Opponent Stagger)
+ - Significant Victory: False Retreat (Significant Opponenet Stagger)
+ - Significant Defeat: Feint (Significant Stagger)
+ - Significant Defeat: Powerful Strike (Take Damage + Stagger)
+ - Draws: Dodge (Stagger + Opponent Stagger)
+
+Dodge:
+ - Significant Victory: Powerful Strike (Significant Opponent Stagger)
+ - Significant Victory: False Retreat (Significant Opponent Stagger)
+ - Significant Defeat: Feint (Significant Stagger)
+ - Significant Defeat: Lithe Probe (Significant Damage)
+ - Draws: Attempt Parry (Stagger + Opponent Stagger)
+
+Feint:
+ - Significant Victory: Attempt Parry (Significant Opponent Stagger)
+ - Significant Victory: Dodge (Significant Opponent Stagger)
+ - Slight Defeat: Powerful Strike (Stagger)
+ - Slight Defeat: Lithe Probe (Stagger)
+ - Slight Defeat: False Retreat (Stagger)
+
+False Retreat:
+ - Slight Victory: Powerful Strike (Opponenet Stagger)
+ - Slight Victory: Lithe Proble (Opponent Stagger)
+ - Slight Victory: Feint (Opponenet Stagger)
+ - Significant Defeat: Attempt Parry (Significant Stagger)
+ - Significant Defeat: Dodge (Significant Stagger)
+
+With the usage of a shield, to more options are unlocked:
+Block
+Bash
+
+Block: 
+ - Significant Victory: Powerful Strike (Opponenet Stagger + Change opponenet has to change weapon)
+ - Significant Victory: Lithe Probe (Significant Opponent Stagger)
+ - Slight Victory: False Retreat (Opponenet Stagger)
+ - Slight Defeat: Feint (Stagger)
+ - Slight Defeat: Dodge (Stagger)
+ - Slight Defeat: Attempt Parry (Stagger)
+ - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight)
+
+Bash:
+ - Significant Victory: Attempt Parry (Opponent Stagger + Chance opponent has to change weapon)
+ - Significant Victory: Dodge (Damage + Stagger)
+ - Slight Victory: Feint (Damage)
+ - Slight Defeat: False Retreat (Stagger)
+ - Slight Defeat: Powerful Strike (Take Damage)
+ - Slight Defeat: Lithe Probe (Take Damage)
+ - Draws: Block (Both shields are broken and cannot be used for the rest of the fight)
+
+

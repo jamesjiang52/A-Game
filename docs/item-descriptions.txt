@@ -151,6 +151,10 @@ This cannot be the real Aegis as I am not stone, but this is a most terrifying r
 
 //Consumables
 
+Whole Wheat Bread:
+Heal 20 hp
+This is only available from my favourite bakery
+
 Loaf of Bread:
 Heal 15 hp
 "Acquired" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies.
@@ -163,6 +167,21 @@ Square of Chocolate:
 Heal 10 hp
 There's nothing like the gooey wonderfulness of this brown-coloured delicacy.
 
+Apple:
+Heal 10 hp
+An apple a day keeps the doctor away
+
+Banana:
+Heal 10 hp
+This banana was once young and green
+
+Durrian
+Random Effect: (drain 5 hp, heal 10 hp)
+Tastes like heaven ... smells like hell
+
+Lemon:
+Heal 5 hp, after 5 turns hidden effect(heal 10 hp)
+
 Ambrosia:
 Random Effect: (heal 15 hp, heal 25 hp, drain 20 hp)
 It is the food of the gods, or so it is said. I'm sure they wont be angry if I take just a little bite.
@@ -174,12 +193,15 @@ I was told that a couple of pinches will invigorate me from even the deepest of 
 
 //Miscellaneous
 
-Lantern:
+Unlit Lantern:
 The last embers glow faintly within.
+
+Lit Latern:
+And then there was light!
 
 The Art of War - Sun Tzu:
 Passive effect: -5% stagger
-I am hit with stunning epiphany... 
+I am hit with a stunning epiphany... 
 
 Rainbow Stone:
 I hope this stone is more useful than the first one...

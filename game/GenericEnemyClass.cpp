@@ -62,10 +62,9 @@ std::vector<InteractableObject*>::iterator GenericEnemy::objectPosition(Interact
 
 void GenericEnemy::addToInventory(InteractableObject *object) {
     /*
-    Adds new object to inventory if it is not already in it
+    Adds new object to inventory
     */
-    if (objectPosition(object) == inventory.end())
-        inventory.push_back(object);
+    inventory.push_back(object);
 }
 
 void GenericEnemy::removeFromInventory(InteractableObject *object) {

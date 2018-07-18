@@ -2,6 +2,7 @@
 #define ARMORS_H
 
 #include "ArmorClass.hpp"
+#include "ActiveEffectClass.hpp"
 
 Armor *createStreetClothes();
 Armor *createLeatherJacket();

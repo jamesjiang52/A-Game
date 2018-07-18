@@ -86,10 +86,9 @@ std::vector<InteractableObject*>::iterator Location::objectPosition(Interactable
 
 void Location::addInteractableObject(InteractableObject *object) {
     /*
-    Adds new object to interactableObjects if it is not already in it
+    Adds new object to interactableObjects
     */
-    if (objectPosition(object) == interactableObjects.end())
-        interactableObjects.push_back(object);
+    interactableObjects.push_back(object);
 }
 
 void Location::removeInteractableObject(InteractableObject *object) {
@@ -133,10 +132,9 @@ std::vector<GenericEnemy*>::iterator Location::enemyPosition(GenericEnemy *enemy
 
 void Location::addEnemy(GenericEnemy *enemy) {
     /*
-    Adds new enemy to enemies if it is not already in it
+    Adds new enemy to enemies
     */
-    if (enemyPosition(enemy) == enemies.end())
-        enemies.push_back(enemy);
+    enemies.push_back(enemy);
 }
 
 void Location::removeEnemy(GenericEnemy *enemy) {

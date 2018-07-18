@@ -2,6 +2,7 @@
 #define WEAPONS_H
 
 #include "WeaponClass.hpp"
+#include "ActiveEffectClass.hpp"
 
 Weapon *createStoneSword();
 Weapon *createBronzeSword();
@@ -20,7 +21,6 @@ Weapon *createDiamondDagger();
 Weapon *createObsidianDagger();
 Weapon *createTrident();
 Weapon *createWhip();
-Weapon *createStone();
 Weapon *createExcalibur();
 Weapon *createExcaliburEnhanced();
 

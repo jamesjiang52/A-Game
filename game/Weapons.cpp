@@ -216,18 +216,6 @@ Weapon *createWhip() {
     return weapon;
 }
 
-Weapon *createStone() {
-    Weapon *weapon = new Weapon(
-        "stone",
-        "This is impressively round... and grey... and smooth... who am I kidding at least I won't miss it when I throw it.\n",
-        1, 0, 0, 0,
-        0, 0, 0,
-        false
-    );
-    weapon->appendToDescription(weapon->getStatString());
-    return weapon;
-}
-
 Weapon *createExcalibur() {
     Weapon *weapon = new Weapon(
         "Excalibur",

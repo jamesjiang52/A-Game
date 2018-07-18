@@ -6,6 +6,7 @@
 #include <ctime>
 #include "PotionClass.hpp"
 #include "PlayerClass.hpp"
+#include "ActiveEffectClass.hpp"
 
 void wholeWheatBreadUseFunction(Player *player);
 Potion *createWholeWheatBread();

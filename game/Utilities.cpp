@@ -229,12 +229,14 @@ void combat(Player *player, GenericEnemy *enemy) {
     std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
     
     player->isBleeding = false;
-    enemy->isBleeding = true;
+    enemy->isBleeding = false;
     
     bool playerStaggered = false;  // true for one turn after player swings and enemy parries, or player parries and enemy feints
     bool enemyStaggered = false;  // true for one turn after enemy swings and player parries, or enemy parries and player feints
     bool playerFailed = false;
     bool enemyFailed = false;
+    
+    int combatTurn = 0;
     
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
@@ -394,6 +396,8 @@ void combat(Player *player, GenericEnemy *enemy) {
         
         playerFailed = false;
         enemyFailed = false;
+        
+        combatTurn++;
     }
     
     if (!player->getCurrentHealth()) {  // player dies
@@ -475,9 +479,17 @@ void printLocationInfo(Player *player) {
 void printInventory(Player *player) {
     std::cout << "\nI search my knapsack and find the following items (encumbrance in parentheses): \n";
     std::vector<InteractableObject*> inventory = player->getInventory();
+    std::map<InteractableObject*, int> inventoryWithCounts = {};
     for (int i = 0; i < inventory.size(); i++) {
         InteractableObject *object = inventory.at(i);
-        std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
+        inventoryWithCounts[object]++;
+    }
+    for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i < inventoryWithCounts.end(); i++) {
+        InteractableObject *object = i->second;
+        if (i->first > 1)
+            std::cout << "    (" << i->first << ") " << object->getName() << " (" << object->getEncumbrance() << ")\n";
+        else
+            std::cout << object->getName() << " (" << object->getEncumbrance() << ")\n";
     }
     std::cout << "\n";
 }

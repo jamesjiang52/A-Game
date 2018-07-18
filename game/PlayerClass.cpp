@@ -77,7 +77,7 @@ std::vector<InteractableObject*> Player::getInventory() const {
 std::vector<InteractableObject*>::iterator Player::objectPosition(InteractableObject *object) {
     /* 
     Returns a vector iterator, with value corresponding to the index of the inventory vector
-    if object is in the vector. Otherwise, returns the iterator with the sizes of the inventory.
+    if object is in the vector. Otherwise, returns the iterator with the size of the inventory.
     */
     return std::find(inventory.begin(), inventory.end(), object);
 }
@@ -105,10 +105,9 @@ InteractableObject *Player::getObjectFromString(std::string objectName) {
 
 void Player::addToInventory(InteractableObject *object) {
     /*
-    Adds new object to inventory if it is not already in it
+    Adds new object to inventory
     */
-    if (objectPosition(object) == inventory.end())
-        inventory.push_back(object);
+    inventory.push_back(object);
 }
 
 void Player::removeFromInventory(InteractableObject *object) {
@@ -119,6 +118,35 @@ void Player::removeFromInventory(InteractableObject *object) {
     std::vector<InteractableObject*>::iterator position = objectPosition(object);
     if (position != inventory.end())
         inventory.erase(position);
+}
+
+std::vector<ActiveEffect*> Player::getActiveEffects() const {
+    return activeEffects;
+}
+
+std::vector<ActiveEffect*>::iterator Player::effectPosition(ActiveEffect *activeEffect) {
+    /* 
+    Returns a vector iterator, with value corresponding to the index of the active effect vector
+    if effect is in the vector. Otherwise, returns the iterator with the size of the active effect vector.
+    */
+    return std::find(activeEffects.begin(), activeEffects.end(), object);
+}
+
+void Player::addToActiveEffects(ActiveEffect *activeEffect) {
+    /*
+    Adds new effect to active effects
+    */
+    activeEffects.push_back(activeEffect);
+}
+
+void Player::removeFromActiveEffects(ActiveEffect *activeEffect) {
+    /*
+    Removes effect from active effects if it is in it
+    Otherwise, does nothing
+    */
+    std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
+    if (position != activeEffects.end())
+        activeEffects.erase(position);  // this also automatically frees the memory allocated for the object
 }
 
 Weapon *Player::getWeapon() const {

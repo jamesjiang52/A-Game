@@ -16,11 +16,11 @@ Player *startGame() {
 }
 
 void outsideFortress(Player *player) {
-    // set-up for scene
+    // set up scene
     printOutsideFortressJournalEntry();
     getContinueFromPlayer();
     
-    // create objects and add to player's inventory
+    // since this is the first scene, initialize player inventory
     Weapon *bronzeSword = createBronzeSword();
     Armor *streetClothes = createStreetClothes();
     Potion *whiteBread = createWhiteBread();
@@ -43,44 +43,51 @@ void outsideFortress(Player *player) {
         "walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just "
         "off the path and down the hill, the river roars its great presence, mighty and boisterous. To the "
         "south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its "
-        "serene nocturne against the fading light. The fortress calls me closer.\n"
+        "serene nocturne against the fading light.\n"
     );
     
-    Location *outsideFortressWallsCloser = new Location(
-        "Outside Fortress Walls",
+    Location *fortressWalls = new Location(
+        "By the Fortress Walls",
         "I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand "
-        "spectacle of amber and violet. I can see not a single cloud, not even a flurry. The fortress calls "
-        "me closer.\n"
+        "spectacle of amber and violet. I can see not a single cloud, not even a flurry.\n"
     );
 
     Location *outsideFortressWallsAway = new Location(  // if player chooses to go south
         "Outside Fortress Walls",
-        "I turn around and try to leave, but the stronghold beckons me closer. I cannot leave until the "
+        "I turn around and try to leave, but I must remember my purpose. I cannot leave until the "
         "fortress is mine.\n"
     );
 
     Location *riverShore = new Location(
         "River Shore",
         "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the "
-        "water with just my streets clothes, lest I lose my strength and become incapable of pulling myself "
-        "back to the safety of shore. I need to get back onto the path.\n"
+        "water, lest I lose my strength and become incapable of pulling myself "
+        "back to the safety of shore. I should get back onto the path.\n"
     );
 
-    Location *fortressGate = new Location(
-        "Fortress Gate",
-        "I approach the first of the fortress' triple walls. I am greeted by a closed gate as I am commanded "
-        "to reveal what I carry. A stolen bronze sword, a lantern, a loaf of bread, a bottle of mead, "
-        "and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised. Fools. "
-        "This is the beginning of the end.\n"
+    Location *moat = new Location(
+        "The Moat",
+        "I approach the first of the fortress' triple walls. I am greeted by a deep ditch and a raised bridge. I look "
+        "down to see a rush of inky black water at least two meters deep. Across stands two watchmen that guard the gate, "
+        "one of whom greets me and commands me to reveal what I carry. A bronze sword, a lantern, a loaf of bread, "
+        "a bottle of mead, and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised.\n"
+    );
+    
+    Location *gate = new Location(
+        "The Gate",
+        "I step across the wooden bridge, careful to mind my step and not trip. As I step off the other side, a curious stone "
+        "catches my interest, impossibly smooth and round. Onwards, I am greeted by the two watchmen. Is it time for their reign "
+        "to end and mine to begin?\n"
     );
 
-    // create directions (that player can use to travel to certain locations)
-    Direction *outsideFortressWallsNorth = new Direction("north", outsideFortressWallsCloser);
+    // create directions
+    Direction *outsideFortressWallsNorth = new Direction("north", fortressWalls);
     Direction *outsideFortressWallsSouth = new Direction("south", outsideFortressWallsAway);
     Direction *outsideFortressWallsRiver = new Direction("river", riverShore);
     Direction *riverShorePath = new Direction("path", outsideFortressWalls);
-    Direction *outsideFortressWallsCloserNorth = new Direction("north", fortressGate);
-    Direction *outsideFortressWallsCloserSouth = new Direction("south", outsideFortressWalls);
+    Direction *fortressWallsNorth = new Direction("north", moat);
+    Direction *fortressWallsSouth = new Direction("south", outsideFortressWalls);
+    Direction *moatGate = new Direction("gate", gate);
 
     // add directions to locations
     outsideFortressWalls->addDirection(outsideFortressWallsNorth);
@@ -91,24 +98,30 @@ void outsideFortress(Player *player) {
     outsideFortressWallsAway->addDirection(outsideFortressWallsRiver);
     outsideFortressWallsAway->addDirection(outsideFortressWallsSouth);
     
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserNorth);
-    outsideFortressWallsCloser->addDirection(outsideFortressWallsCloserSouth);
+    fortressWalls->addDirection(fortressWallsNorth);
+    fortressWalls->addDirection(fortressWallsSouth);
     
     riverShore->addDirection(riverShorePath);
     
-    // test enemy (will remove later)
+    moat->addDirection(moatGate);
+
+    // add things to locations
     Weapon *stoneSword = createStoneSword();
-    GenericEnemy *guard = new GenericEnemy("castle guard", 20);
+    InteractableObject *stone = createStone();
+    
+    GenericEnemy *guard = new GenericEnemy("guard", 20);
     guard->setWeapon(stoneSword);
     guard->setArmor(streetClothes);
     
-    outsideFortressWallsCloser->addEnemy(guard);
+    gate->addEnemy(guard);
+    gate->addEnemy(guard);
+    gate->addInteractableObject(stone);
 
     // play scene
     player->setLocation(outsideFortressWalls);
     printLocationInfo(player);
 
-    while (player->getLocation() != fortressGate) {
+    while (1) {
         getUserInput(player);
     }
     // function terminates when player reaches fortress gate

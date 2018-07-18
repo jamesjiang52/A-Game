@@ -118,12 +118,14 @@ Potion *createDurrian() {
 void lemonUseFunction(Player *player) {
     player->gainHealth(5);
     std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    ActiveEffect *effect = new ActiveEffect("health", 10, 5, 0);  // +10 health after 5 combat turns
+    player->addToActiveEffects(effect);
 }
 
 Potion *createLemon() {
     Potion *potion = new Potion(
         "lemon",
-        "Only when you have eaten a lemon do you appreciate what sweet is (+5 health).\n",
+        "Only when you have eaten a lemon do you appreciate what \"sweet\" is (+5 health).\n",
         1,
         lemonUseFunction
     );
@@ -175,17 +177,22 @@ void mysteriousWhitePowderUseFunction(Player *player) {
     std::srand(std::time(nullptr));
     int choice = choices[std::rand() % 5];
     
-    if (choice > 2) {  // reduce player stagger
-        
+    if (choice < 0) {  // reduce player stagger
+        ActiveEffect *effect = new ActiveEffect("player stagger", choice, 0, -2);
+        ActiveEffect *hiddenEffect = new ActiveEffect("player stagger", 50 - choice, 5, -2);
+        player->addToActiveEffects(effect);
+        player->addToActiveEffects(hiddenEffect);
+        std::cout << "I feel my focus has improved, though I sense the heavy effects of the drug will wear off soon.\n\n";
     } else {  // increase player health
-        
+        player->gainHealth(choice);
+        std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     }
 }
 
 Potion *createMysteriousWhitePowder() {
     Potion *potion = new Potion(
         "mysterious white powder",
-        "I was told that a couple of pinches will invigorate me from even the deepest of stupors.",
+        "I was told that a couple of pinches will invigorate me from even the deepest of stupors (random between +5 health, +15 health, +25 health, -10% player stagger, or -20% player stagger).\n",
         1,
         mysteriousWhitePowderUseFunction
     );

@@ -2,10 +2,13 @@
 #define MISC_OBJECTS_H
 
 #include "InteractableObjectClass.hpp"
+#include "PlayerClass.hpp"
+#include "ActiveEffectClass.hpp"
 
 InteractableObject *createLanternUnlit();
 InteractableObject *createLantern();
 InteractableObject *createTheArtOfWar();
+InteractableObject *createStone();
 InteractableObject *createRainbowStone();
 InteractableObject *createRainbowStoneWithoutExcalibur();
 InteractableObject *createQuill();

@@ -34,7 +34,7 @@ Shield *createAegisReplica() {
     Shield *shield = new Shield(
         "Aegis replica",
         "This cannot be the real Aegis as I am not stone, but this is a most terrifying replica.\n",
-        10, 15, 1, 100
+        10, 15, 1, 50
     );
     shield->appendToDescription(shield->getStatString());
     return shield;

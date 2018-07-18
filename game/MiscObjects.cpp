@@ -30,6 +30,16 @@ InteractableObject *createTheArtOfWar() {
     return object;
 }
 
+InteractableObject *createStone() {
+    InteractableObject *object = new InteractableObject(
+        "stone",
+        "This is impressively round... and grey... and smooth...\n",
+        1
+    );
+    object->setUseMessage("");
+    return object;
+}
+
 InteractableObject *createRainbowStone() {
     InteractableObject *object = new InteractableObject(
         "rainbow stone",

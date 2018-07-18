@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include "Parameters.hpp"
+#include "ActiveEffectClass.hpp"
 #include "InteractableObjectClass.hpp"
 #include "LocationClass.hpp"
 #include "WeaponClass.hpp"
@@ -29,6 +30,8 @@ class Player {
         std::string name;
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
+        std::vector<ActiveEffect*> activeEffects;
+        std::vector<ActiveEffect*>::iterator effectPosition(ActiveEffect *activeEffect);
         bool oneHanded;
         Armor *createStreetClothes();  // I need this
 
@@ -50,6 +53,9 @@ class Player {
         InteractableObject *getObjectFromString(std::string objectName);
         void addToInventory(InteractableObject *object);
         void removeFromInventory(InteractableObject *object);
+        std::vector<ActiveEffect*> getActiveEffects() const;
+        void addToActiveEffects(ActiveEffect *activeEffect);
+        void removeFromActiveEffects(ActiveEffect *activeEffect);
         Weapon *getWeapon() const;
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;

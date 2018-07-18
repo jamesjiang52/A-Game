@@ -53,7 +53,9 @@ void getUserInput(Player *player) {
     std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
     playerInput = stripSpaces(playerInput);
     
-    if (stripSpaces(playerInput) == "help") {
+    if (playerInput == "") {
+        std::cout << "\n";
+    } else if (playerInput == "help") {
         printHelpMessage();
     } else if (playerInput.substr(0, 2) == "go") {  // player wants to move in direction
         inputGo(player, playerInput);
@@ -113,11 +115,32 @@ void inputDrop(Player *player, std::string playerInput) {
         if (player->checkStringInInventory(stripSpaces(playerInput.substr(5)))) {  // object is in inventory
             InteractableObject *object = player->getObjectFromString(stripSpaces(playerInput.substr(4)));
             if (object == player->getWeapon()) {  // don't let player drop their equipped weapon
-                std::cout << "I shouldn't drop my currently equipped weapon, lest a foe take me by surprise.\n\n";
+                std::vector<InteractableObject*> inventory = player->getInventory();
+                if (std::count(inventory.begin(), inventory.end(), object) > 1) {  // but their equipped weapon is duplicate
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me (-" << object->getEncumbrance() << " encumbrance).\n\n";
+                } else {
+                    std::cout << "I shouldn't drop my currently equipped weapon, lest a foe take me by surprise.\n\n";
+                }
             } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() != "street clothes")) {  // don't let player take off clothes while wearing armor
-                std::cout << "Try as I might, I cannot take off my street clothes while wearing armor over it.\n\n";
+                std::vector<InteractableObject*> inventory = player->getInventory();
+                if (std::count(inventory.begin(), inventory.end(), object) > 1) {  // but they have multiple street clothes
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me (-" << object->getEncumbrance() << " encumbrance).\n\n";
+                } else {
+                    std::cout << "Try as I might, I cannot take off my street clothes while wearing armor over it.\n\n";
+                }
             } else if ((object->getName() == "street clothes") && (player->getArmor()->getName() == "street clothes")) {  // don't let player take off clothes
-                std::cout << "I dare not take off all my clothes in public, lest someone call me a madman and attack me on sight.\n\n";
+                std::vector<InteractableObject*> inventory = player->getInventory();
+                if (std::count(inventory.begin(), inventory.end(), object) > 1) {  // but they have multiple street clothes
+                    player->removeFromInventory(object);
+                    player->getLocation()->addInteractableObject(object);
+                    std::cout << "I open my knapsack and grab the " << stripSpaces(playerInput.substr(5)) << ", dropping it on the ground beside me (-" << object->getEncumbrance() << " encumbrance).\n\n";
+                } else {
+                    std::cout << "I dare not take off all my clothes in public, lest someone call me a madman and attack me on sight.\n\n";
+                }
             } else if (object == player->getArmor()) {
                 player->removeFromInventory(object);
                 player->getLocation()->addInteractableObject(object);
@@ -298,7 +321,7 @@ bool enemyCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
 void combat(Player *player, GenericEnemy *enemy) {
     std::string playerInput;
     
-    std::cout << "I engage in combat with the " << enemy->getName() << ".\n";
+    std::cout << "\nI engage in combat with the " << enemy->getName() << ".\n\n";
     
     player->isBleeding = false;
     enemy->isBleeding = false;
@@ -314,19 +337,19 @@ void combat(Player *player, GenericEnemy *enemy) {
         printPlayerEmbellishedHealthInfo(player);
         printEnemyEmbellishedHealthInfo(enemy);
         
-        player->gainHealthFromEffects(player, combatTurn);
-        
+        playerGainHealthFromEffects(player, combatTurn);
+
         player->loseHealth(player->getWeapon()->getPlayerHealthBleed(), 100);
         enemy->loseHealth(enemy->getWeapon()->getPlayerHealthBleed(), 100);
-        
+
         if (player->isBleeding)
             player->loseHealth(enemy->getWeapon()->getEnemyHealthBleed(), 100);
         if (enemy->isBleeding)
             enemy->loseHealth(player->getWeapon()->getEnemyHealthBleed(), 100);
-        
+
         if (!player->getCurrentHealth()) break;
         if (!enemy->getCurrentHealth()) break;
-        
+
         std::cout << "I can choose to swing, parry, or feint with my " << player->getWeapon()->getName() << ". What do I do?\n";
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
@@ -482,23 +505,29 @@ void combat(Player *player, GenericEnemy *enemy) {
         removeAllEffects(player);
     
         std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";
-        std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items:\n";
+        
+        if (enemy->getInventory().size() > 0) {
+            std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items:\n";
 
-        std::vector<InteractableObject*> inventory = enemy->getInventory();
-        std::map<InteractableObject*, int> inventoryWithCounts = {};
-        for (int i = 0; i < inventory.size(); i++) {
-            InteractableObject *object = inventory.at(i);
-            inventoryWithCounts[object]++;
-        }
-        for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i < inventoryWithCounts.end(); i++) {
-            InteractableObject *object = i->second;
-            if (i->first > 1)
-                std::cout << "    (" << i->first << ") " << object->getName() << "\n";
-            else
-                std::cout << "    " << object->getName() << "\n";
+            std::vector<InteractableObject*> inventory = enemy->getInventory();
+            std::map<InteractableObject*, int> inventoryWithCounts = {};
+            for (int i = 0; i < inventory.size(); i++) {
+                InteractableObject *object = inventory.at(i);
+                inventoryWithCounts[object]++;
+                enemy->removeFromInventory(object);
+                player->getLocation()->addInteractableObject(object);
+            }
+            for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i != inventoryWithCounts.end(); i++) {
+                InteractableObject *object = i->first;
+                if (i->second > 1)
+                    std::cout << "    (" << i->second << ") " << object->getName() << "\n";
+                else
+                    std::cout << "    " << object->getName() << "\n";
+            }  
         }
         std::cout << "\n";
         
+        player->getLocation()->removeEnemy(enemy);
         delete enemy;
     }
 }
@@ -543,15 +572,15 @@ void printLocationInfo(Player *player) {
     std::vector<InteractableObject*> objects = location->getObjects();
     if (objects.size() > 0) {
         std::cout << "\nI can spot these items that might be of interest to me:\n";
-        std::map<InteractableObject*, int> inventoryWithCounts = {};
+        std::map<InteractableObject*, int> objectsWithCounts = {};
         for (int i = 0; i < objects.size(); i++) {
             InteractableObject *object = objects.at(i);
             objectsWithCounts[object]++;
         }
-        for (std::map<InteractableObject*, int>::iterator i = objectsWithCounts.begin(); i < objectsWithCounts.end(); i++) {
-            InteractableObject *object = i->second;
-            if (i->first > 1)
-                std::cout << "    (" << i->first << ") " << object->getName() << "\n";
+        for (std::map<InteractableObject*, int>::iterator i = objectsWithCounts.begin(); i != objectsWithCounts.end(); i++) {
+            InteractableObject *object = i->first;
+            if (i->second > 1)
+                std::cout << "    (" << i->second << ") " << object->getName() << "\n";
             else
                 std::cout << "    " << object->getName() << "\n";
         }
@@ -577,10 +606,10 @@ void printInventory(Player *player) {
         InteractableObject *object = inventory.at(i);
         inventoryWithCounts[object]++;
     }
-    for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i < inventoryWithCounts.end(); i++) {
-        InteractableObject *object = i->second;
-        if (i->first > 1)
-            std::cout << "    (" << i->first << ") " << object->getName() << " (" << object->getEncumbrance() << ")\n";
+    for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i != inventoryWithCounts.end(); i++) {
+        InteractableObject *object = i->first;
+        if (i->second > 1)
+            std::cout << "    (" << i->second << ") " << object->getName() << " (" << object->getEncumbrance() << ")\n";
         else
             std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
     }
@@ -612,7 +641,7 @@ void printPlayerEmbellishedHealthInfo(Player *player) {
     } else {
         std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away";
     }
-    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << "health).\n";
+    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n";
 }
 
 void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy) {
@@ -625,5 +654,5 @@ void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy) {
     } else {
         std::cout << "It appears the " << enemy->getName() << " is on its last legs";
     }
-    std::cout << " (" << enemy->getCurrentHealth() << "/" << enemy->getStartingHealth() << "health).\n\n";
+    std::cout << " (" << enemy->getCurrentHealth() << "/" << enemy->getStartingHealth() << " health).\n\n";
 }

@@ -8,7 +8,7 @@ Player *startGame() {
     
     std::cout << "What is my name?\n";
     std::getline(std::cin, playerInput);
-    std::cout << "\n\n";
+    std::cout << "\n";
 
     getContinueFromPlayer();
     Player *player = new Player(playerInput, PLAYER_STARTING_HEALTH);
@@ -25,7 +25,7 @@ void outsideFortress(Player *player) {
     Armor *streetClothes = createStreetClothes();
     Potion *whiteBread = createWhiteBread();
     Potion *meadBottle = createBottleOfMead();
-    InteractableObject *lantern = createLanternUnlit();
+    MiscObject *lantern = createLanternUnlit();
     
     player->addToInventory(bronzeSword);
     player->addToInventory(streetClothes);
@@ -109,12 +109,20 @@ void outsideFortress(Player *player) {
     Weapon *stoneSword = createStoneSword();
     InteractableObject *stone = createStone();
     
-    GenericEnemy *guard = new GenericEnemy("guard", 20);
-    guard->setWeapon(stoneSword);
-    guard->setArmor(streetClothes);
+    GenericEnemy *guard1 = new GenericEnemy("guard", 20);
+    GenericEnemy *guard2 = new GenericEnemy("guard", 20);
+    guard1->setWeapon(stoneSword);
+    guard1->setArmor(streetClothes);
+    guard1->addToInventory(stoneSword);
+    guard1->addToInventory(streetClothes);
     
-    gate->addEnemy(guard);
-    gate->addEnemy(guard);
+    guard2->setWeapon(stoneSword);
+    guard2->setArmor(streetClothes);
+    guard2->addToInventory(stoneSword);
+    guard2->addToInventory(streetClothes);
+    
+    gate->addEnemy(guard1);
+    gate->addEnemy(guard2);
     gate->addInteractableObject(stone);
 
     // play scene

@@ -5,6 +5,7 @@
 #include <string>
 #include "InteractableObjectClass.hpp"
 #include "PlayerClass.hpp"
+#include "ActiveEffectClass.hpp"
 
 class Player;
 
@@ -17,6 +18,7 @@ class Weapon: public InteractableObject {
         int playerHealthBleed;
         int enemyHealthBleed;
         bool twoHanded;
+        ActiveEffect *activeEffect;
     
     public:
         Weapon(
@@ -29,8 +31,10 @@ class Weapon: public InteractableObject {
             int enemyArmorReductionPercent,
             int playerHealthBleed,
             int enemyHealthBleed,
-            bool isTwoHanded
+            bool isTwoHanded,
+            ActiveEffect *activeEffect
         );
+        ~Weapon();
         int getDamage() const;
         int getPlayerStaggerPercentIncrease() const;
         int getEnemyStaggerPercentIncrease() const;
@@ -39,6 +43,7 @@ class Weapon: public InteractableObject {
         int getEnemyHealthBleed() const;
         std::string getStatString() const;
         bool isTwoHanded() const;
+        ActiveEffect *getActiveEffect() const;
         void use(Player *player);  // equips weapon
 };
 

@@ -8,10 +8,10 @@ ActiveEffect::ActiveEffect(std::string targetStat, int amount, int combatTurnsFo
 }
 
 bool ActiveEffect::operator==(const ActiveEffect &activeEffect) {
-    bool boolStat = (targetStat == activeEffect->getTargetStat());
-    bool boolAmount = (amount == activeEffect->getAmount());
-    bool boolCombatTurns = (combatTurnsForActivation == activeEffect->getCombatTurnsForActivation());
-    bool boolDuration = (duration == activeEffect->getDuration());
+    bool boolStat = (targetStat == activeEffect.getTargetStat());
+    bool boolAmount = (amount == activeEffect.getAmount());
+    bool boolCombatTurns = (combatTurnsForActivation == activeEffect.getCombatTurnsForActivation());
+    bool boolDuration = (duration == activeEffect.getDuration());
     return (boolStat && boolAmount && boolCombatTurns && boolDuration);
 }
 

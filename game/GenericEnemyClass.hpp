@@ -29,6 +29,7 @@ class GenericEnemy {
         
     public:
         GenericEnemy(std::string name, int startingHealth);
+        ~GenericEnemy();
         bool isBleeding = false;
         std::string getName() const;
         int getStartingHealth() const;

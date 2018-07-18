@@ -10,7 +10,8 @@ Weapon::Weapon(
         int enemyArmorReductionPercent,
         int playerHealthBleed,
         int enemyHealthBleed,
-        bool twoHanded
+        bool twoHanded,
+        ActiveEffect *activeEffect
     ): InteractableObject(name, description, encumbrance) {
     this->damage = damage;
     this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
@@ -19,6 +20,11 @@ Weapon::Weapon(
     this->playerHealthBleed = playerHealthBleed;
     this->enemyHealthBleed = enemyHealthBleed;
     this->twoHanded = twoHanded;
+    this->activeEffect = activeEffect;
+}
+
+Weapon::~Weapon() {
+    delete activeEffect;
 }
 
 int Weapon::getDamage() const {
@@ -77,8 +83,15 @@ bool Weapon::isTwoHanded() const {
     return twoHanded;
 }
 
+ActiveEffect *Weapon::getActiveEffect() const {
+    return activeEffect;
+}
+
 void Weapon::use(Player *player) {
     if (player->getWeapon() != this) {
+        player->removeFromActiveEffects(player->getWeapon()->getActiveEffect());
+        player->addToActiveEffects(activeEffect);
+        
         if (player->getWeapon()->isTwoHanded() && twoHanded) {  // both previous weapon and current weapon are two-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ".\n\n";
         } else if (!player->getWeapon()->isTwoHanded() && twoHanded) {  // previous weapon is one-handed but current weapon is two-handed
@@ -92,6 +105,7 @@ void Weapon::use(Player *player) {
         } else {  // both previous weapon and current weapon are one-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ".\n\n";
         }
+        player->setShield(NULL);
         player->setWeapon(this);
     } else {  // weapon already equipped
         std::cout << "I already have the " << name << " equipped.\n\n";

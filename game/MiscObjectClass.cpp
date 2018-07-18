@@ -1,7 +1,7 @@
 #include "MiscObjectClass.hpp"
 
-Potion::Potion(std::string name, std::string description, int encumbrance, std::function<void(Player *player)> useFunction): InteractableObject(name, description, encumbrance), useFunction(useFunction) {}
+MiscObject::MiscObject(std::string name, std::string description, int encumbrance, std::function<void(Player *player)> useFunction): InteractableObject(name, description, encumbrance), useFunction(useFunction) {}
 
-void Potion::use(Player *player) {
+void MiscObject::use(Player *player) {
     useFunction(player);
 }

@@ -7,8 +7,17 @@ Player::Player(std::string name, int startingHealth) {
 
     this->weapon = NULL;
     this->armor = NULL;
+    this->shield = NULL;
     
     oneHanded = true;
+}
+
+Player::~Player() {
+    delete weapon;
+    delete armor;
+    delete shield;
+    for (int i = 0; i < inventory.size(); i++) delete inventory.at(i);
+    for (int i = 0; i < activeEffects.size(); i++) delete activeEffects.at(i);
 }
 
 std::string Player::getName() const {
@@ -37,8 +46,10 @@ bool Player::isOverEncumbered() const {
 }
 
 void Player::loseHealth(int amount, int armorReductionPercent) {
-    float damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
+    float damageReductionFraction;
+    if (shield) damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
+    else damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
 
     int loseHealthAmount = std::max((int)(amount*(1 - damageReductionFraction)), 0);  // don't let damage go below 0
 
@@ -129,7 +140,7 @@ std::vector<ActiveEffect*>::iterator Player::effectPosition(ActiveEffect *active
     Returns a vector iterator, with value corresponding to the index of the active effect vector
     if effect is in the vector. Otherwise, returns the iterator with the size of the active effect vector.
     */
-    return std::find(activeEffects.begin(), activeEffects.end(), object);
+    return std::find(activeEffects.begin(), activeEffects.end(), activeEffect);
 }
 
 void Player::addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate) {
@@ -181,7 +192,8 @@ Armor *Player::createStreetClothes() {
     Armor *armor = new Armor(
         "street clothes",
         "The uniform of a lowly soldier consists of a navy coat, black pants, and sturdy boots.\n",
-        1, 1, 0, 0
+        1, 1, 0, 0,
+        NULL
     );
     armor->appendToDescription(armor->getStatString());
     return armor;

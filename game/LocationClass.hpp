@@ -23,6 +23,7 @@ class Location {
         
     public:
         Location(std::string name, std::string description);
+        ~Location();
         bool operator==(const Location &location);
         std::string getName() const;
         std::string getDescription() const;

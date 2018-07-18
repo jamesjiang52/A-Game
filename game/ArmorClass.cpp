@@ -1,9 +1,14 @@
 #include "ArmorClass.hpp"
 
-Armor::Armor(std::string name, std::string description, int encumbrance, int armor, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease): InteractableObject(name, description, encumbrance) {
+Armor::Armor(std::string name, std::string description, int encumbrance, int armor, int playerStaggerPercentIncrease, int enemyStaggerPercentIncrease, ActiveEffect *activeEffect): InteractableObject(name, description, encumbrance) {
     this->armor = armor;
     this->playerStaggerPercentIncrease = playerStaggerPercentIncrease;
     this->enemyStaggerPercentIncrease = enemyStaggerPercentIncrease;
+    this->activeEffect = activeEffect;
+}
+
+Armor::~Armor() {
+    delete activeEffect;
 }
 
 int Armor::getArmor() const {
@@ -38,6 +43,10 @@ std::string Armor::getStatString() const {
     return stats;
 }
 
+ActiveEffect *Armor::getActiveEffect() const {
+    return activeEffect;
+}
+
 void Armor::use(Player *player) {
     if (name == "street clothes") {
         if (player->getArmor() == this) {
@@ -47,6 +56,8 @@ void Armor::use(Player *player) {
         }
     } else if (player->getArmor() != this) {
         std::cout << "I take off the " << player->getArmor()->getName() << " and put on the " << name << ".\n\n";
+        player->removeFromActiveEffects(player->getArmor()->getActiveEffect());
+        player->addToActiveEffects(activeEffect);
         player->setArmor(this);
     } else {
         std::cout << "I'm already wearing the " << name << ".\n\n";

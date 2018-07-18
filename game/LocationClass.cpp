@@ -5,6 +5,11 @@ Location::Location(std::string name, std::string description) {
     this->description = description;
 }
 
+Location::~Location() {
+    for (int i = 0; i < interactableObjects.size(); i++) delete interactableObjects.at(i);
+    for (int i = 0; i < enemies.size(); i++) delete enemies.at(i);
+}
+
 bool Location::operator==(const Location &location) {
     return(name == location.getName());
 }

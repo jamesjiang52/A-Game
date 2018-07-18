@@ -3,7 +3,7 @@
 void unlitLanternUseFunction(Player *player) {
     std::cout << "Let there be light!\n\n";
     
-    InteractableObject *object = playerGetObjectFromString("lantern");
+    InteractableObject *object = player->getObjectFromString("lantern");
     MiscObject *litLantern = createLantern();
     
     player->removeFromInventory(object);
@@ -15,7 +15,7 @@ void unlitLanternUseFunction(Player *player) {
 MiscObject *createLanternUnlit() {
     MiscObject *object = new MiscObject(
         "lantern",
-        "The last embers glow faintly within.\n",
+        "The last embers glow faintly within.",
         1,
         unlitLanternUseFunction
     );
@@ -29,9 +29,9 @@ void lanternUseFunction(Player *player) {
 MiscObject *createLantern() {
     MiscObject *object = new MiscObject(
         "lantern",
-        "The warm flame bathes me in an amber glow.\n",
+        "The warm flame bathes me in an amber glow.",
         1,
-        lanternUseFunction;
+        lanternUseFunction
     );
     return object;
 }
@@ -40,7 +40,7 @@ void theArtOfWarUseFunction(Player *player) {
     ActiveEffect *effect = new ActiveEffect("player stagger", -5, 0, -1);
     player->addToActiveEffects(effect, false);  // don't allow duplicates
     
-    std::cout << "I am hit with stunning epiphany as a river of knowledge flows over me. My combat acumen is improved (-5% player stagger).\n\n"
+    std::cout << "I am hit with stunning epiphany as a river of knowledge flows over me. My combat acumen is improved (-5% player stagger).\n\n";
 }
 
 MiscObject *createTheArtOfWar() {
@@ -55,7 +55,7 @@ MiscObject *createTheArtOfWar() {
 
 void stoneUseFunction(Player *player) {
     std::cout << "I toss the stone. It does nothing (-1 encumbrance).\n\n";
-    InteractableObject *object = playerGetObjectFromString("stone");
+    InteractableObject *object = player->getObjectFromString("stone");
     player->removeFromInventory(object);
     player->getLocation()->addInteractableObject(object);
 }
@@ -63,7 +63,7 @@ void stoneUseFunction(Player *player) {
 MiscObject *createStone() {
     MiscObject *object = new MiscObject(
         "stone",
-        "This is impressively round... and grey... and smooth...\n",
+        "This is impressively round... and grey... and smooth...",
         1,
         stoneUseFunction
     );
@@ -77,7 +77,7 @@ void rainbowStoneUseFunction(Player *player) {
 MiscObject *createRainbowStone() {
     MiscObject *object = new MiscObject(
         "rainbow stone",
-        "I hope this stone is more useful than the first...\n",
+        "I hope this stone is more useful than the first...",
         1,
         rainbowStoneUseFunction
     );
@@ -91,7 +91,7 @@ void rainbowStoneWithoutExcaliburUseFunction(Player *player) {
 MiscObject *createRainbowStoneWithoutExcalibur() {
     MiscObject *object = new MiscObject(
         "rainbow stone",
-        "I hope this stone is more useful than the first...\n",
+        "I hope this stone is more useful than the first...",
         1,
         rainbowStoneWithoutExcaliburUseFunction
     );
@@ -105,9 +105,9 @@ void quillUseFunction(Player *player) {
 MiscObject *createQuill() {
     MiscObject *object = new MiscObject(
         "quill",
-        "A feather is sharpened to a fine tip, perfect for penmanship of the highest calibre.\n",
+        "A feather is sharpened to a fine tip, perfect for penmanship of the highest calibre.",
         1,
-        quillUseFunction;
+        quillUseFunction
     );
     return object;
 }

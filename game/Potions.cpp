@@ -8,9 +8,9 @@ void wholeWheatBreadUseFunction(Player *player) {
 Potion *createWholeWheatBread() {
     Potion *potion = new Potion(
         "whole wheat bread",
-        "This is only available from my favourite bakery (+20 health).\n",
+        "This is only available from my favourite bakery (+20 health).",
         1,
-        wholeWheatBreadUseFunction;
+        wholeWheatBreadUseFunction
     );
     return potion;
 }
@@ -23,9 +23,9 @@ void whiteBreadUseFunction(Player *player) {
 Potion *createWhiteBread() {
     Potion *potion = new Potion(
         "white bread",
-        "\"Acquired\" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies (+15 health).\n",
+        "\"Acquired\" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies (+15 health).",
         1,
-        loafOfBreadUseFunction
+        whiteBreadUseFunction
     );
     return potion;
 }
@@ -38,7 +38,7 @@ void bottleOfMeadUseFunction(Player *player) {
 Potion *createBottleOfMead() {
     Potion *potion = new Potion(
         "bottle of mead",
-        "Nothing soothes pain like a dash of mead - a single gulp and all is forgotten (+15 health).\n",
+        "Nothing soothes pain like a dash of mead - a single gulp and all is forgotten (+15 health).",
         1,
         bottleOfMeadUseFunction
     );
@@ -53,7 +53,7 @@ void squareOfChocolateUseFunction(Player *player) {
 Potion *createSquareOfChocolate() {
     Potion *potion = new Potion(
         "square of chocolate",
-        "There's nothing like the gooey wonderfulness of this brown-coloured delicacy (+10 health).\n",
+        "There's nothing like the gooey wonderfulness of this brown-coloured delicacy (+10 health).",
         1,
         squareOfChocolateUseFunction
     );
@@ -68,7 +68,7 @@ void appleUseFunction(Player *player) {
 Potion *createApple() {
     Potion *potion = new Potion(
         "apple",
-        "An apple a day keeps the doctor away (+10 health).\n",
+        "An apple a day keeps the doctor away (+10 health).",
         1,
         appleUseFunction
     );
@@ -83,7 +83,7 @@ void bananaUseFunction(Player *player) {
 Potion *createBanana() {
     Potion *potion = new Potion(
         "banana",
-        "This banana was once young and green (+10 health).\n",
+        "This banana was once young and green (+10 health).",
         1,
         bananaUseFunction
     );
@@ -96,19 +96,20 @@ void durrianUseFunction(Player *player) {
     int choice = choices[std::rand() % 2];
     player->gainHealth(choice);
     
-    if (choice > 0)
+    if (choice > 0) {
         std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
-    else if (!player->getCurrentHealth())  // player (almost) dies from eating durrian
+    } else if (!player->getCurrentHealth()) { // player (almost) dies from eating durrian
         player->gainHealth(1);
-        std::cout << "The durrian puts me on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n"; 
-    else
-        std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n"; 
+        std::cout << "The durrian puts me on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n";
+    } else {
+        std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    } 
 }
 
 Potion *createDurrian() {
     Potion *potion = new Potion(
         "durrian",
-        "These taste like heaven... but smell like hell (random between +10 health and -5 health).\n",
+        "These taste like heaven... but smell like hell (random between +10 health and -5 health).",
         1,
         durrianUseFunction
     );
@@ -125,7 +126,7 @@ void lemonUseFunction(Player *player) {
 Potion *createLemon() {
     Potion *potion = new Potion(
         "lemon",
-        "Only when you have eaten a lemon do you appreciate what \"sweet\" is (+5 health).\n",
+        "Only when you have eaten a lemon do you appreciate what \"sweet\" is (+5 health).",
         1,
         lemonUseFunction
     );
@@ -140,7 +141,7 @@ void peachUseFunction(Player *player) {
 Potion *createPeach() {
     Potion *potion = new Potion(
         "peach",
-        "A man should never refuse to taste a peach. He may never get the chance again (+10 health).\n",
+        "A man should never refuse to taste a peach. He may never get the chance again (+10 health).",
         1,
         peachUseFunction
     );
@@ -153,19 +154,20 @@ void ambrosiaUseFunction(Player *player) {
     int choice = choices[std::rand() % 3];
     player->gainHealth(choice);
     
-    if (choice > 0)
+    if (choice > 0) {
         std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
-    else if (!player->getCurrentHealth())  // player (almost) dies from eating ambrosia
+    } else if (!player->getCurrentHealth()) { // player (almost) dies from eating ambrosia
         player->gainHealth(1);
         std::cout << "The ambrosia puts me on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n"; 
-    else
+    } else {
         std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n"; 
+    }
 }
 
 Potion *createAmbrosia() {
     Potion *potion = new Potion(
         "ambrosia",
-        "It is the food of the gods, or so it is said. I'm sure they won't be angry if I take just a little bite (random between +15 health, +25 health, and -20 health).\n",
+        "It is the food of the gods, or so it is said. I'm sure they won't be angry if I take just a little bite (random between +15 health, +25 health, and -20 health).",
         1,
         ambrosiaUseFunction
     );
@@ -192,7 +194,7 @@ void mysteriousWhitePowderUseFunction(Player *player) {
 Potion *createMysteriousWhitePowder() {
     Potion *potion = new Potion(
         "mysterious white powder",
-        "I was told that a couple of pinches will invigorate me from even the deepest of stupors (random between +5 health, +15 health, +25 health, -10% player stagger, or -20% player stagger).\n",
+        "I was told that a couple of pinches will invigorate me from even the deepest of stupors (random between +5 health, +15 health, +25 health, -10% player stagger, or -20% player stagger).",
         1,
         mysteriousWhitePowderUseFunction
     );

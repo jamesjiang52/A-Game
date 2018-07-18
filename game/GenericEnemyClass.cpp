@@ -7,6 +7,13 @@ GenericEnemy::GenericEnemy(std::string name, int startingHealth) {
 
     this->weapon = NULL;
     this->armor = NULL;
+    this->shield = NULL;
+}
+
+GenericEnemy::~GenericEnemy() {
+    this->weapon = NULL;
+    this->armor = NULL;
+    this->shield = NULL;
 }
 
 std::string GenericEnemy::getName() const {
@@ -31,8 +38,10 @@ int GenericEnemy::getTotalEncumbrance() const {
 }
 
 void GenericEnemy::loseHealth(int amount, int armorReductionPercent) {
-    float damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
+    float damageReductionFraction;
+    if (shield) damageReductionFraction = std::min(armor->getArmor() + shield->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
     // ^ this value is 0 at armor=0 and MAX_ARMOR_DMG_REDUCTION at armor=MAX_ARMOR
+    else damageReductionFraction = std::min(armor->getArmor(), MAX_ARMOR)*MAX_ARMOR_DMG_REDUCTION*(1 - armorReductionPercent/100.0)/MAX_ARMOR;
 
     int loseHealthAmount = std::max((int)(amount*(1 - damageReductionFraction)), 0);  // don't let damage go below 0
     

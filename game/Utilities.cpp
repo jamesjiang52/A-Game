@@ -193,7 +193,77 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     return(choices[std::rand() % 3]);
 }
 
-bool playerCoinToss(Player *player, GenericEnemy *enemy) {
+void playerGainHealthFromEffects(Player *player, int combatTurn) {
+    int totalModifier = 0;
+    
+    std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
+    for (int i = 0; i < activeEffects.size(); i++) {
+        ActiveEffect *effect = activeEffects.at(i);
+        if ((effect->getTargetStat() == "health") && (effect->getCombatTurnsForActivation() == combatTurn)) {
+            totalModifier += effect->getAmount();
+        }
+    }
+    player->gainHealth(totalModifier);
+    if (!totalModifier)
+        return;
+    else if (totalModifier > 0)
+        std::cout << "Strangely, I feel as if my lifeforce is strengthening. Perhaps it was something I consumed earlier?\n\n";
+    else
+        std::cout << "Strangely, I feel as if my lifeforce is weakening. Perhaps it was something I consumed earlier?\n\n";
+}
+
+int getPlayerStaggerModifierFromEffects(Player *player, int combatTurn) {
+    int totalModifier = 0;
+    
+    std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
+    for (int i = 0; i < activeEffects.size(); i++) {
+        ActiveEffect *effect = activeEffects.at(i);
+        if ((effect->getTargetStat() == "player stagger") && (effect->getCombatTurnsForActivation() <= combatTurn) && (effect->getCombatTurnsForActivation() + effect->getDuration() >= combatTurn)) {
+            totalModifier += effect->getAmount();
+        }
+    }
+    return totalModifier;
+}
+
+int getEnemyStaggerModifierFromEffects(Player *player, int combatTurn) {
+    int totalModifier = 0;
+    
+    std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
+    for (int i = 0; i < activeEffects.size(); i++) {
+        ActiveEffect *effect = activeEffects.at(i);
+        if ((effect->getTargetStat() == "enemy stagger") && (effect->getCombatTurnsForActivation() <= combatTurn) && (effect->getCombatTurnsForActivation() + effect->getDuration() >= combatTurn)) {
+            totalModifier += effect->getAmount();
+        }
+    }
+    return totalModifier;
+}
+
+void removeInactiveEffects(Player *player, int combatTurn) {
+    std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
+    for (int i = 0; i < activeEffects.size(); i++) {
+        ActiveEffect *effect = activeEffects.at(i);
+        if ((effect->getDuration() >= 0) && (effect->getCombatTurnsForActivation() + effect->getDuration() <= combatTurn)) {
+            player->removeFromActiveEffects(effect);
+            delete effect;
+        }
+    }
+}
+
+void removeAllEffects(Player *player) {
+    /*
+    Removes all non-permanent effects. Use at end of combat
+    */
+    std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
+    for (int i = 0; i < activeEffects.size(); i++) {
+        ActiveEffect *effect = activeEffects.at(i);
+        if (effect->getDuration() != -1) {
+            player->removeFromActiveEffects(effect);
+            delete effect;
+        }
+    }
+}
+
+bool playerCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*player->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -204,11 +274,12 @@ bool playerCoinToss(Player *player, GenericEnemy *enemy) {
     if (enemy->getArmor()) threshold += enemy->getArmor()->getEnemyStaggerPercentIncrease();
     if (player->getShield()) threshold += player->getShield()->getPlayerStaggerPercentIncrease();
     if (enemy->getShield()) threshold += enemy->getShield()->getEnemyStaggerPercentIncrease();
+    threshold += getPlayerStaggerModifierFromEffects(player, combatTurn);
     
     return((std::rand() % 100) < threshold);
 }
 
-bool enemyCoinToss(Player *player, GenericEnemy *enemy) {
+bool enemyCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*enemy->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -219,6 +290,7 @@ bool enemyCoinToss(Player *player, GenericEnemy *enemy) {
     if (enemy->getArmor()) threshold += enemy->getArmor()->getPlayerStaggerPercentIncrease();
     if (player->getShield()) threshold += player->getShield()->getEnemyStaggerPercentIncrease();
     if (enemy->getShield()) threshold += enemy->getShield()->getPlayerStaggerPercentIncrease();
+    threshold += getEnemyStaggerModifierFromEffects(player, combatTurn);
     
     return((std::rand() % 100) < threshold);
 }
@@ -242,6 +314,8 @@ void combat(Player *player, GenericEnemy *enemy) {
         printPlayerEmbellishedHealthInfo(player);
         printEnemyEmbellishedHealthInfo(enemy);
         
+        player->gainHealthFromEffects(player, combatTurn);
+        
         player->loseHealth(player->getWeapon()->getPlayerHealthBleed(), 100);
         enemy->loseHealth(enemy->getWeapon()->getPlayerHealthBleed(), 100);
         
@@ -261,13 +335,13 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::string enemyChoice = getEnemyCombatChoice(enemy);
         
         if (playerStaggered) {
-            if (playerCoinToss(player, enemy))
+            if (playerCoinToss(player, enemy, combatTurn))
                 playerFailed = true;
             playerStaggered = false;
         }
         
         if (enemyStaggered) {
-            if (enemyCoinToss(player, enemy))
+            if (enemyCoinToss(player, enemy, combatTurn))
                 enemyFailed = true;
             enemyStaggered = false;
         }
@@ -397,6 +471,7 @@ void combat(Player *player, GenericEnemy *enemy) {
         playerFailed = false;
         enemyFailed = false;
         
+        removeInactiveEffects(player, combatTurn);
         combatTurn++;
     }
     
@@ -404,14 +479,23 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::cout << "The " << enemy->getName() << ", seeing an opportune moment, lunges at me and steals away the last remnants of my lifeforce with a quick series of swings. I fall to the ground elated, terrified, and broken.\n\n";
         getUserRetryOrQuit();
     } else {  // enemy dies
+        removeAllEffects(player);
+    
         std::cout << "I see a perfect opportunity, and I secure another strike on the " << enemy->getName() << ". There is no resistance this time as I watch the blood seep out of the lifeless corpse. While this " << enemy->getName() << " has seen its last breath, I live to fight another day.\n";
         std::cout << "I search the body of the dead " << enemy->getName() << " and find the following items:\n";
-        
-        for (int i = 0; i < enemy->getInventory().size(); i++) {
-            InteractableObject *object = enemy->getInventory().at(i);
-            std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
-            enemy->removeFromInventory(object);
-            player->getLocation()->addInteractableObject(object);
+
+        std::vector<InteractableObject*> inventory = enemy->getInventory();
+        std::map<InteractableObject*, int> inventoryWithCounts = {};
+        for (int i = 0; i < inventory.size(); i++) {
+            InteractableObject *object = inventory.at(i);
+            inventoryWithCounts[object]++;
+        }
+        for (std::map<InteractableObject*, int>::iterator i = inventoryWithCounts.begin(); i < inventoryWithCounts.end(); i++) {
+            InteractableObject *object = i->second;
+            if (i->first > 1)
+                std::cout << "    (" << i->first << ") " << object->getName() << "\n";
+            else
+                std::cout << "    " << object->getName() << "\n";
         }
         std::cout << "\n";
         
@@ -449,7 +533,7 @@ void printLocationInfo(Player *player) {
     // directions
     std::vector<Direction*> directions = location->getDirections();
     if (directions.size() > 0) {
-        std::cout << "\nIt appears I can move in these directions:" << "\n";
+        std::cout << "\nIt appears I can move in these directions:\n";
         for (int i = 0; i < directions.size(); i++) {
             std::cout << "    " << directions.at(i)->getName() << "\n";
         }
@@ -458,9 +542,18 @@ void printLocationInfo(Player *player) {
     // interactable objects
     std::vector<InteractableObject*> objects = location->getObjects();
     if (objects.size() > 0) {
-        std::cout << "\nI can spot these items that might be of interest to me:" << "\n";
+        std::cout << "\nI can spot these items that might be of interest to me:\n";
+        std::map<InteractableObject*, int> inventoryWithCounts = {};
         for (int i = 0; i < objects.size(); i++) {
-            std::cout << "    " << objects.at(i)->getName() << "\n";
+            InteractableObject *object = objects.at(i);
+            objectsWithCounts[object]++;
+        }
+        for (std::map<InteractableObject*, int>::iterator i = objectsWithCounts.begin(); i < objectsWithCounts.end(); i++) {
+            InteractableObject *object = i->second;
+            if (i->first > 1)
+                std::cout << "    (" << i->first << ") " << object->getName() << "\n";
+            else
+                std::cout << "    " << object->getName() << "\n";
         }
     }
     
@@ -489,7 +582,7 @@ void printInventory(Player *player) {
         if (i->first > 1)
             std::cout << "    (" << i->first << ") " << object->getName() << " (" << object->getEncumbrance() << ")\n";
         else
-            std::cout << object->getName() << " (" << object->getEncumbrance() << ")\n";
+            std::cout << "    " << object->getName() << " (" << object->getEncumbrance() << ")\n";
     }
     std::cout << "\n";
 }

@@ -1,71 +1,113 @@
 #include "MiscObjects.hpp"
 
-InteractableObject *createLanternUnlit() {
-    InteractableObject *object = new InteractableObject(
+void unlitLanternUseFunction(Player *player) {
+    std::cout << "Let there be light!\n\n";
+    
+    InteractableObject *object = playerGetObjectFromString("lantern");
+    MiscObject *litLantern = createLantern();
+    
+    player->removeFromInventory(object);
+    player->addToInventory(litLantern);
+    
+    delete object;
+}
+
+MiscObject *createLanternUnlit() {
+    MiscObject *object = new MiscObject(
         "lantern",
         "The last embers glow faintly within.\n",
-        1
+        1,
+        unlitLanternUseFunction
     );
-    object->setUseMessage("Let there be light!");
     return object;
 }
 
-InteractableObject *createLantern() {
-    InteractableObject *object = new InteractableObject(
+void lanternUseFunction(Player *player) {
+    std::cout << "The lantern is already lit.\n\n";
+}
+
+MiscObject *createLantern() {
+    MiscObject *object = new MiscObject(
         "lantern",
         "The warm flame bathes me in an amber glow.\n",
-        1
+        1,
+        lanternUseFunction;
     );
-    object->setUseMessage("The lantern is already lit.");
     return object;
 }
 
-InteractableObject *createTheArtOfWar() {
-    InteractableObject *object = new InteractableObject(
+void theArtOfWarUseFunction(Player *player) {
+    ActiveEffect *effect = new ActiveEffect("player stagger", -5, 0, -1);
+    player->addToActiveEffects(effect, false);  // don't allow duplicates
+    
+    std::cout << "I am hit with stunning epiphany as a river of knowledge flows over me. My combat acumen is improved (-5% player stagger).\n\n"
+}
+
+MiscObject *createTheArtOfWar() {
+    MiscObject *object = new MiscObject(
         "The Art of War - Sun Tzu",
         "",
-        1
+        1,
+        theArtOfWarUseFunction
     );
-    object->setUseMessage("I am hit with stunning epiphany as a river of knowledge flows over me. My combat acumen is improved (-5% player stagger).\n");
     return object;
 }
 
-InteractableObject *createStone() {
-    InteractableObject *object = new InteractableObject(
+void stoneUseFunction(Player *player) {
+    std::cout << "I toss the stone. It does nothing (-1 encumbrance).\n\n";
+    InteractableObject *object = playerGetObjectFromString("stone");
+    player->removeFromInventory(object);
+    player->getLocation()->addInteractableObject(object);
+}
+
+MiscObject *createStone() {
+    MiscObject *object = new MiscObject(
         "stone",
         "This is impressively round... and grey... and smooth...\n",
-        1
+        1,
+        stoneUseFunction
     );
-    object->setUseMessage("");
     return object;
 }
 
-InteractableObject *createRainbowStone() {
-    InteractableObject *object = new InteractableObject(
+void rainbowStoneUseFunction(Player *player) {
+    
+}
+
+MiscObject *createRainbowStone() {
+    MiscObject *object = new MiscObject(
         "rainbow stone",
         "I hope this stone is more useful than the first...\n",
-        1
+        1,
+        rainbowStoneUseFunction
     );
-    object->setUseMessage("");
     return object;
 }
 
-InteractableObject *createRainbowStoneWithoutExcalibur() {
-    InteractableObject *object = new InteractableObject(
+void rainbowStoneWithoutExcaliburUseFunction(Player *player) {
+    std::cout << "This stone seems too important to toss.\n\n";
+}
+
+MiscObject *createRainbowStoneWithoutExcalibur() {
+    MiscObject *object = new MiscObject(
         "rainbow stone",
         "I hope this stone is more useful than the first...\n",
-        1
+        1,
+        rainbowStoneWithoutExcaliburUseFunction
     );
-    object->setUseMessage("");
     return object;
 }
 
-InteractableObject *createQuill() {
-    InteractableObject *object = new InteractableObject(
+void quillUseFunction(Player *player) {
+    std::cout << "If only I had something to write on...\n\n";
+}
+
+MiscObject *createQuill() {
+    MiscObject *object = new MiscObject(
         "quill",
         "A feather is sharpened to a fine tip, perfect for penmanship of the highest calibre.\n",
-        1
+        1,
+        quillUseFunction;
     );
-    object->setUseMessage("If only I had something to write on...");
     return object;
 }

@@ -54,7 +54,7 @@ class Player {
         void addToInventory(InteractableObject *object);
         void removeFromInventory(InteractableObject *object);
         std::vector<ActiveEffect*> getActiveEffects() const;
-        void addToActiveEffects(ActiveEffect *activeEffect);
+        void addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate=true);
         void removeFromActiveEffects(ActiveEffect *activeEffect);
         Weapon *getWeapon() const;
         void setWeapon(Weapon *weapon);

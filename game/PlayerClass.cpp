@@ -132,11 +132,17 @@ std::vector<ActiveEffect*>::iterator Player::effectPosition(ActiveEffect *active
     return std::find(activeEffects.begin(), activeEffects.end(), object);
 }
 
-void Player::addToActiveEffects(ActiveEffect *activeEffect) {
+void Player::addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate) {
     /*
     Adds new effect to active effects
     */
-    activeEffects.push_back(activeEffect);
+    if (allowDuplicate)
+        activeEffects.push_back(activeEffect);
+    else {
+        std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
+        if (position != activeEffects.end())
+            activeEffects.push_back(activeEffect);
+    }    
 }
 
 void Player::removeFromActiveEffects(ActiveEffect *activeEffect) {

@@ -13,6 +13,7 @@
 #include "ArmorClass.hpp"
 #include "ShieldClass.hpp"
 #include "PotionClass.hpp"
+#include "MiscObjectClass.hpp"
 #include "GenericEnemyClass.hpp"
 #include "PlayerClass.hpp"
 #include "Utilities.hpp"

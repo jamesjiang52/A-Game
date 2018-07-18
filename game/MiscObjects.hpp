@@ -1,7 +1,7 @@
 #ifndef MISC_OBJECTS_H
 #define MISC_OBJECTS_H
 
-#include "InteractableObjectClass.hpp"
+#include "MiscObjectClass.hpp"
 #include "PlayerClass.hpp"
 #include "ActiveEffectClass.hpp"
 

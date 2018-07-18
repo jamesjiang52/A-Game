@@ -1,5 +1,5 @@
-#ifndef ACTIVE_EFFECT
-#define ACTIVE_EFFECT
+#ifndef ACTIVE_EFFECT_H
+#define ACTIVE_EFFECT_H
 
 class ActiveEffect {
     private:

@@ -151,49 +151,61 @@ This cannot be the real Aegis as I am not stone, but this is a most terrifying r
 
 //Consumables
 
-Whole Wheat Bread:
+Loaf of Whole Wheat Bread:
 Heal 20 hp
 This is only available from my favourite bakery
+Feels healthier than white bread
 
-White Bread:
-Heal 15 hp
-"Acquired" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies.
+Loaf of White Bread:
+Heal 15 hp (After 5 turn hidden effect: heal 5 hp)
+This is only available from my favourite bakery
+Tastes better than whole wheat bread
 
 Bottle of Mead:
 Heal 15 hp
 Nothing soothes pain like a dash of mead - a single gulp and all is forgotten.
+What was hurting again?
 
 Square of Chocolate:
 Heal 10 hp
 There's nothing like the gooey wonderfulness of this brown-coloured delicacy.
+Delicious!
 
 Apple:
 Heal 10 hp
 An apple a day keeps the doctor away
+Kept the doctor away for another day!
 
 Banana:
 Heal 10 hp
 This banana was once young and green
+I too once was young... 
 
 Durrian
 Random Effect: (drain 5 hp, heal 10 hp)
 Tastes like heaven ... smells like hell
+This smell ... it is too much (if drain 5 hp)
+Even heaven pales in comparison (if heal 10 hp)
 
 Lemon:
 Heal 5 hp, after 5 turns hidden effect (heal 10 hp)
 Only when you have eaten a lemon do you appreciate what sweet is
+I can't make lemonade so I guess this will have to do.
 
 Peach:
 Heal 10 hp
 A man should never refuse to taste a peach. He may never get the chance again
+Life is short and winter is coming
 
 Ambrosia:
 Random Effect: (heal 15 hp, heal 25 hp, drain 20 hp)
 It is the food of the gods, or so it is said. I'm sure they wont be angry if I take just a little bite.
+Have I been blessed or cursed?
 
 Mysterious White Powder:
 Random Effect: (heal 5 hp, heal 15 hp, heal 25 hp, -10% stagger, or -20% stagger), after five turns hidden effect (+50% stagger)
 I was told that a couple of pinches will invigorate me from even the deepest of stupors.
+I feel ... strange
 
 
 //Miscellaneous

@@ -6,7 +6,7 @@ Dodge
 Feint 
 False Retreat
 
-With each dammage attempt there are three possible results:
+With each damage attempt there are three possible results:
 Missed - Deals 0% of damage		15% of the time
 Normal - Deals 100% of damage		70% of the time
 Critical - Deals 200% of damage		15% of the time
@@ -18,14 +18,16 @@ Powerful Strike(+10% critical, +5% missed):
  - Slight Victory: Feint (Deal Damage)
  - Slight Defeat: False Retreat (Stagger)
  - Significant Defeat: Dodge (Significant Stagger)
- - Draws: Lithe probe (Deal Damage + Take Damage)
+ - Draws: Lithe probe (Deal Significant Damage + Take Significant Damage)
+ - Draws: Powerful Strike (Deal Damage + Take Damage)
 
 Lithe Probe(-10% missed, -5% critical):
  - Significant Victory: Dodge (Deal Significant Damage)
  - Slight Victory: Feint (Deal Damage)
  - Slight Defeat: False Retreat (+10% opponenet critical)
  - Significant Defeat: Attempt Parry (Stagger + 50% damage taken increase)
- - Draws: Powerful Strike (Deal Damage + Take Damage)
+ - Draws: Powerful Strike (Deal Significant Damage + Take Significant Damage)
+ - Draws: Lithe Probe (Deal Damage + Take Damage)
 
 Attempt Parry(-5% critical):
  - Significant Victory: Lithe Probe (Opponent Stagger + 50% damage taken increase)
@@ -33,6 +35,7 @@ Attempt Parry(-5% critical):
  - Significant Defeat: Feint (Stagger + -10% opponent missed)
  - Significant Defeat: Powerful Strike (Take Damage + Stagger)
  - Draws: Dodge (Stagger + Opponent Stagger)
+ - Draws: Attempt Parry( ... nothing happens ...)
 
 Dodge(+5% missed):
  - Significant Victory: Powerful Strike (Significant Opponent Stagger)
@@ -40,6 +43,7 @@ Dodge(+5% missed):
  - Significant Defeat: Feint (Stagger + +10% oponent critical)
  - Significant Defeat: Lithe Probe (Take Significant Damage)
  - Draws: Attempt Parry (Stagger + Opponent Stagger)
+ - Draws: Dodge( ... nothing happens ... )
 
 Feint(+5% opponent stagger):
  - Significant Victory: Attempt Parry (Opponent Stagger + -10% missed)
@@ -47,6 +51,7 @@ Feint(+5% opponent stagger):
  - Slight Defeat: Powerful Strike (Take Damage)
  - Slight Defeat: Lithe Probe (Take Damage)
  - Slight Defeat: False Retreat (Stagger)
+ - Draws: Feint (Stagger + Opponent Stagger)
 
 False Retreat(-5% stagger):
  - Slight Victory: Powerful Strike (Opponent Stagger)
@@ -54,10 +59,14 @@ False Retreat(-5% stagger):
  - Slight Victory: Feint (Opponenet Stagger)
  - Significant Defeat: Attempt Parry (Significant Stagger)
  - Significant Defeat: Dodge (Significant Stagger)
+ - Draws: False Retreat (Stagger + Opponent Stagger)
 
 With the usage of a shield, to more options are unlocked:
 Block
 Bash
+
+With each damage attempt(Bash) there is one possible results:
+Normal - Deals 100% of damage		100% of the time
 
 Block: 
  - Significant Victory: Powerful Strike (Opponenet Stagger + Chance opponent has to change weapon)
@@ -67,6 +76,7 @@ Block:
  - Slight Defeat: Dodge (Stagger)
  - Slight Defeat: Attempt Parry (Stagger)
  - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight)
+ - Draws: Block ( ... Nothing Happens ... )
 
 Bash:
  - Significant Victory: Attempt Parry (Opponent Stagger + Chance opponent has to change weapon)
@@ -76,6 +86,7 @@ Bash:
  - Slight Defeat: Powerful Strike (Take Damage)
  - Slight Defeat: Lithe Probe (Take Damage)
  - Draws: Block (Both shields are broken and cannot be used for the rest of the fight)
+ - Draws: Bash (Stagger + Opponent Stagger)
 
 All effects are temporary and lasts for the next turn
 

@@ -210,18 +210,19 @@ I feel ... strange
 
 //Miscellaneous
 
-Unlit Lantern:
+Lantern:
 The last embers glow faintly within.
-
-Lit Latern:
 And then there was light!
 
 The Art of War - Sun Tzu:
 Passive effect: -5% stagger
-I am hit with a stunning epiphany... 
+"Appear weak when you are strong, and strong when you are weak"
+I am hit with a stunning epiphany!!!
 
 Rainbow Stone:
 I hope this stone is more useful than the first one...
+(Not meant to be used)
 
 Quill:
 If only I had something to write on...
+(Not meant to be used)

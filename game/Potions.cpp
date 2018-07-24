@@ -2,7 +2,7 @@
 
 void wholeWheatBreadUseFunction(Player *player) {
     player->gainHealth(20);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "Feels healthier than white bread... I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createWholeWheatBread() {
@@ -17,13 +17,15 @@ Potion *createWholeWheatBread() {
 
 void whiteBreadUseFunction(Player *player) {
     player->gainHealth(15);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "Tastes better than whole wheat bread... I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    ActiveEffect *effect = new ActiveEffect("health", 5, 5, 0);  // +5 health after 5 combat turns
+    player->addToActiveEffects(effect);
 }
 
 Potion *createWhiteBread() {
     Potion *potion = new Potion(
         "white bread",
-        "\"Acquired\" from my second-favorite bakery, it was saved for a rainy day. It will soon rain... the tears of my enemies (+15 health).",
+        "This is only available from my favourite bakery (+15 health).",
         1,
         whiteBreadUseFunction
     );
@@ -32,7 +34,7 @@ Potion *createWhiteBread() {
 
 void bottleOfMeadUseFunction(Player *player) {
     player->gainHealth(15);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health). What was hurting again?\n\n";
 }
 
 Potion *createBottleOfMead() {
@@ -47,7 +49,7 @@ Potion *createBottleOfMead() {
 
 void squareOfChocolateUseFunction(Player *player) {
     player->gainHealth(10);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health). Delicious!\n\n";
 }
 
 Potion *createSquareOfChocolate() {
@@ -62,7 +64,7 @@ Potion *createSquareOfChocolate() {
 
 void appleUseFunction(Player *player) {
     player->gainHealth(10);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health). Kept the doctor away for another day!\n\n";
 }
 
 Potion *createApple() {
@@ -77,7 +79,7 @@ Potion *createApple() {
 
 void bananaUseFunction(Player *player) {
     player->gainHealth(10);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "I too once was young... I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createBanana() {
@@ -97,12 +99,12 @@ void durrianUseFunction(Player *player) {
     player->gainHealth(choice);
     
     if (choice > 0) {
-        std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+        std::cout << "Even heaven pales in comparison; I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     } else if (!player->getCurrentHealth()) { // player (almost) dies from eating durrian
         player->gainHealth(1);
-        std::cout << "The durrian puts me on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n";
+        std::cout << "The smell... it is too much. I am put on the brink of death (" << "1/" << player->getStartingHealth() << " health).\n\n";
     } else {
-        std::cout << "I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+        std::cout << "The smell... it is too much. I can feel my lifeforce weakening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     } 
 }
 
@@ -118,7 +120,7 @@ Potion *createDurrian() {
 
 void lemonUseFunction(Player *player) {
     player->gainHealth(5);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "I can't make lemonade, so I guess this will have to do. I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     ActiveEffect *effect = new ActiveEffect("health", 10, 5, 0);  // +10 health after 5 combat turns
     player->addToActiveEffects(effect);
 }
@@ -135,7 +137,7 @@ Potion *createLemon() {
 
 void peachUseFunction(Player *player) {
     player->gainHealth(10);
-    std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+    std::cout << "Life is short and winter is coming. I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
 }
 
 Potion *createPeach() {
@@ -154,6 +156,7 @@ void ambrosiaUseFunction(Player *player) {
     int choice = choices[std::rand() % 3];
     player->gainHealth(choice);
     
+    std::cout << "Have I been blessed or cursed? ";
     if (choice > 0) {
         std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     } else if (!player->getCurrentHealth()) { // player (almost) dies from eating ambrosia
@@ -184,10 +187,10 @@ void mysteriousWhitePowderUseFunction(Player *player) {
         ActiveEffect *hiddenEffect = new ActiveEffect("player stagger", 50 - choice, 5, -2);
         player->addToActiveEffects(effect);
         player->addToActiveEffects(hiddenEffect);
-        std::cout << "I feel my focus has improved, though I sense the heavy effects of the drug will wear off soon.\n\n";
+        std::cout << "I feel... strange (-" << choice << "% stagger next combat duel).\n\n";
     } else {  // increase player health
         player->gainHealth(choice);
-        std::cout << "I can feel my lifeforce strengthening (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
+        std::cout << "I feel... strange (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).\n\n";
     }
 }
 

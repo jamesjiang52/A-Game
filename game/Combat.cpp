@@ -68,7 +68,7 @@ void removeInactiveEffects(Player *player, int combatTurn) {
 
 void removeAllEffects(Player *player) {
     /*
-    Removes all non-permanent effects. Use at end of combat
+    Removes all non-permanent effects. Use at end of combat.
     */
     std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
     for (int i = 0; i < activeEffects.size(); i++) {

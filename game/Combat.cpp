@@ -29,7 +29,7 @@ void playerGainHealthFromEffects(Player *player, int combatTurn) {
         std::cout << "Strangely, I feel as if my lifeforce is weakening. Perhaps it was something I consumed earlier?\n\n";
 }
 
-int getPlayerStaggerModifierFromEffects(Player *player, int combatTurn) {
+int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn) {
     int totalModifier = 0;
     
     std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
@@ -42,7 +42,7 @@ int getPlayerStaggerModifierFromEffects(Player *player, int combatTurn) {
     return totalModifier;
 }
 
-int getEnemyStaggerModifierFromEffects(Player *player, int combatTurn) {
+int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn) {
     int totalModifier = 0;
     
     std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
@@ -80,7 +80,25 @@ void removeAllEffects(Player *player) {
     }
 }
 
-bool playerCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
+int calculateDamage(int baseDamage, int missedModifier, int criticalModifier, float damageTakenMultiplier) {
+    /*
+    Determines the amount of damage a player deals, before armor and significant damage calculations.
+    */
+    int damage = baseDamage;
+    
+    std::srand(std::time(nullptr));
+    int roll = std::rand() % 100;
+    if (roll < 100*(DEFAULT_MISSED_CHANCE + missedModifier)) 
+        return 0;
+    else if (roll < 100*(DEFAULT_CRITICAL_CHANCE + DEFAULT_MISSED_CHANCE + missedModifier + criticalModifier))
+        damage *= CRITICAL_DAMAGE_MULTIPLIER;
+    return(damage*damageTakenMultiplier);
+}
+
+bool playerStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical) {
+    /*
+    Determines whether player fails their move (from previous turn's stagger)
+    */
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*player->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -93,10 +111,15 @@ bool playerCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
     if (enemy->getShield()) threshold += enemy->getShield()->getEnemyStaggerPercentIncrease();
     threshold += getPlayerStaggerModifierFromEffects(player, combatTurn);
     
+    if (critical)
+        return((std::rand() % 100)*SIGNIFICANT_STAGGER_MULTIPLIER < threshold);
     return((std::rand() % 100) < threshold);
 }
 
-bool enemyCoinToss(Player *player, GenericEnemy *enemy, int combatTurn) {
+bool enemyStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical) {
+    /*
+    Determines whether enemy fails their move (from previous turn's stagger)
+    */
     std::srand(std::time(nullptr));
     int threshold = 100*(MIN_STAGGER_CHANCE + (MAX_STAGGER_CHANCE - MIN_STAGGER_CHANCE)*enemy->getTotalEncumbrance()/MAX_ENCUMBRANCE);
     
@@ -120,12 +143,15 @@ void combat(Player *player, GenericEnemy *enemy) {
     player->isBleeding = false;
     enemy->isBleeding = false;
     
-    bool playerStaggered = false;  // true for one turn after player swings and enemy parries, or player parries and enemy feints
-    bool enemyStaggered = false;  // true for one turn after enemy swings and player parries, or enemy parries and player feints
+    bool playerStaggered = false, playerCriticalStagger = false;
+    bool enemyStaggered = false, enemyCriticalStagger = false;
     bool playerFailed = false;
     bool enemyFailed = false;
     
     int combatTurn = 0;
+    
+    int playerMissedModifier = 0, playerCriticalModifier = 0;
+    int enemyMissedModifier = 0, enemyCriticalModifier = 0;
     
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
@@ -159,15 +185,17 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::string enemyChoice = getEnemyCombatChoice(enemy);
         
         if (playerStaggered) {
-            if (playerCoinToss(player, enemy, combatTurn))
+            if (playerStaggerRoll(player, enemy, combatTurn, playerCriticalStagger))
                 playerFailed = true;
             playerStaggered = false;
+            playerCriticalStagger = false;
         }
         
         if (enemyStaggered) {
-            if (enemyCoinToss(player, enemy, combatTurn))
+            if (enemyStaggerRoll(player, enemy, combatTurn, enemyCriticalStagger))
                 enemyFailed = true;
             enemyStaggered = false;
+            enemyCriticalStagger = false;
         }
         
         if (playerInput.substr(0, 2) == "go") {
@@ -189,7 +217,8 @@ void combat(Player *player, GenericEnemy *enemy) {
         } else if (playerInput == "powerful strike") {
             if (enemyChoice == "powerful strike") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    player->loseHealth(calculateDamage(enemy->getWeapon()->getDamage(), POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier, POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -199,7 +228,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "lithe probe") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    player->loseHealth(calculateDamage(enemy->getWeapon()->getDamage(), LITHE_PROBE_MISSED_MODIFIER + enemyMissedModifier, LITHE_PROBE_CRITICAL_MODIFIER + enemyCriticalModifier)*SIGNIFICANT_DAMAGE_MULTIPLIER, enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier)*SIGNIFICANT_DAMAGE_MULTIPLIER, player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -209,7 +239,9 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "attempt parry") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, POWERFUL_STRIKE_CRITICAL_MODIFIER + ATTEMPT_PARRY_CRITICAL_MODIFIER + playerCriticalModifier), player->getWeapon()->getEnemyArmorReductionPercent());
+                    enemyStaggered = true;
+                    enemyCriticalStagger = false;
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -219,7 +251,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    playerStaggered = true;
+                    playerCriticalStagger = true;
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -229,7 +262,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -239,7 +272,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "false retreat") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    playerStaggered = true;
+                    playerCriticalStagger = false;
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -249,7 +283,9 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    playerStaggered = true;
+                    playerCriticalStagger = false;
+                    // TODO: chance player has to change weapon
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -259,7 +295,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), 5 + playerMissedModifier, 10 + playerCriticalModifier), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -271,7 +307,8 @@ void combat(Player *player, GenericEnemy *enemy) {
         } else if (playerInput == "lithe probe") {
             if (enemyChoice == "powerful strike") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    player->loseHealth(calculateDamage(enemy->getWeapon()->getDamage(), 5 + enemyMissedModifier, 10 + enemyCriticalModifier)*SIGNIFICANT_DAMAGE_MULTIPLIER, enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), -5 + playerMissedModifier, -10 + playerCriticalModifier)*SIGNIFICANT_DAMAGE_MULTIPLIER, player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -281,7 +318,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "lithe probe") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    player->loseHealth(calculateDamage(enemy->getWeapon()->getDamage(), -5 + enemyMissedModifier, -10 + enemyCriticalModifier), enemy->getWeapon()->getEnemyArmorReductionPercent());
+                    enemy->loseHealth(calculateDamage(player->getWeapon()->getDamage(), -5 + playerMissedModifier, -10 + playerCriticalModifier), player->getWeapon()->getEnemyArmorReductionPercent());
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
@@ -291,7 +329,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
-                    
+                    playerStaggered = true;
+                    playerCriticalStagger = false;
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {

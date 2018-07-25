@@ -5,6 +5,7 @@
 #include <regex>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include "Parameters.hpp"
 #include "DirectionClass.hpp"
 #include "InteractableObjectClass.hpp"

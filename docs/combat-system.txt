@@ -30,7 +30,7 @@ Lithe Probe(-10% missed, -5% critical):
  - Draws: Lithe Probe (Deal Damage + Take Damage)
 
 Attempt Parry(-5% critical):
- - Significant Victory: Lithe Probe (Opponent Stagger + 50% damage taken increase)
+ - Significant Victory: Lithe Probe (Opponent Stagger + 50% damage dealt increase)
  - Significant Victory: False Retreat (Significant Opponent Stagger)
  - Significant Defeat: Feint (Stagger + -10% opponent missed next turn)
  - Significant Defeat: Powerful Strike (Take Damage + Stagger)

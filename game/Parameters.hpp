@@ -13,7 +13,9 @@ const float DEFAULT_CRITICAL_CHANCE = 0.15;  // default chance of dealing critic
 const float CRITICAL_DAMAGE_MULTIPLIER = 2;  // critical damage multiplier
 const float SIGNIFICANT_DAMAGE_MULTIPLIER = 1.5;  // "significant damage" in combat compared to regular damage (can stack with CRITICAL_DAMAGE_MULTIPLIER)
 const float SIGNIFICANT_STAGGER_MULTIPLIER = 1.5;  // "significant stagger" in combat compared to regular stagger
-const float BASH_DAMAGE_MULTIPLIER = 2;  // bash damage is calculated by taking the fourth root of the shield's encumbrance and multiplying it by this number
+const float BASH_DAMAGE_POWER_SCALE = 0.25  // bash damage is calculated by raising the shield's encumbrance to this power and multiplying it by BASH_DAMAGE_MULTIPLIER
+// ^ this variable should be in the range (0, 1]. A higher value amplifies the effectiveness of a heavier shield compared to a lighter one.
+const float BASH_DAMAGE_MULTIPLIER = 2;  // bash damage is calculated by raising the shield's encumbrance to the BASH_DAMAGE_POWER_SCALE-th power and multiplying it by this number
 
 const int POWERFUL_STRIKE_CRITICAL_MODIFIER = 10;
 const int POWERFUL_STRIKE_MISSED_MODIFIER = 5;
@@ -24,7 +26,7 @@ const int DODGE_MISSED_MODIFIER = 5;
 const int FEINT_STAGGER_MODIFIER = 5;
 const int FALSE_RETREAT_STAGGER_MODIFIER = -5;
 const float LITHE_PROBE_ATTEMPT_PARRY_ADDITIONAL_DAMAGE_MULTIPLIER = 1.5;
-const int ATTEMPT_PARRY_FEINT_MISSED_MODIFIER = 10;
+const int ATTEMPT_PARRY_FEINT_MISSED_MODIFIER = -10;
 const int LITHE_PROBE_FALSE_RETREAT_CRITICAL_MODIFIER = 10;
 const int FEINT_DODGE_CRITICAL_MODIFIER = 10;
 

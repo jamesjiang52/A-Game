@@ -1,65 +1,64 @@
 There are nominally six different combat options:
-Powerful Strike
-Lithe Probe
-Attempt Parry
+Thrust
+Slash
+Parry
 Dodge
 Feint 
-False Retreat
+Disengage
 
 With each damage attempt there are three possible results:
 Missed - Deals 0% of damage		15% of the time
 Normal - Deals 100% of damage		70% of the time
 Critical - Deals 200% of damage		15% of the time
-(When the possibilities are changed, they are added/deducted from the normal)
+(When the probabilities are changed, they are added/deducted from the normal)
 
-
-Powerful Strike(+10% critical, +5% missed):
- - Signifiant Victory: Attempt Parry (Deal Damage + Opponent Stagger)
+Thrust(+10% critical, +5% missed):
+ - Signifiant Victory: Parry (Deal Damage + Opponent Stagger)
  - Slight Victory: Feint (Deal Damage)
- - Slight Defeat: False Retreat (Stagger)
- - Significant Defeat: Dodge (Significant Stagger)
- - Draws: Lithe probe (Deal Significant Damage + Take Significant Damage)
- - Draws: Powerful Strike (Deal Damage + Take Damage)
+ - Slight Defeat: Disengage (Stagger)
+ - Significant Defeat: Dodge (Stagger + +10% opponent critical next turn)
+ - Draws: Slash (Deal Significant Damage + Take Significant Damage)
+ - Draws: Thrust (Deal Damage + Take Damage)
 
-Lithe Probe(-10% missed, -5% critical):
+Slash(-10% missed, -5% critical):
  - Significant Victory: Dodge (Deal Significant Damage)
  - Slight Victory: Feint (Deal Damage)
- - Slight Defeat: False Retreat (+10% opponenet critical)
- - Significant Defeat: Attempt Parry (Stagger + 50% damage taken increase)
- - Draws: Powerful Strike (Deal Significant Damage + Take Significant Damage)
- - Draws: Lithe Probe (Deal Damage + Take Damage)
+ - Slight Defeat: Disengage (+10% opponent critical next turn)
+ - Significant Defeat: Parry (Stagger + -10% opponent missed next turn)
+ - Draws: Thrust (Deal Significant Damage + Take Significant Damage)
+ - Draws: Slash (Deal Damage + Take Damage)
 
-Attempt Parry(-5% critical):
- - Significant Victory: Lithe Probe (Opponent Stagger + 50% damage dealt increase)
- - Significant Victory: False Retreat (Significant Opponent Stagger)
+Parry(-5% critical):
+ - Significant Victory: Slash (Opponent Stagger + -10% opponent missed next turn)
+ - Significant Victory: Disengage (Significant Opponent Stagger)
  - Significant Defeat: Feint (Stagger + -10% opponent missed next turn)
- - Significant Defeat: Powerful Strike (Take Damage + Stagger)
+ - Significant Defeat: Thrust (Take Damage + Stagger)
  - Draws: Dodge (Stagger + Opponent Stagger)
- - Draws: Attempt Parry( ... nothing happens ...)
+ - Draws: Parry( ... nothing happens ...)
 
 Dodge(+5% missed):
- - Significant Victory: Powerful Strike (Significant Opponent Stagger)
- - Significant Victory: False Retreat (Significant Opponent Stagger)
- - Significant Defeat: Feint (Stagger + +10% oponent critical next turn)
- - Significant Defeat: Lithe Probe (Take Significant Damage)
- - Draws: Attempt Parry (Stagger + Opponent Stagger)
+ - Significant Victory: Thrust (Opponent Stagger + 10% critical next turn)
+ - Significant Victory: Disengage (Significant Opponent Stagger)
+ - Significant Defeat: Feint (Stagger + +10% Opponent critical next turn)
+ - Significant Defeat: Slash (Take Significant Damage)
+ - Draws: Parry (Stagger + Opponent Stagger)
  - Draws: Dodge( ... nothing happens ... )
 
 Feint(+5% opponent stagger):
- - Significant Victory: Attempt Parry (Opponent Stagger + -10% missed next turn)
- - Significant Victory: Dodge (Opponent Stagger + +10% critical next turn)
- - Slight Defeat: Powerful Strike (Take Damage)
- - Slight Defeat: Lithe Probe (Take Damage)
- - Slight Defeat: False Retreat (Stagger)
+ - Significant Victory: Parry (Opponent Stagger + -10% opponent missed next turn)
+ - Significant Victory: Dodge (Opponent Stagger + +10% opponent critical next turn)
+ - Slight Defeat: Thrust (Take Damage)
+ - Slight Defeat: Slash (Take Damage)
+ - Slight Defeat: Disengage (+5% opponent critical next turn + -5% opponent missed next turn)
  - Draws: Feint (Stagger + Opponent Stagger)
 
-False Retreat(-5% stagger):
- - Slight Victory: Powerful Strike (Opponent Stagger)
- - Slight Victory: Lithe Proble (+10% critical next turn)
- - Slight Victory: Feint (Opponenet Stagger)
- - Significant Defeat: Attempt Parry (Significant Stagger)
+Disengage(-5% stagger):
+ - Slight Victory: Thrust (Opponent Stagger)
+ - Slight Victory: Slash (+10% critical next turn)
+ - Slight Victory: Feint (+5% critical next turn + -%5 missed next turn)
+ - Significant Defeat: Parry (Significant Stagger)
  - Significant Defeat: Dodge (Significant Stagger)
- - Draws: False Retreat (Stagger + Opponent Stagger)
+ - Draws: Disengage (Stagger + Opponent Stagger)
 
 With the usage of a shield, to more options are unlocked:
 Block
@@ -69,24 +68,24 @@ With each damage attempt(Bash) there is one possible results:
 Normal - Deals 100% of damage		100% of the time
 
 Block: 
- - Significant Victory: Powerful Strike (Opponenet Stagger + Chance opponent has to change weapon)
- - Significant Victory: Lithe Probe (Significant Opponent Stagger)
- - Slight Victory: False Retreat (Opponenet Stagger)
- - Slight Defeat: Feint (Stagger)
+ - Significant Victory: Thrust (Opponenet Stagger + Chance opponent has to change weapon + -5% missed next turn)
+ - Significant Victory: Slash (Opponenet Stagger + Chance opponent has to change weapon + +5% critical next turn)
+ - Slight Victory: Disengage (Opponenet Stagger)
+ - Slight Defeat: Feint (+5% opponent critical next turn + -5% opponent missed next turn)
  - Slight Defeat: Dodge (Stagger)
- - Slight Defeat: Attempt Parry (Stagger)
+ - Slight Defeat: Parry (Stagger)
  - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight)
  - Draws: Block ( ... Nothing Happens ... )
 
 Bash:
- - Significant Victory: Attempt Parry (Opponent Stagger + Chance opponent has to change weapon)
- - Significant Victory: Dodge (Slight Damage + Significant Stagger)
- - Slight Victory: Feint (Slight Damage + Stagger)
- - Slight Defeat: False Retreat (Stagger)
- - Slight Defeat: Powerful Strike (Take Damage)
- - Slight Defeat: Lithe Probe (Take Damage)
+ - Significant Victory: Parry (Deal Slight Damage + Opponent Stagger + Chance opponent has to change weapon)
+ - Significant Victory: Dodge (Deal Slight Damage + Significant Stagger)
+ - Slight Victory: Feint (Deal Slight Damage + Stagger)
+ - Slight Defeat: Disengage (Stagger)
+ - Slight Defeat: Thrust (Take Damage)
+ - Slight Defeat: Slash (Take Damage)
  - Draws: Block (Both shields are broken and cannot be used for the rest of the fight)
- - Draws: Bash (Stagger + Opponent Stagger)
+ - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight + Deal Slight Damage + Take Slight Damage + Stagger + Opponent Stagger)
 
 All effects are temporary and lasts for the next turn
 

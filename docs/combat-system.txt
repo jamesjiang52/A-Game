@@ -32,7 +32,7 @@ Lithe Probe(-10% missed, -5% critical):
 Attempt Parry(-5% critical):
  - Significant Victory: Lithe Probe (Opponent Stagger + 50% damage taken increase)
  - Significant Victory: False Retreat (Significant Opponent Stagger)
- - Significant Defeat: Feint (Stagger + -10% opponent missed)
+ - Significant Defeat: Feint (Stagger + -10% opponent missed next turn)
  - Significant Defeat: Powerful Strike (Take Damage + Stagger)
  - Draws: Dodge (Stagger + Opponent Stagger)
  - Draws: Attempt Parry( ... nothing happens ...)
@@ -40,14 +40,14 @@ Attempt Parry(-5% critical):
 Dodge(+5% missed):
  - Significant Victory: Powerful Strike (Significant Opponent Stagger)
  - Significant Victory: False Retreat (Significant Opponent Stagger)
- - Significant Defeat: Feint (Stagger + +10% oponent critical)
+ - Significant Defeat: Feint (Stagger + +10% oponent critical next turn)
  - Significant Defeat: Lithe Probe (Take Significant Damage)
  - Draws: Attempt Parry (Stagger + Opponent Stagger)
  - Draws: Dodge( ... nothing happens ... )
 
 Feint(+5% opponent stagger):
- - Significant Victory: Attempt Parry (Opponent Stagger + -10% missed)
- - Significant Victory: Dodge (Opponent Stagger + +10% critical)
+ - Significant Victory: Attempt Parry (Opponent Stagger + -10% missed next turn)
+ - Significant Victory: Dodge (Opponent Stagger + +10% critical next turn)
  - Slight Defeat: Powerful Strike (Take Damage)
  - Slight Defeat: Lithe Probe (Take Damage)
  - Slight Defeat: False Retreat (Stagger)
@@ -55,7 +55,7 @@ Feint(+5% opponent stagger):
 
 False Retreat(-5% stagger):
  - Slight Victory: Powerful Strike (Opponent Stagger)
- - Slight Victory: Lithe Proble (Opponent Stagger)
+ - Slight Victory: Lithe Proble (+10% critical next turn)
  - Slight Victory: Feint (Opponenet Stagger)
  - Significant Defeat: Attempt Parry (Significant Stagger)
  - Significant Defeat: Dodge (Significant Stagger)
@@ -80,8 +80,8 @@ Block:
 
 Bash:
  - Significant Victory: Attempt Parry (Opponent Stagger + Chance opponent has to change weapon)
- - Significant Victory: Dodge (Damage + Stagger)
- - Slight Victory: Feint (Deal Damage)
+ - Significant Victory: Dodge (Slight Damage + Significant Stagger)
+ - Slight Victory: Feint (Slight Damage + Stagger)
  - Slight Defeat: False Retreat (Stagger)
  - Slight Defeat: Powerful Strike (Take Damage)
  - Slight Defeat: Lithe Probe (Take Damage)

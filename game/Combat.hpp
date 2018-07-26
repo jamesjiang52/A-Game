@@ -26,23 +26,19 @@ int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int
 int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
 void removeInactiveEffects(Player *player, int combatTurn);
 void removeAllEffects(Player *player);
-int calculateDamage(int baseDamage, int missedModifier, int criticalModifier, float damageTakenMultiplier=1);
+int calculateDamage(int baseDamage, int missedModifier, int criticalModifier);
 bool playerStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
 bool enemyStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
 void resetModifiers(
     int &playerMissedModifier,
     int &playerCriticalModifier,
-    float &playerDamageTakenMultiplier,
     int &enemyMissedModifier,
     int &enemyCriticalModifier,
-    float &enemyDamageTakenMultiplier,
     bool ignorePlayerMissedModifier,
     bool ignorePlayerCriticalModifier,
-    bool ignorePlayerDamageTakenMultiplier,
     bool ignoreEnemyMissedModifier,
-    bool ignoreEnemyCriticalModifier,
-    bool ignoreEnemyDamageTakenMultiplier
-)
+    bool ignoreEnemyCriticalModifier
+);
 void combat(Player *player, GenericEnemy *enemy);
 void printPlayerEmbellishedHealthInfo(Player *player);
 void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy);

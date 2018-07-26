@@ -5,9 +5,9 @@ std::string getEnemyCombatChoice(GenericEnemy *enemy) {
     This function is the entirety of enemy "AI" in the game
     */
     // just have it random for now
-    std::string choices[3] = {"swing", "parry", "feint"};
+    std::string choices[6] = {"thrust", "slash", "parry", "feint", "dodge", "disengage"};
     std::srand(std::time(nullptr));
-    return(choices[std::rand() % 3]);
+    return(choices[std::rand() % 6]);
 }
 
 void playerGainHealthFromEffects(Player *player, int combatTurn) {
@@ -29,7 +29,7 @@ void playerGainHealthFromEffects(Player *player, int combatTurn) {
         std::cout << "Strangely, I feel as if my lifeforce is weakening. Perhaps it was something I consumed earlier?\n\n";
 }
 
-int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn) {
+int getPlayerStaggerModifierFromEffects(Player *player, int combatTurn) {
     int totalModifier = 0;
     
     std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
@@ -44,7 +44,7 @@ int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int
     return totalModifier;
 }
 
-int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn) {
+int getEnemyStaggerModifierFromEffects(Player *player, int combatTurn) {
     int totalModifier = 0;
     
     std::vector<ActiveEffect*> activeEffects = player->getActiveEffects();
@@ -84,7 +84,7 @@ void removeAllEffects(Player *player) {
     }
 }
 
-int calculateDamage(int baseDamage, int missedModifier, int criticalModifier, float damageTakenMultiplier) {
+int calculateDamage(int baseDamage, int missedModifier, int criticalModifier) {
     /*
     Determines the amount of damage a player deals, before armor and significant damage calculations.
     */
@@ -96,7 +96,7 @@ int calculateDamage(int baseDamage, int missedModifier, int criticalModifier, fl
         return 0;
     else if (roll < 100*(DEFAULT_CRITICAL_CHANCE + DEFAULT_MISSED_CHANCE + missedModifier + criticalModifier))
         damage *= CRITICAL_DAMAGE_MULTIPLIER;
-    return(damage*damageTakenMultiplier);
+    return(damage);
 }
 
 bool playerStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical, int staggerModifier) {
@@ -142,29 +142,21 @@ bool enemyStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool 
 void resetModifiers(
         int &playerMissedModifier,
         int &playerCriticalModifier,
-        float &playerDamageTakenMultiplier,
         int &enemyMissedModifier,
         int &enemyCriticalModifier,
-        float &enemyDamageTakenMultiplier,
         bool ignorePlayerMissedModifier,
         bool ignorePlayerCriticalModifier,
-        bool ignorePlayerDamageTakenMultiplier,
         bool ignoreEnemyMissedModifier,
-        bool ignoreEnemyCriticalModifier,
-        bool ignoreEnemyDamageTakenMultiplier
+        bool ignoreEnemyCriticalModifier
     ) {
     if (!ignorePlayerMissedModifier)
         playerMissedModifier = 0;
     if (!ignorePlayerCriticalModifier)
         playerCriticalModifier = 0;
-    if (!ignorePlayerDamageTakenMultiplier)
-        playerDamageTakenMultiplier = 1;
     if (!ignoreEnemyMissedModifier)
         enemyMissedModifier = 0;
     if (!ignoreEnemyCriticalModifier)
         enemyCriticalModifier = 0;
-    if (!ignoreEnemyDamageTakenMultiplier)
-        enemyDamageTakenMultiplier = 1;
 }
 
 void combat(Player *player, GenericEnemy *enemy) {
@@ -185,9 +177,6 @@ void combat(Player *player, GenericEnemy *enemy) {
     int playerMissedModifier = 0, playerCriticalModifier = 0, playerStaggerModifier = 0;
     int enemyMissedModifier = 0, enemyCriticalModifier = 0, enemyStaggerModifier = 0;
     
-    float playerDamageTakenMultiplier = 1;
-    float enemyDamageTakenMultiplier = 1;
-    
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
         printEnemyEmbellishedHealthInfo(enemy);
@@ -206,7 +195,7 @@ void combat(Player *player, GenericEnemy *enemy) {
         if (!enemy->getCurrentHealth()) break;
 
         std::cout << "I can choose to perform a POWERFUL STRIKE, a LITHE PROBE, attempt a PARRY, or FEINT a strike with my " << player->getWeapon()->getName();
-        std::cout << ". Alternatively, I can perform a DODGE or a FALSE RETREAT"
+        std::cout << ". Alternatively, I can perform a DODGE or a FALSE RETREAT";
         if (player->getShield()) {
             std::cout << ", or I can BLOCK or BASH with my " << player->getShield()->getName() << ". What do I do?\n";
         } else {
@@ -251,33 +240,31 @@ void combat(Player *player, GenericEnemy *enemy) {
             std::cout << "I shouldn't try to look inside my knapsack while I'm in combat.\n\n";
         } else if (playerInput == "stats") {
             printStats(player);
-        } else if (playerInput == "powerful strike") {
-            if (enemyChoice == "powerful strike") {
+        } else if (playerInput == "thrust") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + enemyCriticalModifier
                         ), 
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + playerMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -286,32 +273,30 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + enemyMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + enemyMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + enemyCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + playerMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + playerCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -325,9 +310,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + ATTEMPT_PARRY_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + playerMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + PARRY_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
@@ -335,10 +319,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyCriticalStagger = false;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -350,14 +334,15 @@ void combat(Player *player, GenericEnemy *enemy) {
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
-                    playerCriticalStagger = true;
+                    playerCriticalStagger = false;
                     playerStaggerModifier = 0;
+                    enemyCriticalModifier = THRUST_DODGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -371,18 +356,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + playerMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -391,17 +375,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -415,13 +399,14 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
+                    enemyMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
                     // TODO: chance player has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -435,18 +420,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth( 
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + playerMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + playerMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -456,33 +440,31 @@ void combat(Player *player, GenericEnemy *enemy) {
                     
                 }
             }
-        } else if (playerInput == "lithe probe") {
-            if (enemyChoice == "powerful strike") {
+        } else if (playerInput == "slash") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(), 
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier, 
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier, 
+                            THRUST_CRITICAL_MODIFIER + enemyCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + playerMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + playerMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + playerCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -491,32 +473,30 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + enemyMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + enemyMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + enemyCriticalModifier
                         ), 
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     enemy->loseHealth(
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + playerMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + playerCriticalModifierd,
-                            enemyDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + playerMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -529,14 +509,14 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
-                    playerStaggerModifier = 0
-                    playerDamageTakenMultiplier = LITHE_PROBE_ATTEMPT_PARRY_ADDITIONAL_DAMAGE_MULTIPLIER;
+                    playerStaggerModifier = 0;
+                    enemyMissedModifier = SLASH_PARRY_MISSED_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, true,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -550,18 +530,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth( 
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + DODGE_MISSED_MODIFIER + playerMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + DODGE_MISSED_MODIFIER + playerMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + playerCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -575,18 +554,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth( 
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + playerMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + playerMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -595,15 +573,15 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
-                    enemyCriticalModifier = LITHE_PROBE_FALSE_RETREAT_CRITICAL_MODIFIER;
+                    enemyCriticalModifier = SLASH_DISENGAGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, true, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -615,14 +593,16 @@ void combat(Player *player, GenericEnemy *enemy) {
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
-                    playerCriticalStagger = true;
+                    playerCriticalStagger = false;
                     playerStaggerModifier = 0;
+                    enemyCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
+                    // TODO: chance player has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -636,18 +616,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemy->loseHealth( 
                         calculateDamage(
                             player->getWeapon()->getDamage(), 
-                            LITHE_PROBE_MISSED_MODIFIER + playerMissedModifier, 
-                            LITHE_PROBE_CRITICAL_MODIFIER + playerCriticalModifier,
-                            enemyDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + playerMissedModifier, 
+                            SLASH_CRITICAL_MODIFIER + playerCriticalModifier
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -658,26 +637,25 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else if (playerInput == "parry") {
-            if (enemyChoice == "powerful strike") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier,
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + ATTEMPT_PARRY_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier,
+                            THRUST_CRITICAL_MODIFIER + PARRY_CRITICAL_MODIFIER + enemyCriticalModifier
                         ),
-                        enemy->getWeapon->getEnemyArmorReductionPercent()
+                        enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -686,18 +664,18 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
-                    enemyDamageTakenMultiplier = LITHE_PROBE_ATTEMPT_PARRY_ADDITIONAL_DAMAGE_MULTIPLIER;
+                    playerMissedModifier = SLASH_PARRY_MISSED_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, true
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        true, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -710,10 +688,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     // nothing
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -725,17 +703,17 @@ void combat(Player *player, GenericEnemy *enemy) {
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
-                    playerStaggerCritical = false;
+                    playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     enemyStaggered = true;
-                    enemyStaggerCritical = false;
+                    enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -749,13 +727,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = FEINT_STAGGER_MODIFIER;
-                    enemyMissedModifier = ATTEMPT_PARRY_FEINT_MISSED_MODIFIER;
+                    enemyMissedModifier = PARRY_FEINT_MISSED_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        true, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -764,17 +742,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = true;
-                    enemyStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    enemyStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -790,10 +768,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -804,16 +782,20 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
+                    player->loseHealth(
+                        pow((float)enemy->getShield()->getEncumbrance(), BASH_DAMAGE_POWER_SCALE)*BASH_DAMAGE_MULTIPLIER,
+                        100
+                    );
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     // TODO: chance player has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -824,17 +806,18 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else if (playerInput == "dodge") {
-            if (enemyChoice == "powerful strike") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
-                    enemyCriticalStagger = true;
+                    enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
+                    playerCriticalModifier = THRUST_DODGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -843,23 +826,22 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            LITHE_PROBE_MISSED_MODIFIER + DODGE_MISSED_MODIFIER + enemyMissedModifier,
-                            LITHE_PROBE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + DODGE_MISSED_MODIFIER + enemyMissedModifier,
+                            SLASH_CRITICAL_MODIFIER + enemyCriticalModifier
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -871,17 +853,17 @@ void combat(Player *player, GenericEnemy *enemy) {
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
-                    playerStaggerCritical = false;
+                    playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     enemyStaggered = true;
-                    enemyStaggerCritical = false;
+                    enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -894,10 +876,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     // nothing
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -914,10 +896,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyCriticalModifier = FEINT_DODGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, true, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -926,17 +908,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = true;
-                    enemyStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    enemyStaggerModifier = SLASH_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -952,10 +934,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -975,10 +957,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -989,23 +971,22 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else if (playerInput == "feint") {
-            if (enemyChoice == "powerful strike") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier,
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier,
+                            THRUST_CRITICAL_MODIFIER + enemyCriticalModifier
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1014,23 +995,22 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            LITHE_PROBE_MISSED_MODIFIER + enemyMissedModifier,
-                            LITHE_PROBE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            SLASH_MISSED_MODIFIER + enemyMissedModifier,
+                            SLASH_CRITICAL_MODIFIER + enemyCriticalModifier
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1044,13 +1024,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = FEINT_STAGGER_MODIFIER;
-                    playerMissedModifier = ATTEMPT_PARRY_FEINT_MISSED_MODIFIER;
+                    playerMissedModifier = PARRY_FEINT_MISSED_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        true, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        true, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1067,10 +1047,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerCriticalModifier = FEINT_DODGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, true, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1089,10 +1069,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = FEINT_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1101,17 +1081,16 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
-                    playerStaggered = true;
-                    playerCriticalStagger = false;
-                    playerStaggerModifier = 0;
+                    enemyMissedModifier = FEINT_DISENGAGE_MISSED_MODIFIER;
+                    enemyCriticalModifier = FEINT_DISENGAGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        true, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1122,18 +1101,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    enemyStaggered = true;
-                    enemyCriticalStagger = false;
-                    enemyStaggerModifier = FEINT_STAGGER_MODIFIER;
+                    playerMissedModifier = BLOCK_FEINT_MISSED_MODIFIER;
+                    playerCriticalModifier = BLOCK_FEINT_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        true, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
-                    playerStaggered = 
+
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
@@ -1150,10 +1128,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1163,18 +1141,18 @@ void combat(Player *player, GenericEnemy *enemy) {
                     
                 }
             }
-        } else if (playerInput == "false retreat") {
-            if (enemyChoice == "powerful strike") {
+        } else if (playerInput == "disengage") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1183,15 +1161,15 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
-                    playerCriticalModifier = LITHE_PROBE_FALSE_RETREAT_CRITICAL_MODIFIER;
+                    playerCriticalModifier = SLASH_DISENGAGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, true, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1204,13 +1182,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = true;
-                    playerStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    playerStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1223,13 +1201,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = true;
-                    playerStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    playerStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1240,15 +1218,14 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    enemyStaggered = true;
-                    enemyCriticalStagger = false;
-                    enemyStaggerModifier = 0;
+                    playerMissedModifier = FEINT_DISENGAGE_MISSED_MODIFIER;
+                    playerCriticalModifier = FEINT_DISENGAGE_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        true, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1257,20 +1234,20 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
-                    playerStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    playerStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
-                    enemyStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    enemyStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1283,13 +1260,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
-                    playerStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    playerStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1305,10 +1282,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1319,18 +1296,19 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else if ((playerInput == "block") && player->getShield()) {
-            if (enemyChoice == "powerful strike") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
+                    playerMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
                     // TODO: chance enemy has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        true, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1339,17 +1317,19 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
-                    enemyCriticalStagger = true;
+                    enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
+                    playerCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
+                    // TODO: chance enemy has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, true,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1365,10 +1345,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1384,10 +1364,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1398,15 +1378,14 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
-                    playerStaggered = true;
-                    playerCriticalStagger = false;
-                    playerStaggerModifier = FEINT_STAGGER_MODIFIER;
+                    enemyMissedModifier = BLOCK_FEINT_MISSED_MODIFIER;
+                    enemyCriticalModifier = BLOCK_FEINT_CRITICAL_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        true, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1415,17 +1394,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
-                    enemyStaggerModifier = FALSE_RETREAT_STAGGER_MODIFIER;
+                    enemyStaggerModifier = DISENGAGE_STAGGER_MODIFIER;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1438,10 +1417,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                 if (!playerFailed && !enemyFailed) {
                     // nothing
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1455,10 +1434,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // TODO: both shields are broken and cannot be used for the rest of the fight
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1469,23 +1448,22 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             }
         } else if ((playerInput == "bash") && player->getShield()) {
-            if (enemyChoice == "powerful strike") {
+            if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier,
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier,
+                            THRUST_CRITICAL_MODIFIER + enemyCriticalModifier
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1494,23 +1472,22 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "lithe probe") {
+            } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
                         calculateDamage(
                             enemy->getWeapon()->getDamage(),
-                            POWERFUL_STRIKE_MISSED_MODIFIER + enemyMissedModifier,
-                            POWERFUL_STRIKE_CRITICAL_MODIFIER + enemyCriticalModifier,
-                            playerDamageTakenMultiplier
+                            THRUST_MISSED_MODIFIER + enemyMissedModifier,
+                            THRUST_CRITICAL_MODIFIER + enemyCriticalModifier
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1521,16 +1498,20 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
+                    enemy->loseHealth(
+                        pow((float)player->getShield()->getEncumbrance(), BASH_DAMAGE_POWER_SCALE)*BASH_DAMAGE_MULTIPLIER,
+                        100
+                    );
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     // TODO: chance enemy has to change weapon
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1550,10 +1531,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1573,10 +1554,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1585,17 +1566,17 @@ void combat(Player *player, GenericEnemy *enemy) {
                 } else {
                     
                 }
-            } else if (enemyChoice == "false retreat") {
+            } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1609,10 +1590,10 @@ void combat(Player *player, GenericEnemy *enemy) {
                     // TODO: both shields are broken and cannot be used for the rest of the fight
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -1623,18 +1604,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
+                    player->loseHealth(
+                        pow((float)enemy->getShield()->getEncumbrance(), BASH_DAMAGE_POWER_SCALE)*BASH_DAMAGE_MULTIPLIER,
+                        100
+                    );
+                    enemy->loseHealth(
+                        pow((float)player->getShield()->getEncumbrance(), BASH_DAMAGE_POWER_SCALE)*BASH_DAMAGE_MULTIPLIER,
+                        100
+                    );
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
+                    // TODO: both shields are broken and cannot be used for the rest of the fight
                     
                     resetModifiers(
-                        playerMissedModifier, playerCriticalModifier, playerDamageTakenMultiplier,
-                        enemyMissedModifier, enemyCriticalModifier, enemyDamageTakenMultiplier,
-                        false, false, false,
-                        false, false, false
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     

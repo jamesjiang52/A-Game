@@ -26,12 +26,11 @@ class GenericEnemy {
         std::string name;
         std::vector<InteractableObject*> inventory;
         std::vector<InteractableObject*>::iterator objectPosition(InteractableObject *object);
-        std::vector<ActiveEffect*> activeEffects;
-        std::vector<ActiveEffect*>::iterator effectPosition(ActiveEffect *activeEffect);
         
     public:
         GenericEnemy(std::string name, int startingHealth);
         ~GenericEnemy();
+        bool operator==(const GenericEnemy &enemy);
         bool isBleeding = false;
         std::string getName() const;
         int getStartingHealth() const;
@@ -42,9 +41,6 @@ class GenericEnemy {
         std::vector<InteractableObject*> getInventory() const;
         void addToInventory(InteractableObject *object);
         void removeFromInventory(InteractableObject *object);
-        std::vector<ActiveEffect*> getActiveEffects() const;
-        void addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate=true);
-        void removeFromActiveEffects(ActiveEffect *activeEffect);
         Weapon *getWeapon() const;
         void setWeapon(Weapon *weapon);
         Armor *getArmor() const;

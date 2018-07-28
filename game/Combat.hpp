@@ -20,7 +20,7 @@
 #include "Potions.hpp"
 #include "Utilities.hpp"
 
-std::string getEnemyCombatChoice(GenericEnemy *enemy);
+std::string getEnemyCombatChoice(bool weaponDisabled, bool shieldDisabled);
 void playerGainHealthFromEffects(Player *player, int combatTurn);
 int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
 int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
@@ -37,7 +37,11 @@ void resetModifiers(
     bool ignorePlayerMissedModifier,
     bool ignorePlayerCriticalModifier,
     bool ignoreEnemyMissedModifier,
-    bool ignoreEnemyCriticalModifier
+    bool ignoreEnemyCriticalModifier,
+    bool &playerWeaponDisabled,
+    bool &enemyWeaponDisabled,
+    bool ignorePlayerWeaponDisabled,
+    bool ignoreEnemyWeaponDisabled
 );
 void combat(Player *player, GenericEnemy *enemy);
 void printPlayerEmbellishedHealthInfo(Player *player);

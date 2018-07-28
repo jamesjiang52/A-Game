@@ -1,13 +1,27 @@
 #include "Combat.hpp"
 
-std::string getEnemyCombatChoice(GenericEnemy *enemy) {
+std::string getEnemyCombatChoice(bool weaponDisabled, bool shieldDisabled) {
     /*
     This function is the entirety of enemy "AI" in the game
     */
     // just have it random for now
-    std::string choices[6] = {"thrust", "slash", "parry", "feint", "dodge", "disengage"};
-    std::srand(std::time(nullptr));
-    return(choices[std::rand() % 6]);
+    if (!weaponDisabled && !shieldDisabled) {
+        std::string choices[8] = {"thrust", "slash", "parry", "feint", "dodge", "disengage", "block", "bash"};
+        std::srand(std::time(nullptr));
+        return(choices[std::rand() % 8]);
+    } else if (!weaponDisabled && shieldDisabled) {
+        std::string choices[6] = {"thrust", "slash", "parry", "feint", "dodge", "disengage"};
+        std::srand(std::time(nullptr));
+        return(choices[std::rand() % 6]);
+    } else if (weaponDisabled && !shieldDisabled) {
+        std::string choices[4] = {"dodge", "disengage", "block", "bash"};
+        std::srand(std::time(nullptr));
+        return(choices[std::rand() % 4]);
+    } else {
+        std::string choices[2] = {"dodge", "disengage"};
+        std::srand(std::time(nullptr));
+        return(choices[std::rand() % 2]);
+    }
 }
 
 void playerGainHealthFromEffects(Player *player, int combatTurn) {
@@ -147,16 +161,18 @@ void resetModifiers(
         bool ignorePlayerMissedModifier,
         bool ignorePlayerCriticalModifier,
         bool ignoreEnemyMissedModifier,
-        bool ignoreEnemyCriticalModifier
+        bool ignoreEnemyCriticalModifier,
+        bool &playerWeaponDisabled,
+        bool &enemyWeaponDisabled,
+        bool ignorePlayerWeaponDisabled,
+        bool ignoreEnemyWeaponDisabled
     ) {
-    if (!ignorePlayerMissedModifier)
-        playerMissedModifier = 0;
-    if (!ignorePlayerCriticalModifier)
-        playerCriticalModifier = 0;
-    if (!ignoreEnemyMissedModifier)
-        enemyMissedModifier = 0;
-    if (!ignoreEnemyCriticalModifier)
-        enemyCriticalModifier = 0;
+    if (!ignorePlayerMissedModifier) playerMissedModifier = 0;
+    if (!ignorePlayerCriticalModifier) playerCriticalModifier = 0;
+    if (!ignoreEnemyMissedModifier) enemyMissedModifier = 0;
+    if (!ignoreEnemyCriticalModifier) enemyCriticalModifier = 0;
+    if (!ignorePlayerWeaponDisabled) playerWeaponDisabled = false;
+    if (!ignoreEnemyWeaponDisabled) enemyWeaponDisabled = false;
 }
 
 void combat(Player *player, GenericEnemy *enemy) {
@@ -177,12 +193,16 @@ void combat(Player *player, GenericEnemy *enemy) {
     int playerMissedModifier = 0, playerCriticalModifier = 0, playerStaggerModifier = 0;
     int enemyMissedModifier = 0, enemyCriticalModifier = 0, enemyStaggerModifier = 0;
     
+    bool playerWeaponDisabled = false, playerShieldDisabled = false;
+    bool enemyWeaponDisabled = false, enemyShieldDisabled;
+    if (enemy->getShield()) enemyShieldDisabled = false;
+    else enemyShieldDisabled = true;
+    
     while (player->getCurrentHealth() > 0 && enemy->getCurrentHealth() > 0) {
         printPlayerEmbellishedHealthInfo(player);
         printEnemyEmbellishedHealthInfo(enemy);
-        
-        playerGainHealthFromEffects(player, combatTurn);
 
+        playerGainHealthFromEffects(player, combatTurn);
         player->loseHealth(player->getWeapon()->getPlayerHealthBleed(), 100);
         enemy->loseHealth(enemy->getWeapon()->getPlayerHealthBleed(), 100);
 
@@ -194,9 +214,13 @@ void combat(Player *player, GenericEnemy *enemy) {
         if (!player->getCurrentHealth()) break;
         if (!enemy->getCurrentHealth()) break;
 
-        std::cout << "I can choose to perform a POWERFUL STRIKE, a LITHE PROBE, attempt a PARRY, or FEINT a strike with my " << player->getWeapon()->getName();
-        std::cout << ". Alternatively, I can perform a DODGE or a FALSE RETREAT";
-        if (player->getShield()) {
+        if (!playerWeaponDisabled) {
+            std::cout << "I can choose to perform a THRUST, a SLASH, attempt a PARRY, or FEINT a strike with my " << player->getWeapon()->getName();
+            std::cout << ". Alternatively, I can perform a DODGE or DISENGAGE the " << enemy->getName();
+        } else {
+            std::cout << "I can perform a DODGE or DISENGAGE the " << enemy->getName();
+        }
+        if (player->getShield() && !playerShieldDisabled) {
             std::cout << ", or I can BLOCK or BASH with my " << player->getShield()->getName() << ". What do I do?\n";
         } else {
             std::cout << ". What do I do?\n";
@@ -206,7 +230,7 @@ void combat(Player *player, GenericEnemy *enemy) {
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
         playerInput = stripSpaces(playerInput);
         
-        std::string enemyChoice = getEnemyCombatChoice(enemy);
+        std::string enemyChoice = getEnemyCombatChoice(enemyWeaponDisabled, enemyShieldDisabled);
         
         if (playerStaggered) {
             if (playerStaggerRoll(player, enemy, combatTurn, playerCriticalStagger, playerStaggerModifier))
@@ -240,7 +264,7 @@ void combat(Player *player, GenericEnemy *enemy) {
             std::cout << "I shouldn't try to look inside my knapsack while I'm in combat.\n\n";
         } else if (playerInput == "stats") {
             printStats(player);
-        } else if (playerInput == "thrust") {
+        } else if (playerInput == "thrust" && !playerWeaponDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
@@ -259,19 +283,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -291,19 +324,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -317,19 +359,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                     );
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
+                    enemyStaggerModifier = 0;
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -342,14 +393,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, true
+                        false, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -361,19 +419,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -385,14 +451,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -400,20 +473,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     enemyMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
-                    // TODO: chance player has to change weapon
+                    playerWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        true, false
+                        true, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -425,22 +505,30 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
-        } else if (playerInput == "slash") {
+        } else if (playerInput == "slash" && !playerWeaponDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
@@ -459,19 +547,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -491,19 +588,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -516,14 +622,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        true, false
+                        true, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -535,19 +648,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -559,19 +680,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -581,14 +710,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, true
+                        false, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -596,20 +732,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     enemyCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
-                    // TODO: chance player has to change weapon
+                    playerWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, true
+                        false, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -621,22 +764,30 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    enemy->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
-        } else if (playerInput == "parry") {
+        } else if (playerInput == "parry" && !playerWeaponDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
@@ -650,19 +801,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -675,14 +834,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         true, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -691,7 +857,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
@@ -713,14 +880,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -733,14 +907,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        true, false
+                        true, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -752,14 +933,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -771,14 +959,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -789,20 +984,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
-                    // TODO: chance player has to change weapon
+                    playerWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, true, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
         } else if (playerInput == "dodge") {
@@ -817,14 +1019,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -836,19 +1045,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -863,14 +1080,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -879,14 +1103,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -899,14 +1130,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, true
+                        false, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -918,14 +1156,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -937,14 +1182,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -960,17 +1212,24 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
-        } else if (playerInput == "feint") {
+        } else if (playerInput == "feint" && !playerWeaponDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
@@ -981,19 +1240,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1005,19 +1272,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -1030,14 +1305,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         true, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -1050,14 +1332,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -1072,14 +1361,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -1090,14 +1386,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        true, true
+                        true, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -1108,14 +1411,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         true, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
 
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1131,14 +1441,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
         } else if (playerInput == "disengage") {
@@ -1152,14 +1469,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1169,14 +1493,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -1188,14 +1519,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -1207,14 +1545,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -1225,14 +1570,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         true, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -1247,14 +1599,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -1266,14 +1625,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1285,37 +1651,51 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
-        } else if ((playerInput == "block") && player->getShield()) {
+        } else if ((playerInput == "block") && player->getShield() && !playerShieldDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     playerMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
-                    // TODO: chance enemy has to change weapon
+                    enemyWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         true, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1323,20 +1703,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     playerCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
-                    // TODO: chance enemy has to change weapon
+                    enemyWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, true,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -1348,14 +1735,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -1367,14 +1761,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -1385,14 +1786,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        true, true
+                        true, true,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -1404,14 +1812,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
@@ -1420,34 +1835,49 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
-                    // TODO: both shields are broken and cannot be used for the rest of the fight
+                    playerShieldDisabled = true;
+                    enemyShieldDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
-        } else if ((playerInput == "bash") && player->getShield()) {
+        } else if ((playerInput == "bash") && player->getShield() && !playerShieldDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {
                     player->loseHealth(
@@ -1458,19 +1888,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "slash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1482,19 +1920,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
+                    player->isBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "parry") {
                 if (!playerFailed && !enemyFailed) {
@@ -1505,20 +1951,27 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
-                    // TODO: chance enemy has to change weapon
+                    enemyWeaponDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, true
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "dodge") {
                 if (!playerFailed && !enemyFailed) {
@@ -1534,14 +1987,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -1557,14 +2017,21 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "disengage") {
                 if (!playerFailed && !enemyFailed) {
@@ -1576,31 +2043,46 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {
-                    // TODO: both shields are broken and cannot be used for the rest of the fight
+                    playerShieldDisabled = true;
+                    enemyShieldDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             } else if (enemyChoice == "bash") {
                 if (!playerFailed && !enemyFailed) {
@@ -1618,20 +2100,28 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
-                    // TODO: both shields are broken and cannot be used for the rest of the fight
+                    playerShieldDisabled = true;
+                    enemyShieldDisabled = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
                         enemyMissedModifier, enemyCriticalModifier,
                         false, false,
-                        false, false
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                 } else if (!playerFailed && enemyFailed) {
                     
                 } else if (playerFailed && !enemyFailed) {
                     
                 } else {
-                    
+                    resetModifiers(
+                        playerMissedModifier, playerCriticalModifier,
+                        enemyMissedModifier, enemyCriticalModifier,
+                        false, false,
+                        false, false,
+                        playerWeaponDisabled, enemyWeaponDisabled, false, false
+                    );
                 }
             }
         } else {  // invalid command
@@ -1689,7 +2179,7 @@ void printPlayerEmbellishedHealthInfo(Player *player) {
     } else {
         std::cout << "I desperately cling onto a faint sliver of life, but I feel it fading away";
     }
-    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health).";
+    std::cout << " (" << player->getCurrentHealth() << "/" << player->getStartingHealth() << " health). ";
 }
 
 void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy) {

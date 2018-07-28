@@ -94,18 +94,21 @@ void Weapon::use(Player *player) {
         
         if (player->getWeapon()->isTwoHanded() && twoHanded) {  // both previous weapon and current weapon are two-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ".\n\n";
+            player->setShield(NULL);
         } else if (!player->getWeapon()->isTwoHanded() && twoHanded) {  // previous weapon is one-handed but current weapon is two-handed
             if (player->getShield()) {  // player has shield equipped
                 std::cout << "I sheathe the " << player->getWeapon()->getName() << ", put the " << player->getShield()->getName() << " back into my knapsack, and equip the " << name << ".\n\n";
+                player->setShield(NULL);
             } else {
                 std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ".\n\n";
+                player->setShield(NULL);
             }
         } else if (player->getWeapon()->isTwoHanded() && !twoHanded) {  // previous weapon is two-handed but current weapon is one-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ", freeing up my off hand.\n\n";
+            player->setShield(NULL);
         } else {  // both previous weapon and current weapon are one-handed
             std::cout << "I sheathe the " << player->getWeapon()->getName() << " and equip the " << name << ".\n\n";
         }
-        player->setShield(NULL);
         player->setWeapon(this);
     } else {  // weapon already equipped
         std::cout << "I already have the " << name << " equipped.\n\n";

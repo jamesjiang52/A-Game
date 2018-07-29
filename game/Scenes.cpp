@@ -22,6 +22,7 @@ void outsideFortress(Player *player) {
     
     // since this is the first scene, initialize player inventory
     Weapon *bronzeSword = createBronzeSword();
+    Weapon *stoneSword = createStoneSword();
     Armor *streetClothes = createStreetClothes();
     Potion *whiteBread = createWhiteBread();
     Potion *meadBottle = createBottleOfMead();
@@ -106,7 +107,6 @@ void outsideFortress(Player *player) {
     moat->addDirection(moatGate);
 
     // add things to locations
-    Weapon *stoneSword = createStoneSword();
     InteractableObject *stone = createStone();
     
     GenericEnemy *guard1 = new GenericEnemy("guard", 20);

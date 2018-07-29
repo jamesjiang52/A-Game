@@ -20,15 +20,29 @@
 #include "Potions.hpp"
 #include "Utilities.hpp"
 
-std::string getEnemyCombatChoice(GenericEnemy *enemy);
+std::string getEnemyCombatChoice(bool weaponDisabled, bool shieldDisabled);
 void playerGainHealthFromEffects(Player *player, int combatTurn);
 int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
 int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
 void removeInactiveEffects(Player *player, int combatTurn);
 void removeAllEffects(Player *player);
-int calculateDamage(int baseDamage, int missedModifier, int criticalModifier, float damageTakenMultiplier=1);
+int calculateDamage(int baseDamage, int missedModifier, int criticalModifier);
 bool playerStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
 bool enemyStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
+void resetModifiers(
+    int &playerMissedModifier,
+    int &playerCriticalModifier,
+    int &enemyMissedModifier,
+    int &enemyCriticalModifier,
+    bool ignorePlayerMissedModifier,
+    bool ignorePlayerCriticalModifier,
+    bool ignoreEnemyMissedModifier,
+    bool ignoreEnemyCriticalModifier,
+    bool &playerWeaponDisabled,
+    bool &enemyWeaponDisabled,
+    bool ignorePlayerWeaponDisabled,
+    bool ignoreEnemyWeaponDisabled
+);
 void combat(Player *player, GenericEnemy *enemy);
 void printPlayerEmbellishedHealthInfo(Player *player);
 void printEnemyEmbellishedHealthInfo(GenericEnemy *enemy);

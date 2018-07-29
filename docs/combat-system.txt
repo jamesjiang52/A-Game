@@ -7,87 +7,84 @@ Feint
 Disengage
 
 With each damage attempt there are three possible results:
-Missed - Deals 0% of damage		15% of the time
-Normal - Deals 100% of damage		70% of the time
-Critical - Deals 200% of damage		15% of the time
-(When the probabilities are changed, they are added/deducted from the normal)
+Missed - deals 0% of damage		    15% of the time
+Normal - deals 100% of damage		70% of the time
+Critical - deals 200% of damage		15% of the time
+(when the probabilities are changed, they are added/deducted from the normal)
 
+Thrust (+10% critical, +5% missed):
+ - significant victory: parry (deal damage + opponent stagger)
+ - slight victory: feint (deal damage)
+ - slight defeat: disengage (stagger)
+ - significant defeat: dodge (stagger + +10% opponent critical next turn)
+ - draws: slash (deal significant damage + take significant damage)
+ - draws: thrust (deal damage + take damage)
 
-Thrust(+10% critical, +5% missed):
- - Signifiant Victory: Parry (Deal Damage + Opponent Stagger)
- - Slight Victory: Feint (Deal Damage)
- - Slight Defeat: Disengage (Stagger)
- - Significant Defeat: Dodge (Stagger + +10% opponent critical next turn)
- - Draws: Slash (Deal Significant Damage + Take Significant Damage)
- - Draws: Thrust (Deal Damage + Take Damage)
+Slash (-10% missed, -5% critical):
+ - significant victory: dodge (deal significant damage)
+ - slight victory: feint (deal damage)
+ - slight defeat: disengage (+10% opponent critical next turn)
+ - significant defeat: parry (stagger + -10% opponent missed next turn)
+ - draws: thrust (deal significant damage + take significant damage)
+ - draws: slash (deal damage + take damage)
 
-Slash(-10% missed, -5% critical):
- - Significant Victory: Dodge (Deal Significant Damage)
- - Slight Victory: Feint (Deal Damage)
- - Slight Defeat: Disengage (+10% opponent critical next turn)
- - Significant Defeat: Parry (Stagger + -10% opponent missed next turn)
- - Draws: Thrust (Deal Significant Damage + Take Significant Damage)
- - Draws: Slash (Deal Damage + Take Damage)
+Parry (-5% critical):
+ - significant victory: slash (opponent stagger + -10% opponent missed next turn)
+ - significant victory: disengage (significant opponent stagger)
+ - significant defeat: feint (stagger + -10% opponent missed next turn)
+ - significant defeat: thrust (take damage + stagger)
+ - draws: dodge (stagger + opponent stagger)
+ - draws: parry (nothing)
 
-Parry(-5% critical):
- - Significant Victory: Slash (Opponent Stagger + -10% missed next turn)
- - Significant Victory: Disengage (Significant Opponent Stagger)
- - Significant Defeat: Feint (Stagger + -10% opponent missed next turn)
- - Significant Defeat: Thrust (Take Damage + Stagger)
- - Draws: Dodge (Stagger + Opponent Stagger)
- - Draws: Parry( ... nothing happens ...)
+Dodge (+5% missed):
+ - significant victory: thrust (opponent stagger + +10% critical next turn)
+ - significant victory: disengage (significant opponent stagger)
+ - significant defeat: feint (stagger + +10% opponent critical next turn)
+ - significant defeat: slash (take significant damage)
+ - draws: parry (stagger + opponent stagger)
+ - draws: dodge (nothing)
 
-Dodge(+5% missed):
- - Significant Victory: Thrust (Opponent Stagger + 10% critical next turn)
- - Significant Victory: Disengage (Significant Opponent Stagger)
- - Significant Defeat: Feint (Stagger + +10% Opponent critical next turn)
- - Significant Defeat: Slash (Take Significant Damage)
- - Draws: Parry (Stagger + Opponent Stagger)
- - Draws: Dodge( ... nothing happens ... )
+Feint (+5% opponent stagger):
+ - significant victory: parry (opponent stagger + -10% missed next turn)
+ - significant victory: dodge (opponent stagger + +10% critical next turn)
+ - slight defeat: thrust (take damage)
+ - slight defeat: slash (take damage)
+ - slight defeat: disengage (+5% opponent critical next turn + -5% opponent missed next turn)
+ - draws: feint (stagger + opponent stagger)
 
-Feint(+5% opponent stagger):
- - Significant Victory: Parry (Opponent Stagger + -10% missed next turn)
- - Significant Victory: Dodge (Opponent Stagger + +10% critical next turn)
- - Slight Defeat: Thrust (Take Damage)
- - Slight Defeat: Slash (Take Damage)
- - Slight Defeat: Disengage (+5% opponent critical next turn + -5% opponent missed next turn)
- - Draws: Feint (Stagger + Opponent Stagger)
-
-Disengage(-5% stagger):
- - Slight Victory: Thrust (Opponent Stagger)
- - Slight Victory: Slash (+10% critical next turn)
- - Slight Victory: Feint (+5% critical next turn + -%5 missed next turn)
- - Significant Defeat: Parry (Significant Stagger)
- - Significant Defeat: Dodge (Significant Stagger)
- - Draws: Disengage (Stagger + Opponent Stagger)
+Disengage (-5% stagger):
+ - slight victory: thrust (opponent stagger)
+ - slight victory: slash (+10% critical next turn)
+ - slight victory: feint (+5% critical next turn + -%5 missed next turn)
+ - significant defeat: parry (significant stagger)
+ - significant defeat: dodge (significant stagger)
+ - draws: disengage (stagger + opponent stagger)
 
 With the usage of a shield, to more options are unlocked:
 Block
 Bash
 
-With each damage attempt(Bash) there is one possible results:
-Normal - Deals 100% of damage		100% of the time
+With each damage attempt(bash) there is one possible results:
+Normal - deals 100% of damage		100% of the time
 
 Block: 
- - Significant Victory: Thrust (Opponenet Stagger + Chance opponent has to change weapon + -5% missed next turn)
- - Significant Victory: Slash (Opponenet Stagger + Chance opponent has to change weapon + +5% critical next turn)
- - Slight Victory: Disengage (Opponenet Stagger)
- - Slight Defeat: Feint (+5% opponent critical next turn + -5% opponent missed next turn)
- - Slight Defeat: Dodge (Stagger)
- - Slight Defeat: Parry (Stagger)
- - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight)
- - Draws: Block ( ... Nothing Happens ... )
+ - significant victory: thrust (opponenet stagger + chance opponent has to change weapon + -5% missed next turn)
+ - significant victory: slash (opponenet stagger + chance opponent has to change weapon + +5% critical next turn)
+ - slight victory: disengage (opponenet stagger)
+ - slight defeat: feint (+5% opponent critical next turn + -5% opponent missed next turn)
+ - slight defeat: dodge (stagger)
+ - slight defeat: parry (stagger)
+ - draws: bash (both shields are broken and cannot be used for the rest of the fight)
+ - draws: block (nothing)
 
 Bash:
- - Significant Victory: Parry (Deal Slight Damage + Opponent Stagger + Chance opponent has to change weapon)
- - Significant Victory: Dodge (Deal Slight Damage + Significant Stagger)
- - Slight Victory: Feint (Deal Slight Damage + Stagger)
- - Slight Defeat: Disengage (Stagger)
- - Slight Defeat: Thrust (Take Damage)
- - Slight Defeat: Slash (Take Damage)
- - Draws: Block (Both shields are broken and cannot be used for the rest of the fight)
- - Draws: Bash (Both shields are broken and cannot be used for the rest of the fight + Deal Slight Damage + Take Slight Damage + Stagger + Opponent Stagger)
+ - significant victory: parry (deal slight damage + opponent stagger + chance opponent has to change weapon)
+ - significant victory: dodge (deal slight damage + significant stagger)
+ - slight victory: feint (deal slight damage + stagger)
+ - slight defeat: disengage (stagger)
+ - slight defeat: thrust (take damage)
+ - slight defeat: slash (take damage)
+ - draws: block (both shields are broken and cannot be used for the rest of the fight)
+ - draws: bash (both shields are broken and cannot be used for the rest of the fight + deal slight damage + take slight damage + stagger + opponent stagger)
 
 All effects are temporary and lasts for the next turn
-
-

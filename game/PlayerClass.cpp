@@ -118,7 +118,8 @@ void Player::addToInventory(InteractableObject *object) {
     /*
     Adds new object to inventory
     */
-    inventory.push_back(object);
+    if (object)
+        inventory.push_back(object);
 }
 
 void Player::removeFromInventory(InteractableObject *object) {
@@ -147,13 +148,15 @@ void Player::addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate)
     /*
     Adds new effect to active effects
     */
-    if (allowDuplicate)
-        activeEffects.push_back(activeEffect);
-    else {
-        std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
-        if (position != activeEffects.end())
+    if (activeEffect) {
+        if (allowDuplicate)
             activeEffects.push_back(activeEffect);
-    }    
+        else {
+            std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
+            if (position != activeEffects.end())
+                activeEffects.push_back(activeEffect);
+        }
+    }
 }
 
 void Player::removeFromActiveEffects(ActiveEffect *activeEffect) {

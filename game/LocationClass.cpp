@@ -46,8 +46,10 @@ void Location::addDirection(Direction *direction) {
     /*
     Adds new direction to allowedDirections if it is not already in it
     */
-    if (directionPosition(direction) == allowedDirections.end())
-        allowedDirections.push_back(direction);
+    if (direction) {
+        if (directionPosition(direction) == allowedDirections.end())
+            allowedDirections.push_back(direction);
+    }
 }
 
 void Location::removeDirection(Direction *direction) {
@@ -93,7 +95,8 @@ void Location::addInteractableObject(InteractableObject *object) {
     /*
     Adds new object to interactableObjects
     */
-    interactableObjects.push_back(object);
+    if (object)
+        interactableObjects.push_back(object);
 }
 
 void Location::removeInteractableObject(InteractableObject *object) {
@@ -139,7 +142,8 @@ void Location::addEnemy(GenericEnemy *enemy) {
     /*
     Adds new enemy to enemies
     */
-    enemies.push_back(enemy);
+    if (enemy)
+        enemies.push_back(enemy);
 }
 
 void Location::removeEnemy(GenericEnemy *enemy) {

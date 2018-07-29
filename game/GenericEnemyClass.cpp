@@ -16,6 +16,10 @@ GenericEnemy::~GenericEnemy() {
     this->shield = NULL;
 }
 
+bool GenericEnemy::operator==(const GenericEnemy &enemy) {
+    return(name == enemy.getName());
+}
+
 std::string GenericEnemy::getName() const {
     return name;
 }
@@ -73,7 +77,8 @@ void GenericEnemy::addToInventory(InteractableObject *object) {
     /*
     Adds new object to inventory
     */
-    inventory.push_back(object);
+    if (object)
+        inventory.push_back(object);
 }
 
 void GenericEnemy::removeFromInventory(InteractableObject *object) {
@@ -84,41 +89,6 @@ void GenericEnemy::removeFromInventory(InteractableObject *object) {
     std::vector<InteractableObject*>::iterator position = objectPosition(object);
     if (position != inventory.end())
         inventory.erase(position);
-}
-
-std::vector<ActiveEffect*> GenericEnemy::getActiveEffects() const {
-    return activeEffects;
-}
-
-std::vector<ActiveEffect*>::iterator GenericEnemy::effectPosition(ActiveEffect *activeEffect) {
-    /* 
-    Returns a vector iterator, with value corresponding to the index of the active effect vector
-    if effect is in the vector. Otherwise, returns the iterator with the size of the active effect vector.
-    */
-    return std::find(activeEffects.begin(), activeEffects.end(), activeEffect);
-}
-
-void GenericEnemy::addToActiveEffects(ActiveEffect *activeEffect, bool allowDuplicate) {
-    /*
-    Adds new effect to active effects
-    */
-    if (allowDuplicate)
-        activeEffects.push_back(activeEffect);
-    else {
-        std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
-        if (position != activeEffects.end())
-            activeEffects.push_back(activeEffect);
-    }    
-}
-
-void GenericEnemy::removeFromActiveEffects(ActiveEffect *activeEffect) {
-    /*
-    Removes effect from active effects if it is in it
-    Otherwise, does nothing
-    */
-    std::vector<ActiveEffect*>::iterator position = effectPosition(activeEffect);
-    if (position != activeEffects.end())
-        activeEffects.erase(position);  // this also automatically frees the memory allocated for the object
 }
 
 Weapon *GenericEnemy::getWeapon() const {

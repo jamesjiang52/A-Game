@@ -30,7 +30,7 @@ Slash(-10% missed, -5% critical):
  - Draws: Slash (Deal Damage + Take Damage)
 
 Parry(-5% critical):
- - Significant Victory: Slash (Opponent Stagger + -10% opponent missed next turn)
+ - Significant Victory: Slash (Opponent Stagger + -10% missed next turn)
  - Significant Victory: Disengage (Significant Opponent Stagger)
  - Significant Defeat: Feint (Stagger + -10% opponent missed next turn)
  - Significant Defeat: Thrust (Take Damage + Stagger)
@@ -46,8 +46,8 @@ Dodge(+5% missed):
  - Draws: Dodge( ... nothing happens ... )
 
 Feint(+5% opponent stagger):
- - Significant Victory: Parry (Opponent Stagger + -10% opponent missed next turn)
- - Significant Victory: Dodge (Opponent Stagger + +10% opponent critical next turn)
+ - Significant Victory: Parry (Opponent Stagger + -10% missed next turn)
+ - Significant Victory: Dodge (Opponent Stagger + +10% critical next turn)
  - Slight Defeat: Thrust (Take Damage)
  - Slight Defeat: Slash (Take Damage)
  - Slight Defeat: Disengage (+5% opponent critical next turn + -5% opponent missed next turn)

@@ -26,7 +26,9 @@ int getPlayerStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int
 int getEnemyStaggerModifierFromEffects(Player *player, GenericEnemy *enemy, int combatTurn);
 void removeInactiveEffects(Player *player, int combatTurn);
 void removeAllEffects(Player *player);
+int getDamageType(int missedModifier, int criticalModifier);
 int calculateDamage(int baseDamage, int missedModifier, int criticalModifier);
+bool weaponDisabledRoll(int shieldEncumbrance);
 bool playerStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
 bool enemyStaggerRoll(Player *player, GenericEnemy *enemy, int combatTurn, bool critical);
 void resetModifiers(

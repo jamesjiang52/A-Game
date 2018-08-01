@@ -16,6 +16,10 @@ const float SIGNIFICANT_STAGGER_MULTIPLIER = 1.5;  // "significant stagger" in c
 const float BASH_DAMAGE_POWER_SCALE = 0.25;  // bash damage is calculated by raising the shield's encumbrance to this power and multiplying it by BASH_DAMAGE_MULTIPLIER
 // ^ this variable should be in the range (0, 1]. A higher value amplifies the effectiveness of a heavier shield compared to a lighter one.
 const float BASH_DAMAGE_MULTIPLIER = 2;  // bash damage is calculated by raising the shield's encumbrance to the BASH_DAMAGE_POWER_SCALE-th power and multiplying it by this number
+const int BASH_WEAPON_DISABLED_EFFECTIVE_SHIELD_WEIGHT_MODIFIER = -1;  // use the shield's encumbrance plus this number in weapon disabled calculations
+const float BASH_WEAPON_DISABLED_CHANCE_POWER_SCALE = 0.5;  // weapon disabled chance is calculated by raising the shield's encumbrance to this power and multiplying it by BASH_WEAPON_DISABLED_CHANCE_MULTIPLIER
+// ^ this variable should be in the range (0, 1]. A higher value amplifies the effectiveness of a heavier shield compared to a lighter one.
+const float BASH_WEAPON_DISABLED_CHANCE_MULTIPLIER = 5;  // weapon disabled chance is calculated by raising the shield's encumbrance to the BASH_WEAPON_DISABLED_CHANCE_POWER_SCALE-th power and multiplying it by this number
 
 const int THRUST_CRITICAL_MODIFIER = 10;
 const int THRUST_MISSED_MODIFIER = 5;
@@ -36,5 +40,7 @@ const int BLOCK_THRUST_MISSED_MODIFIER = -5;
 const int BLOCK_SLASH_CRITICAL_MODIFIER = 5;
 const int BLOCK_FEINT_MISSED_MODIFIER = -5;
 const int BLOCK_FEINT_CRITICAL_MODIFIER = 5;
+const int STAGGERED_THRUST_CRITICAL_MODIFIER = 5;
+const int STAGGERED_SLASH_MISSED_MODIFIER = -5;
 
 #endif

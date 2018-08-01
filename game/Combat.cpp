@@ -180,8 +180,8 @@ void combat(Player *player, GenericEnemy *enemy) {
     
     std::cout << "\nI engage in combat with the " << enemy->getName() << ".\n\n";
     
-    player->isBleeding = false;
-    enemy->isBleeding = false;
+    playerBleeding = false;
+    enemyBleeding = false;
     
     bool playerStaggered = false, playerCriticalStagger = false;
     bool enemyStaggered = false, enemyCriticalStagger = false;
@@ -206,9 +206,9 @@ void combat(Player *player, GenericEnemy *enemy) {
         player->loseHealth(player->getWeapon()->getPlayerHealthBleed(), 100);
         enemy->loseHealth(enemy->getWeapon()->getPlayerHealthBleed(), 100);
 
-        if (player->isBleeding)
+        if (playerBleeding)
             player->loseHealth(enemy->getWeapon()->getEnemyHealthBleed(), 100);
-        if (enemy->isBleeding)
+        if (enemyBleeding)
             enemy->loseHealth(player->getWeapon()->getEnemyHealthBleed(), 100);
 
         if (!player->getCurrentHealth()) break;
@@ -283,8 +283,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
-                    enemy->isBleeding = true;
+                    playerBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -324,8 +324,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
-                    enemy->isBleeding = true;
+                    playerBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -360,7 +360,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggered = true;
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -419,7 +419,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -505,7 +505,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -547,8 +547,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
-                    enemy->isBleeding = true;
+                    playerBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -588,8 +588,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
-                    enemy->isBleeding = true;
+                    playerBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -648,7 +648,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER, 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -680,7 +680,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -764,7 +764,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ), 
                         player->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    enemy->isBleeding = true;
+                    enemyBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -801,7 +801,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggered = true;
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -1045,7 +1045,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         )*SIGNIFICANT_DAMAGE_MULTIPLIER,
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -1240,7 +1240,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -1272,7 +1272,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -1888,7 +1888,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -1920,7 +1920,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         ),
                         enemy->getWeapon()->getEnemyArmorReductionPercent()
                     );
-                    player->isBleeding = true;
+                    playerBleeding = true;
                     
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,

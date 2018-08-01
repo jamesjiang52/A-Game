@@ -38,7 +38,6 @@ class Player {
     public:
         Player(std::string name, int startingHealth);
         ~Player();
-        bool isBleeding = false;
         std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;

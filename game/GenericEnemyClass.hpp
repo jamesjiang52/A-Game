@@ -31,7 +31,6 @@ class GenericEnemy {
         GenericEnemy(std::string name, int startingHealth);
         ~GenericEnemy();
         bool operator==(const GenericEnemy &enemy);
-        bool isBleeding = false;
         std::string getName() const;
         int getStartingHealth() const;
         int getCurrentHealth() const;

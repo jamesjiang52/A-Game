@@ -1,0 +1,22 @@
+Thurst:
+ - Against parry:
+	Normal - You lunge forward, knocking aside the parry attempt, as the sword glances off <the enemy>'s thigh
+	Staggared - Your arm cramps, forcing you to abandon your thrust attempt
+	Opponent Staggered - You lunge foward, freezing <the enemy> as you push the sword deep into their midsection
+	Both Staggered - You feel your knees buckling, but luckily <the enemy> seems to have mistemped on a rock and backed off
+	Critical - You lunge forward, knocking aside the parry attempt, as the sword sinks deep into <the enemy>'s thigh
+	Missed - You lunge forward, underneath <the enemy>'s parry attempt, just barely missing their leg
+- Against Dodge
+	Normal - You lunge forward, but <the enemy> nimblely sidesteps your thrust
+	Staggered - Your leg cramps, forcing you to back off
+	Opponent Staggered - You lunge forward and <the enemy> steps right into the path of your blade
+	Both Staggered - A loud bang from affar momentairily distracts both of you
+	Critical(Can only happen when opponent is staggered) - You lunge foward and <the enemy> stumbles, causing your sword to go clean through their leg
+	Missed(Can only happen when opponent is staggered) - You lunge foward and <the enemy> mistakenly steps into the path of your blade, but you pull back too early
+ - Against Feint
+	Normal - You lunge forward, ignoring <the enemy>'s feint, scoring a gash in their thigh
+	Staggered - You notice the opponent moving forward and try to move into a more defensible position, but only manage to stumble as your legs were crossed up from the thrust attempt. Luckily it was only a feint...
+	Opponent Staggered - Your quick lunge seems to freeze <the enemy> allowing you to push your blade into their thigh
+	Both Staggered - A dog barks in the distance startling the both of you
+	Critical - You lunge forward, knocking aside <the enemy>'s feint, sinking your blade into the midsection
+	Missed - You notice the opponent moving forward, resulting in a lapse of concentration that cause your blade to just barely miss their leg

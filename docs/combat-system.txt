@@ -7,7 +7,7 @@ Feint
 Disengage
 
 With each damage attempt there are three possible results:
-Missed - deals 0% of damage		    15% of the time
+Missed - deals 0% of damage		15% of the time
 Normal - deals 100% of damage		70% of the time
 Critical - deals 200% of damage		15% of the time
 (when the probabilities are changed, they are added/deducted from the normal)
@@ -19,6 +19,7 @@ Thrust (+10% critical, +5% missed):
  - significant defeat: dodge (stagger + +10% opponent critical next turn)
  - draws: slash (deal significant damage + take significant damage)
  - draws: thrust (deal damage + take damage)
+When opponent is staggered, deal significant damage with +5% critical
 
 Slash (-10% missed, -5% critical):
  - significant victory: dodge (deal significant damage)
@@ -27,6 +28,7 @@ Slash (-10% missed, -5% critical):
  - significant defeat: parry (stagger + -10% opponent missed next turn)
  - draws: thrust (deal significant damage + take significant damage)
  - draws: slash (deal damage + take damage)
+When opponent is staggered, deal significant damage with -%5 missed
 
 Parry (-5% critical):
  - significant victory: slash (opponent stagger + -10% opponent missed next turn)
@@ -35,6 +37,7 @@ Parry (-5% critical):
  - significant defeat: thrust (take damage + stagger)
  - draws: dodge (stagger + opponent stagger)
  - draws: parry (nothing)
+When opponent is staggered, does nothing
 
 Dodge (+5% missed):
  - significant victory: thrust (opponent stagger + +10% critical next turn)
@@ -43,6 +46,7 @@ Dodge (+5% missed):
  - significant defeat: slash (take significant damage)
  - draws: parry (stagger + opponent stagger)
  - draws: dodge (nothing)
+When opponent is staggered, does nothing
 
 Feint (+5% opponent stagger):
  - significant victory: parry (opponent stagger + -10% missed next turn)
@@ -51,6 +55,7 @@ Feint (+5% opponent stagger):
  - slight defeat: slash (take damage)
  - slight defeat: disengage (+5% opponent critical next turn + -5% opponent missed next turn)
  - draws: feint (stagger + opponent stagger)
+When opponent is staggered, does nothing
 
 Disengage (-5% stagger):
  - slight victory: thrust (opponent stagger)
@@ -59,6 +64,7 @@ Disengage (-5% stagger):
  - significant defeat: parry (significant stagger)
  - significant defeat: dodge (significant stagger)
  - draws: disengage (stagger + opponent stagger)
+When opponent is staggered, does nothing
 
 With the usage of a shield, to more options are unlocked:
 Block
@@ -76,6 +82,7 @@ Block:
  - slight defeat: parry (stagger)
  - draws: bash (both shields are broken and cannot be used for the rest of the fight)
  - draws: block (nothing)
+When opponent is staggered, does nothing
 
 Bash:
  - significant victory: parry (deal slight damage + opponent stagger + chance opponent has to change weapon)
@@ -86,5 +93,6 @@ Bash:
  - slight defeat: slash (take damage)
  - draws: block (both shields are broken and cannot be used for the rest of the fight)
  - draws: bash (both shields are broken and cannot be used for the rest of the fight + deal slight damage + take slight damage + stagger + opponent stagger)
+When opponent is staggered, deals dammage and staggers opponent
 
 All effects are temporary and lasts for the next turn

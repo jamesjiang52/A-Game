@@ -31,10 +31,8 @@ int main() {
     Player playerData = *player;
     Player *playerCopy = &playerData;  // for loading checkpoints
     
-    while (1) {
-        try {
-            outsideFortress(player);  // throws an exception if player dies
-        } catch (int e) {  // if player dies and wants to retry
+    try {
+        while(outsideFortress(player)) {
             Player *temp = player;
             player = playerCopy;
             delete temp;
@@ -44,13 +42,9 @@ int main() {
             
             printCheckpointLoaded();
             getContinueFromPlayer();
-            continue;
-        } catch (char e) {  // if player dies and wants to exit
-            return 0;
         }
-        playerData = *player;
-        playerCopy = &playerData;
-        break;
+    } catch (char e) {
+        return 0;
     }
     
     printCheckpointCreated();

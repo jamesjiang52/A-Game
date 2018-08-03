@@ -12,6 +12,36 @@ Player::Player(std::string name, int startingHealth) {
     oneHanded = true;
 }
 
+Player::Player(const Player &player) {
+    name = player.name;
+    startingHealth = player.startingHealth;
+    currentHealth = player.currentHealth;
+    weapon = player.weapon;
+    armor = player.armor;
+    shield = player.shield;
+    location = player.location;
+    oneHanded = player.oneHanded;
+    
+    for (int i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
+    for (int i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
+}
+
+Player& Player::operator=(const Player &player) {
+    name = player.name;
+    startingHealth = player.startingHealth;
+    currentHealth = player.currentHealth;
+    weapon = player.weapon;
+    armor = player.armor;
+    shield = player.shield;
+    location = player.location;
+    oneHanded = player.oneHanded;
+    
+    inventory.clear();
+    activeEffects.clear();
+    for (int i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
+    for (int i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
+}
+
 Player::~Player() {
     delete weapon;
     delete armor;

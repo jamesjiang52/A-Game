@@ -136,7 +136,7 @@ bool weaponDisabledRoll(int shieldEncumbrance) {
     std::srand(std::time(nullptr));
     int roll = std::rand() % 100;
     
-    int threshold = pow((float)(shieldEncumbrance + BASH_WEAPON_DISABLED_EFFECTIVE_SHIELD_WEIGHT_MODIFIER, BASH_WEAPON_DISABLED_CHANCE_POWER_SCALE)*BASH_WEAPON_DISABLED_CHANCE_MULTIPLIER);
+    int threshold = pow((float)(shieldEncumbrance + BASH_WEAPON_DISABLED_EFFECTIVE_SHIELD_WEIGHT_MODIFIER), BASH_WEAPON_DISABLED_CHANCE_POWER_SCALE)*BASH_WEAPON_DISABLED_CHANCE_MULTIPLIER;
     return(roll < threshold);
 }
 
@@ -721,7 +721,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     enemyMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
                     
-                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance()))
                         playerWeaponDisabled = true;
                     else
                         playerWeaponDisabled = false;
@@ -1205,7 +1205,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerStaggerModifier = 0;
                     enemyCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
                     
-                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance()))
                         playerWeaponDisabled = true;
                     else
                         playerWeaponDisabled = false;
@@ -1628,7 +1628,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     playerCriticalStagger = false;
                     playerStaggerModifier = 0;
                     
-                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(enemy->getShield()->getEncumbrance()))
                         playerWeaponDisabled = true;
                     else
                         playerWeaponDisabled = false;
@@ -2723,7 +2723,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     playerMissedModifier = BLOCK_THRUST_MISSED_MODIFIER;
                     
-                    if (weaponDisabledRoll(player->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(player->getShield()->getEncumbrance()))
                         enemyWeaponDisabled = true;
                     else
                         enemyWeaponDisabled = false;
@@ -2778,7 +2778,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyStaggerModifier = 0;
                     playerCriticalModifier = BLOCK_SLASH_CRITICAL_MODIFIER;
                     
-                    if (weaponDisabledRoll(player->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(player->getShield()->getEncumbrance()))
                         enemyWeaponDisabled = true;
                     else
                         enemyWeaponDisabled = false;
@@ -3196,7 +3196,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                     enemyCriticalStagger = false;
                     enemyStaggerModifier = 0;
                     
-                    if (weaponDisabledRoll(player->getShield()->getEncumbrance())
+                    if (weaponDisabledRoll(player->getShield()->getEncumbrance()))
                         enemyWeaponDisabled = true;
                     else
                         enemyWeaponDisabled = false;

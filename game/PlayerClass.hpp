@@ -37,6 +37,8 @@ class Player {
 
     public:
         Player(std::string name, int startingHealth);
+        Player(const Player &player);
+        Player& operator=(const Player &player);
         ~Player();
         std::string getName() const;
         int getStartingHealth() const;

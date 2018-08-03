@@ -8,14 +8,14 @@ Player *startGame() {
     
     std::cout << "What is my name?\n";
     std::getline(std::cin, playerInput);
-    std::cout << "\n";
+    std::cout << "\nAt any time, use \"help\" to display a list of available commands.\n\n";
 
     getContinueFromPlayer();
     Player *player = new Player(playerInput, PLAYER_STARTING_HEALTH);
     return player;
 }
 
-void outsideFortress(Player *player) {
+int outsideFortress(Player *player) {
     // set up scene
     printOutsideFortressJournalEntry();
     getContinueFromPlayer();
@@ -129,8 +129,12 @@ void outsideFortress(Player *player) {
     player->setLocation(outsideFortressWalls);
     printLocationInfo(player);
 
-    while (1) {
-        getUserInput(player);
+    try {
+        while (1) {
+            getUserInput(player);
+        }
+    } catch (int e) {
+        return -1;
     }
-    // function terminates when player reaches fortress gate
+    return 0;
 }

@@ -55,6 +55,8 @@ void getUserInput(Player *player) {
     
     if (playerInput == "") {
         std::cout << "\n";
+    } else if (playerInput == "die") {  // testing
+        getUserRetryOrQuit();
     } else if (playerInput == "help") {
         printHelpMessage();
     } else if (playerInput.substr(0, 2) == "go") {  // player wants to move in direction
@@ -218,13 +220,16 @@ void printHelpMessage() {
     /*
     Called if user input is "help" (case insensitive, leading/trailing spaces are ignored). Displays valid user commands.
     */
-    std::string validCommands[] = {"go ___", "take ___ ", "drop ___", "use ___", "look ___", "attack ___", "inventory", "stats"};
     std::cout << "\nValid commands: \n";
-    
-    for (int i = 0; i < 8; i++) {
-        std::cout << "    " << validCommands[i] << "\n";
-    }
-    std::cout << "\n";
+    std::cout << "    go ___: move in a particular direction\n";
+    std::cout << "    take ___: put an object in your location into your inventory\n";
+    std::cout << "    drop ___: drop an object from your inventory into your location\n";
+    std::cout << "    use ___: use (or attempt to use) an object in your inventory\n";
+    std::cout << "    look: inspect your location\n";
+    std::cout << "    look ___: inspect a particular object in your location or in your inventory\n";
+    std::cout << "    attack ___: attack a potential hostile in your location\n";
+    std::cout << "    inventory: view your inventory\n";
+    std::cout << "    stats: view your stats\n\n";
 }
 
 void printLocationInfo(Player *player) {

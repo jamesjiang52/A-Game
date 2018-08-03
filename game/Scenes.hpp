@@ -22,6 +22,6 @@
 #include "Potions.hpp"
 
 Player *startGame();
-void outsideFortress(Player *player);
+int outsideFortress(Player *player);
 
 #endif

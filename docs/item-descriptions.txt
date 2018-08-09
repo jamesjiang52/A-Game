@@ -153,12 +153,12 @@ This cannot be the real Aegis as I am not stone, but this is a most terrifying r
 
 Loaf of Whole Wheat Bread:
 Heal 20 hp
-This is only available from my favourite bakery
+This is only available from my favorite bakery
 Feels healthier than white bread
 
 Loaf of White Bread:
 Heal 15 hp (After 5 turn hidden effect: heal 5 hp)
-This is only available from my favourite bakery
+This is only available from my favorite bakery
 Tastes better than whole wheat bread
 
 Bottle of Mead:

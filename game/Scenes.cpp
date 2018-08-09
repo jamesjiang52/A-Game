@@ -10,6 +10,7 @@ Player *startGame() {
     std::getline(std::cin, playerInput);
     std::cout << "\nAt any time, use \"help\" to display a list of available commands.\n\n";
 
+    printCheckpointCreated();
     getContinueFromPlayer();
     Player *player = new Player(playerInput, PLAYER_STARTING_HEALTH);
     return player;
@@ -44,26 +45,26 @@ int outsideFortress(Player *player) {
         "walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just "
         "off the path and down the hill, the river roars its great presence, mighty and boisterous. To the "
         "south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its "
-        "serene nocturne against the fading light.\n"
+        "serene nocturne against the fading light."
     );
     
     Location *fortressWalls = new Location(
         "By the Fortress Walls",
         "I walk north along the beaten path, closer to the fortress. The sun's dusk paints the sky a grand "
-        "spectacle of amber and violet. I can see not a single cloud, not even a flurry.\n"
+        "spectacle of amber and violet. I can see not a single cloud, not even a flurry."
     );
 
     Location *outsideFortressWallsAway = new Location(  // if player chooses to go south
         "Outside Fortress Walls",
         "I turn around and try to leave, but I must remember my purpose. I cannot leave until the "
-        "fortress is mine.\n"
+        "fortress is mine."
     );
 
     Location *riverShore = new Location(
         "River Shore",
         "I veer off the path and dip my foot into the water. It is freezing cold. I do not dare go into the "
         "water, lest I lose my strength and become incapable of pulling myself "
-        "back to the safety of shore. I should get back onto the path.\n"
+        "back to the safety of shore. I should get back onto the path."
     );
 
     Location *moat = new Location(
@@ -71,14 +72,14 @@ int outsideFortress(Player *player) {
         "I approach the first of the fortress' triple walls. I am greeted by a deep ditch and a raised bridge. I look "
         "down to see a rush of inky black water at least two meters deep. Across stands two watchmen that guard the gate, "
         "one of whom greets me and commands me to reveal what I carry. A bronze sword, a lantern, a loaf of bread, "
-        "a bottle of mead, and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised.\n"
+        "a bottle of mead, and the clothes on my back. Assent is given as the bridge is lowered and the gate is raised."
     );
     
     Location *gate = new Location(
         "The Gate",
         "I step across the wooden bridge, careful to mind my step and not trip. As I step off the other side, a curious stone "
         "catches my interest, impossibly smooth and round. Onwards, I am greeted by the two watchmen. Is it time for their reign "
-        "to end and mine to begin?\n"
+        "to end and mine to begin?"
     );
 
     // create directions

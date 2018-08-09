@@ -236,7 +236,7 @@ void printLocationInfo(Player *player) {
     // general location info
     Location *location = player->getLocation();
     std::cout << "\n-- " << location->getName() << " --\n\n";
-    std::cout << location->getDescription();
+    std::cout << location->getDescription() << "\n";
     
     // directions
     std::vector<Direction*> directions = location->getDirections();

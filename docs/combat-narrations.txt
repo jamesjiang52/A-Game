@@ -1,5 +1,5 @@
 Thurst:
- - Against parry:
+ - Against Parry:
 	Normal - I lunge forward, knocking aside <the enemy>'s parry attempt, as my sword scrapes <the enemy>'s thigh
 	Staggared - I feel my arm cramping ... I must abandon my attack attempt
 	Opponent Staggered - I lunge foward, and seeing <the enemy> seem to freeze push my sword into their midsection
@@ -20,3 +20,13 @@ Thurst:
 	Both Staggered - I am startled by a bark of a dog in the distance, but luckily so is <the enemy>
 	Critical - I lunge forward, knocking aside <the enemy>'s feint, sinking my blade into their midsection
 	Missed - I suddenly notice <the enemy> moving forward, and lose concentration my blade going through the air barely centimetres away from their leg
+ - Against Disengage:
+	Normal - I lunge forward but <the enemy> pulls back out of my reach
+	Staggered - <the enemy> pulls back but I overcompensate and barely manage to remain standing
+	Opponent Staggered - I notice that the enemy is trying to disengage and I quickly strike before they can react
+	Both Staggered - A strange calm falls over us as we stare at each other ... contemplating
+	Critical(Can only happen when opponent is staggered) - I lunge foward, surprising <te enemy> with my speed and thrust my sword deep into <the enemy>'s thigh
+	Missed - I see the enemy trip and lunge foward quickly, but am just unable to make contact
+ - Against Slash:
+	Normal - I lunge foward, slicing my sword against the <the enemy> thigh, but feel a sharp pain and <the enemy>'s sword scored a hit on my forearm
+	Staggered - 

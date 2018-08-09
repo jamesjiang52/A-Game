@@ -1,3 +1,6 @@
+BEGINING
+--------
+
 Outside the Fortress:
 I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's
 walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just
@@ -39,5 +42,20 @@ to end and mines to begin?
  - Inside the Gate
 
 Inside the gate:
-The first step of my masterplan is now complete with my gaining access to the fortress.
+The first step of my masterplan is now complete with my gaining access to the fortress. What should my next move be?
+ - Raid the armoury - I need better weapons!
+ - Assisinate the fortress commander - the less leaders around the better
+ - Kill some guards - I need to scratch my killing itch
+
+
+RAID THE ARMOURY
+----------------
+
+Inside the gate:
+I look on enviously at the at the weapons of the guardsmen. Proudly sharp and made of dependable steel; my own bronze 
+blade like a butter knife in comparison. I need to get a better weapon before my dynasty topling can begin. 
+ - Attack the guardsmen for their weapons
+ - Ask the guardsmen where the armoury is
+ - Head right
+ - Head left
 

@@ -8,7 +8,9 @@
 
 void printJournalHeader();
 void printJournalFooter();
+void printTitlePage(std::string name);
 void printStringWriting(std::string);
-void printOutsideFortressJournalEntry();
+void printOutsideFortressJournalEntry(bool slow=true);
+void journal(int questStage, std::string name);  // called if player input is "journal"
 
 #endif

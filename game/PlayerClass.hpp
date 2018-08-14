@@ -33,6 +33,7 @@ class Player {
         std::vector<ActiveEffect*> activeEffects;
         std::vector<ActiveEffect*>::iterator effectPosition(ActiveEffect *activeEffect);
         bool oneHanded;
+        int questStage;
         Armor *createStreetClothes();  // I need this
 
     public:
@@ -48,6 +49,8 @@ class Player {
         void loseHealth(int amount, int armorReductionPercent=0);
         void gainHealth(int amount);
         void attack(GenericEnemy *enemy);
+        int getQuestStage() const;
+        void setQuestStage(int stage);
         Location *getLocation() const;
         void setLocation(Location *location);
         std::vector<InteractableObject*> getInventory() const;

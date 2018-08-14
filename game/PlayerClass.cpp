@@ -10,6 +10,7 @@ Player::Player(std::string name, int startingHealth) {
     this->shield = NULL;
     
     oneHanded = true;
+    questStage = 0;
 }
 
 Player::Player(const Player &player) {
@@ -101,6 +102,14 @@ void Player::gainHealth(int amount) {
 
 void Player::attack(GenericEnemy *enemy) {
     enemy->loseHealth(weapon->getDamage());
+}
+
+int getQuestStage() const {
+    return questStage;
+}
+
+void setQuestStage(int stage) {
+    this->questStage = stage;
 }
 
 Location *Player::getLocation() const {

@@ -12,6 +12,7 @@
 #include "LocationClass.hpp"
 #include "GenericEnemyClass.hpp"
 #include "PlayerClass.hpp"
+#include "Journal.hpp"
 #include "MiscObjects.hpp"
 #include "Weapons.hpp"
 #include "Armors.hpp"

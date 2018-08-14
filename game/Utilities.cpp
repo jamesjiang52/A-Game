@@ -75,6 +75,8 @@ void getUserInput(Player *player) {
         printInventory(player);
     } else if (playerInput == "stats") {
         printStats(player);
+    } else if (playerInput == "journal") {
+        journal(player->getQuestStage(), player->getName);
     } else {  // command is not valid
         std::cout << "I do not know that action.\n\n";
     }
@@ -229,7 +231,8 @@ void printHelpMessage() {
     std::cout << "    look ___: inspect a particular object in your location or in your inventory\n";
     std::cout << "    attack ___: attack a potential hostile in your location\n";
     std::cout << "    inventory: view your inventory\n";
-    std::cout << "    stats: view your stats\n\n";
+    std::cout << "    stats: view your stats\n";
+    std::cout << "    journal: view your journal\n\n";
 }
 
 void printLocationInfo(Player *player) {

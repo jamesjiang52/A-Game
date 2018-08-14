@@ -296,6 +296,8 @@ void combat(Player *player, GenericEnemy *enemy) {
             std::cout << "I shouldn't try to look inside my knapsack while I'm in combat.\n\n";
         } else if (playerInput == "stats") {
             printStats(player);
+        } else if (playerInput == "journal") {
+            std::cout < "I shouldn't try to open my journal while I'm in combat.\n\n";
         } else if (playerInput == "thrust" && !playerWeaponDisabled) {
             if (enemyChoice == "thrust") {
                 if (!playerFailed && !enemyFailed) {

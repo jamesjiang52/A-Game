@@ -12,7 +12,7 @@ Player *startGame() {
 
     printCheckpointCreated();
     getContinueFromPlayer();
-    Player *player = new Player(playerInput, PLAYER_STARTING_HEALTH);
+    Player *player = new Player(correctCase(playerInput), PLAYER_STARTING_HEALTH);
     return player;
 }
 

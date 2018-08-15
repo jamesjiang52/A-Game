@@ -49,4 +49,5 @@ int main() {
     
     printCheckpointCreated();
     getContinueFromPlayer();
+    player->setQuestStage(1);
 }

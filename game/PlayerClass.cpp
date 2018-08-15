@@ -104,11 +104,11 @@ void Player::attack(GenericEnemy *enemy) {
     enemy->loseHealth(weapon->getDamage());
 }
 
-int getQuestStage() const {
+int Player::getQuestStage() const {
     return questStage;
 }
 
-void setQuestStage(int stage) {
+void Player::setQuestStage(int stage) {
     this->questStage = stage;
 }
 

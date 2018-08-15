@@ -14,6 +14,15 @@ std::string stripSpaces(std::string original) {
     return std::regex_replace(original, std::regex("^ +| +$|( ) +"), "$1");
 }
 
+std::string correctCase(std::string original) {
+    std::string newStr = original;
+    newStr[0] = std::toupper(original[0]);
+    for (int i = 1; i < original.length(); i++) {
+        newStr[i] = std::tolower(original[i]);
+    }
+    return newStr;
+}
+
 void getContinueFromPlayer() {
     /*
     Function to prompt and receive for user input to continue
@@ -76,7 +85,8 @@ void getUserInput(Player *player) {
     } else if (playerInput == "stats") {
         printStats(player);
     } else if (playerInput == "journal") {
-        journal(player->getQuestStage(), player->getName);
+        journal(player->getQuestStage(), player->getName());
+        printLocationInfo(player);
     } else {  // command is not valid
         std::cout << "I do not know that action.\n\n";
     }

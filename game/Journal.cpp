@@ -1,7 +1,9 @@
 #include "Journal.hpp"
 
-const int MILLISECONDS_DELAY_BETWEEN_CHARACTERS = 20;
-const int LONG_MILLISECONDS_DELAY = 1000;
+const int MILLISECONDS_DELAY_BETWEEN_CHARACTERS = 40;
+const int MILLISECONDS_DELAY_ON_PAUSE_SHORT = 200;
+const int MILLISECONDS_DELAY_ON_PAUSE_LONG = 500;
+const int LONG_PAUSE = 1000;
 
 void printJournalHeader() {
     std::cout << "== Begin journal entry ==\n\n";
@@ -11,24 +13,39 @@ void printJournalFooter() {
     std::cout << "\n\n== End journal entry ==\n\n";
 }
 
-void printTitlePage(std::string name) {
-    std::cout << std::toupper(name[0]) << name.substr(1, name.length() - 1) << "'s Journal\n\n"
+void printStringWriting(std::string str, bool allowLongPauses) {
+    if (allowLongPauses) {
+        for (char& c : str) {
+            std::cout << c;
+            if ((c == ',') || (c == ';') || (c == ':')) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_ON_PAUSE_SHORT));
+            } else if ((c == '.') || (c == '?') || (c == '!')) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_ON_PAUSE_LONG));
+            } else {
+                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_BETWEEN_CHARACTERS));
+            }
+        }
+    } else {
+        for (char& c : str) {
+            std::cout << c;
+            std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_BETWEEN_CHARACTERS));
+        }
+    }
 }
 
-void printStringWriting(std::string str) {
-    for (char& c : str) {
-        std::cout << c;
-        std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_BETWEEN_CHARACTERS));
-    }
+void printTitlePage(std::string name) {
+    std::cout << "== Begin title page ==\n\n";
+    std::cout << name << "'s Journal";
+    std::cout << "\n\n== End title page ==\n\n";
 }
 
 void printOutsideFortressJournalEntry(bool slow) {
     printJournalHeader();
     
     if (slow) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_MILLISECONDS_DELAY));
-        printStringWriting("7:34pm");
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_MILLISECONDS_DELAY));
+        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
+        printStringWriting("7:34pm", false);
+        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
         std::cout << "\n\n";
         printStringWriting("Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten "
                      "years of verbal abuse, ten years of manipulation and deceit. Ten years endured, and for what? "
@@ -40,7 +57,7 @@ void printOutsideFortressJournalEntry(bool slow) {
                      "destroyed, the mighty empire brought to its knees, and I shall be the cause. My name once revered as "
                      "the next imperator will now be spit upon alongside the dregs and scum, but vengeance must have its "
                      "due.");
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_MILLISECONDS_DELAY));
+        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
     } else {
         std::cout << "7:34pm\n\n";
         std::cout << "Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten "
@@ -59,12 +76,38 @@ void printOutsideFortressJournalEntry(bool slow) {
 }
 
 void journal(int questStage, std::string name) {  // called if player input is "journal"
-    std::cout << "I open my journal. Use \"next\" and \"previous\" to navigate pages, or \"journal\" to close.\n\n";
+    std::cout << "\nI open my journal. Use \"next\" and \"previous\" to navigate pages, or \"journal\" to close.\n\n";
     printTitlePage(name);
+    
+    void (*journalEntries[])(bool slow) = {printOutsideFortressJournalEntry};
+    int currentIndex = -1;  // an index of -1 specifies the title page
+    
+    std::string playerInput;
     do {
-        std::string playerInput;
         std::getline(std::cin, playerInput);
         std::transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);  // convert input to all lowercase
         playerInput = stripSpaces(playerInput);
+        
+        if (playerInput == "next") {
+            std::cout << "\n";
+            if (currentIndex < questStage) {
+                currentIndex += 1;
+                journalEntries[currentIndex](false);
+            } else {
+                journalEntries[currentIndex](false);
+            }
+        } else if (playerInput == "previous") {
+            std::cout << "\n";
+            if (currentIndex < 1) {
+                printTitlePage(name);
+            } else {
+                currentIndex -= 1;
+                journalEntries[currentIndex](false);
+            }
+        } else if (playerInput != "journal") {
+            std::cout << "Use \"next\" and \"previous\" to navigate pages, or \"journal\" to close.\n\n";
+        }
     } while (playerInput != "journal");
+    
+    std::cout << "\n";
 }

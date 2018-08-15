@@ -22,6 +22,7 @@
 
 std::string addQuotes(std::string original);
 std::string stripSpaces(std::string original);
+std::string correctCase(std::string original);
 void getContinueFromPlayer();
 void getUserRetryOrQuit();
 void getUserInput(Player *player);

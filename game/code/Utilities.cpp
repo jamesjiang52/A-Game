@@ -28,7 +28,7 @@ void getContinueFromPlayer() {
     Function to prompt and receive for user input to continue
     */
     std::string playerInput;
-    std::cout << "--------------------------------------Press ENTER to continue--------------------------------------";
+    std::cout << "-------------------------------------- Press ENTER to continue --------------------------------------";
     std::getline(std::cin, playerInput);
     std::cout << "\n";
 }
@@ -88,7 +88,7 @@ void getUserInput(Player *player) {
         journal(player->getQuestStage(), player->getName());
         printLocationInfo(player);
     } else {  // command is not valid
-        std::cout << "I do not know that action.\n\n";
+        std::cout << "I do not know how to " << playerInput <<".\n\n";
     }
 }
 

@@ -78,8 +78,7 @@ int outsideFortress(Player *player) {
     Location *gate = new Location(
         "The Gate",
         "I step across the wooden bridge, careful to mind my step and not trip. As I step off the other side, a curious stone "
-        "catches my interest, impossibly smooth and round. Onwards, I am greeted by the two watchmen. Is it time for their reign "
-        "to end and mine to begin?"
+        "catches my interest, impossibly smooth and round. Onwards, I am greeted by the two watchmen."
     );
 
     // create directions

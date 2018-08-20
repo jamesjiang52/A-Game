@@ -50,4 +50,27 @@ int main() {
     printCheckpointCreated();
     getContinueFromPlayer();
     player->setQuestStage(1);
+    
+    Player *temp = player;
+    player = playerCopy;
+    delete temp;
+    
+    playerData = *player;
+    playerCopy = &playerData;
+    
+    try {
+        while(outsideFortress(player)) {
+            Player *temp = player;
+            player = playerCopy;
+            delete temp;
+            
+            playerData = *player;
+            playerCopy = &playerData;
+            
+            printCheckpointLoaded();
+            getContinueFromPlayer();
+        }
+    } catch (char e) {
+        return 0;
+    }
 }

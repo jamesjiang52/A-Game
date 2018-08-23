@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Covered+By+Your+Grace">
-	<link rel="stylesheet" href="main.css">  
-	<title>Epistle</title>
+    <link rel="stylesheet" href="main.css">  
+    <title>Epistle</title>
 </head>
 <body>
-    <!-- Use a line break <br> for a single newline and a </p><p> for a double. -->
-    <div class="output-container">
-        <!-- This is just a test to see what the output looks like. -->
-        <p>------------------------------------------------------------------ Press ENTER to continue ------------------------------------------------------------------</p>
-        <p>Begin journal entry</p>
-        <p>7:34pm</p>
-        <p>
-            Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten 
-            years of verbal abuse, ten years of manipulation and deceit. Ten years endured, and for what? 
-            Demotion and an official reprimand for "unprofessional" conduct. These were the thoughts that raged 
-            through my mind as I approached <i>Reinbreaker</i>, the towering presence that loomed over the entire 
-            valley, its impregnability famed across the land. Considered the sole reason why the west had 
-            remained relatively unmarred after the many years of war, the fortress stood proudly along the 
-            river, shining as a beacon of imperial might. Tonight, this will change, its illusion of power 
-            destroyed, the mighty empire brought to its knees, and I shall be the cause. My name once revered as 
-            the next imperator will now be spit upon alongside the dregs and scum, but vengeance must have its 
-            due.
-        </p>
-        <p>End journal entry</p>
-        <p>------------------------------------------------------------------ Press ENTER to continue ------------------------------------------------------------------</p>
-        <p>Outside Fortress Walls</p>
-        <p>
-            I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's 
-            walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just 
-            off the path and down the hill, the river roars its great presence, mighty and boisterous. To the 
-            south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its 
-            serene nocturne against the fading light.
-        </p>
-        <p>
-            It appears I can move in these directions:<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;- north<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;- south<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;- river<br>
-        </p>
+    <!-- Use a line break <br> for a single newline. -->
+    <img src="images/tape1.png" id="tape1-img">
+    <div class="output-wrapper"> <!-- This is for padding for the top and bottom edges when the user scrolls -->
+        <div class="output-container">
+            <!-- This is just a test to see what the output looks like. -->
+            <p id="output">
+                Begin journal entry<br><br>
+                
+                7:34pm<br><br>
+                Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten years of verbal abuse, ten years of manipulation and deceit. Ten years endured, and for what? Demotion and an 
+                official reprimand for "unprofessional" conduct. These were the thoughts that raged through my mind as I approached <i>Reinbreaker</i>, the towering presence that loomed over the entire valley, its impregnability 
+                famed across the land. Considered the sole reason why the west had remained relatively unmarred after the many years of war, the fortress stood proudly along the river, shining as a beacon of imperial might. 
+                Tonight, this will change, its illusion of power destroyed, the mighty empire brought to its knees, and I shall be the cause. My name once revered as the next imperator will now be spit upon alongside the dregs 
+                and scum, but vengeance must have its due.<br><br>
+                
+                End journal entry<br><br>
+                
+                Outside Fortress Walls<br><br>
+                
+                I am on a narrow cobblestoned trail. Just up ahead to the north is the stronghold, a mere minute's walk away, its imperial towers and walls standing unshaken against the cannons of war unending. Just off the path 
+                and down the hill, the river roars its great presence, mighty and boisterous. To the south, I can only see the unbroken plains of grass ripple and roll as the evening gale sings its serene nocturne against the 
+                fading light.<br><br>
+                
+                It appears I can move in these directions:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- north<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- south<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- river<br>
+            </p>
+        </div>
     </div>
-    <div class="input-container">
-        <p>What do I do?<br>></p>
+    <img src="images/tape2.png" id="tape2-img">
+    <img src="images/tape3.png" id="tape3-img">
+    <div class="input-wrapper">
+        <form action="" id="player_input_form" method="post">
+            <p>
+                What do I do?<br>
+                >
+                <input type="text" id="player_input_field" name="player-input" autocomplete="off" size="20" maxlength="20"><br>
+                <input type="submit" id="player-input-submit">
+            </p>
+        </form>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="set-focus.js"></script>
 </body>
 </html>

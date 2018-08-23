@@ -2,6 +2,13 @@ html {
     background: url("images/background.png") no-repeat center center fixed; 
     background-size: cover;
     height: 90%;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
 }
 
 body {
@@ -15,27 +22,89 @@ p {
     line-height: 1.3;
 }
 
-.output-container {
+/* Not sure if this is completely necessary. Might remove later. */
+*:focus {
+    outline: none;
+}
+
+.output-wrapper {
     display: block;
-	margin-left: auto;
-	margin-right: auto;
-    margin-top: 4%;
-    padding: 10px 50px 10px 50px;
+    position: relative;
+    width: 75%;
     height: 90%;
-	width: 75%;
+    margin-top: 4%;
+    margin-bottom: 0.5%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 0;
+    background-color: #f0e09e;
+    background-image: url("images/background-paper.png");
+    box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.5);
+    z-index: -1;  /* so the shadow doesn't spill onto the next element */
+}
+
+.output-container {
+    padding: 0 50px;
+    height: 100%;
+    overflow: scroll;
+}
+
+.input-wrapper {
+    display: block;
+    width: 75%;
+    margin-top: 0;
+    margin-bottom: 4%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px 0;
     background-color: #f0e09e;
     background-image: url("images/background-paper.png");
     box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.5)
 }
 
-.input-container {
-    display: block;
-	margin-left: auto;
-	margin-right: auto;
-    margin-top: 1%;
-    padding: 1px 50px 1px 50px;
-	width: 75%;
-    background-color: #f0e09e;
-    background-image: url("images/background-paper.png");
-    box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.5)
+#player_input_form {
+    padding: 0 50px;
+    height: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#player_input_field {
+    display: inline;
+    background-color: transparent;
+    border: none;
+    font-family: 'Covered By Your Grace', cursive;
+    font-size: 0.9em;
+    color: black;
+}
+
+#player-input-submit {
+    display: none;
+}
+
+#tape1-img {
+    width: 14%;
+    float: left;
+    position: absolute;
+    left: 43%;
+    top: 2%;
+    z-index: 1000;
+}
+
+#tape2-img {
+    width: 8%;
+    float: right;
+    position: relative;
+    right: 30%;
+    bottom: 5%;
+    z-index: 1000;
+}
+
+#tape3-img {
+    width: 8%;
+    float: right;
+    position: relative;
+    right: 55%;
+    bottom: 5%;
+    z-index: 1000;
 }

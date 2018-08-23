@@ -591,7 +591,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                     
-                    std::cout << "BANG... I jump and shake my head momentarily confused. Luckily, the " << enemy->getName() << " was confused as well.\n\n";
+                    std::cout << "A cannon fires in the distance. I jump and shake my head momentarily confused. Luckily, the " << enemy->getName() << " was confused as well.\n\n";
                 }
             } else if (enemyChoice == "feint") {
                 if (!playerFailed && !enemyFailed) {
@@ -680,6 +680,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         false, false,
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
+
+                    std::cout << "I lunge forward, but the " << enemy->getName() << " pulls back out of my reach.\n\n";
                 } else if (!playerFailed && enemyFailed) {
                     enemy->loseHealth(
                         calculateDamage(
@@ -699,6 +701,13 @@ void combat(Player *player, GenericEnemy *enemy) {
                         false, false,
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
+                    
+                    if (enemyDamageType == 0)
+                        std::cout << "I see the " << enemy->getName() << " trip and lunge forward quickly, but am just unable to make contact.\n\n";
+                    else if (enemyDamageType == 1)
+                        std::cout << "I lunge forward, surprising the " << enemy->getName() << " with my speed, and thrust my sword deep into their thigh.\n\n";
+                    else if (enemyDamageType == 2)
+                        std::cout << "I notice that the " << enemy->getName() << " is trying to disengage and I quickly strike before they can react.\n\n";
                 } else if (playerFailed && !enemyFailed) {
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -707,6 +716,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         false, false,
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
+                    
+                    std::cout < "The " << enemy->getName() << " pulls back, but I overcompensate and barely manage to remain standing.\n\n";
                 } else {
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
@@ -715,6 +726,8 @@ void combat(Player *player, GenericEnemy *enemy) {
                         false, false,
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
+                    
+                    std::cout << "A strange calm falls over us as we stare at each other... contemplating.\n\n";
                 }
             } else if (enemyChoice == "block") {
                 if (!playerFailed && !enemyFailed) {

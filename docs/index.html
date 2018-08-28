@@ -11,7 +11,7 @@
     <!-- Use a line break <br> for a single newline. -->
     <img src="images/tape1.png" id="tape1-img">
     <div class="output-wrapper"> <!-- This is for padding for the top and bottom edges when the user scrolls -->
-        <div class="output-container">
+        <div class="output-container has-shadow">
             <!-- This is just a test to see what the output looks like. -->
             <p id="output">
                 Begin journal entry<br><br>
@@ -40,17 +40,18 @@
     </div>
     <img src="images/tape2.png" id="tape2-img">
     <img src="images/tape3.png" id="tape3-img">
-    <div class="input-wrapper">
-        <form action="" id="player_input_form" method="post">
+    <div class="input-wrapper has-shadow">
+        <form id="player_input_form">
             <p>
                 What do I do?<br>
                 >
-                <input type="text" id="player_input_field" name="player-input" autocomplete="off" size="20" maxlength="20"><br>
-                <input type="submit" id="player-input-submit">
+                <input type="text" id="player_input_field" name="player-input" autocomplete="off" size="50" maxlength="20"><br>
+                <input type="submit" id="player_input_submit">
             </p>
         </form>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="set-focus.js"></script>
+    <script src="scripts.js"></script>
+    <script>setFocus();</script>
 </body>
 </html>

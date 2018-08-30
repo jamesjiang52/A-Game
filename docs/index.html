@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Covered+By+Your+Grace">
-    <link rel="stylesheet" href="main.css">  
+    <link rel="stylesheet" href="style-main.css">  
     <title>Epistle</title>
 </head>
 <body>
     <!-- Use a line break <br> for a single newline. -->
-    <img src="images/tape1.png" id="tape1-img">
+    <img src="images/img-tape1.png" class="disable-select" id="tape1-img">
     <div class="output-wrapper"> <!-- This is for padding for the top and bottom edges when the user scrolls -->
-        <div class="output-container has-shadow">
+        <div class="output-container">
             <!-- This is just a test to see what the output looks like. -->
             <p id="output">
                 Begin journal entry<br><br>
@@ -38,9 +38,9 @@
             </p>
         </div>
     </div>
-    <img src="images/tape2.png" id="tape2-img">
-    <img src="images/tape3.png" id="tape3-img">
-    <div class="input-wrapper has-shadow">
+    <img src="images/img-tape2.png" class="disable-select" id="tape2-img">
+    <img src="images/img-tape3.png" class="disable-select" id="tape3-img">
+    <div class="input-wrapper">
         <form id="player_input_form">
             <p>
                 What do I do?<br>
@@ -51,7 +51,7 @@
         </form>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="scripts.js"></script>
-    <script>setFocus();</script>
+    <script src="script-main.js"></script>
+    <script>setFocusToInputField();</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 html { 
-    background: url("images/background.png") no-repeat center center fixed; 
+    background: url("images/bg-wall.png") no-repeat center center fixed; 
     background-size: cover;
     height: 90%;
     overflow-y: scroll;
@@ -36,7 +36,7 @@ p {
     margin-right: auto;
     padding: 20px 0;
     background-color: #f0e09e;
-    background-image: url("images/background-paper.png");
+    background-image: url("images/bg-paper.png");
     box-shadow: inset 0px 0px 20px 15px rgba(0, 0, 0, 0.6), 0px 0px 40px 5px rgba(0, 0, 0, 0.5);
     border-radius: 3px;
     overflow: hidden;
@@ -57,7 +57,7 @@ p {
     margin-right: auto;
     padding: 0px 0;
     background-color: #f0e09e;
-    background-image: url("images/background-paper.png");
+    background-image: url("images/bg-paper.png");
     box-shadow: inset 0px 0px 20px 15px rgba(0, 0, 0, 0.6), 0px 0px 40px 5px rgba(0, 0, 0, 0.5);
     border-radius: 3px;
 }
@@ -106,4 +106,9 @@ p {
     right: 55%;
     bottom: 5%;
     z-index: 1000;
+}
+
+.disable-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }

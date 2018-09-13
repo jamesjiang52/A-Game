@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>code/ActiveEffectClass.hpp</itemPath>
+      <itemPath>code/ArmorClass.hpp</itemPath>
+      <itemPath>code/Armors.hpp</itemPath>
+      <itemPath>code/Combat.hpp</itemPath>
+      <itemPath>code/DirectionClass.hpp</itemPath>
+      <itemPath>code/GenericEnemyClass.hpp</itemPath>
+      <itemPath>code/InteractableObjectClass.hpp</itemPath>
+      <itemPath>code/Journal.hpp</itemPath>
+      <itemPath>code/LocationClass.hpp</itemPath>
+      <itemPath>code/MiscObjectClass.hpp</itemPath>
+      <itemPath>code/MiscObjects.hpp</itemPath>
+      <itemPath>code/Parameters.hpp</itemPath>
+      <itemPath>code/PlayerClass.hpp</itemPath>
+      <itemPath>code/PotionClass.hpp</itemPath>
+      <itemPath>code/Potions.hpp</itemPath>
+      <itemPath>code/Scenes.hpp</itemPath>
+      <itemPath>code/ShieldClass.hpp</itemPath>
+      <itemPath>code/Shields.hpp</itemPath>
+      <itemPath>code/Utilities.hpp</itemPath>
+      <itemPath>code/WeaponClass.hpp</itemPath>
+      <itemPath>code/Weapons.hpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>code/ActiveEffectClass.cpp</itemPath>
+      <itemPath>code/ArmorClass.cpp</itemPath>
+      <itemPath>code/Armors.cpp</itemPath>
+      <itemPath>code/Combat.cpp</itemPath>
+      <itemPath>code/DirectionClass.cpp</itemPath>
+      <itemPath>code/Game.cpp</itemPath>
+      <itemPath>code/GenericEnemyClass.cpp</itemPath>
+      <itemPath>code/InteractableObjectClass.cpp</itemPath>
+      <itemPath>code/Journal.cpp</itemPath>
+      <itemPath>code/LocationClass.cpp</itemPath>
+      <itemPath>code/MiscObjectClass.cpp</itemPath>
+      <itemPath>code/MiscObjects.cpp</itemPath>
+      <itemPath>code/PlayerClass.cpp</itemPath>
+      <itemPath>code/PotionClass.cpp</itemPath>
+      <itemPath>code/Potions.cpp</itemPath>
+      <itemPath>code/Scenes.cpp</itemPath>
+      <itemPath>code/ShieldClass.cpp</itemPath>
+      <itemPath>code/Shields.cpp</itemPath>
+      <itemPath>code/Utilities.cpp</itemPath>
+      <itemPath>code/WeaponClass.cpp</itemPath>
+      <itemPath>code/Weapons.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandLine>-O3 -Wall -Wextra -Wpedantic</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+      </compileType>
+      <item path="code/ActiveEffectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ActiveEffectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/ArmorClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ArmorClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Armors.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Armors.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Combat.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Combat.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/DirectionClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/DirectionClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/GenericEnemyClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/GenericEnemyClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/InteractableObjectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/InteractableObjectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Journal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Journal.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/LocationClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/LocationClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/MiscObjectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/MiscObjectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/MiscObjects.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/MiscObjects.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Parameters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/PlayerClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/PlayerClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/PotionClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/PotionClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Potions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Potions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Scenes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Scenes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/ShieldClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ShieldClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Shields.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Shields.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Utilities.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/WeaponClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/WeaponClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Weapons.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Weapons.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="code/ActiveEffectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ActiveEffectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/ArmorClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ArmorClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Armors.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Armors.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Combat.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Combat.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/DirectionClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/DirectionClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/GenericEnemyClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/GenericEnemyClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/InteractableObjectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/InteractableObjectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Journal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Journal.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/LocationClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/LocationClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/MiscObjectClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/MiscObjectClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/MiscObjects.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/MiscObjects.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Parameters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/PlayerClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/PlayerClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/PotionClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/PotionClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Potions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Potions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Scenes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Scenes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/ShieldClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/ShieldClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Shields.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Shields.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Utilities.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/WeaponClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/WeaponClass.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="code/Weapons.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="code/Weapons.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

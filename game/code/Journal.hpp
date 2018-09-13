@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <windows.h>
 #include "Utilities.hpp"
 
 void printJournalHeader();

@@ -6,8 +6,8 @@ Location::Location(std::string name, std::string description) {
 }
 
 Location::~Location() {
-    for (int i = 0; i < interactableObjects.size(); i++) delete interactableObjects.at(i);
-    for (int i = 0; i < enemies.size(); i++) delete enemies.at(i);
+    for (size_t i = 0; i < interactableObjects.size(); i++) delete interactableObjects.at(i);
+    for (size_t i = 0; i < enemies.size(); i++) delete enemies.at(i);
 }
 
 bool Location::operator==(const Location &location) {
@@ -66,7 +66,7 @@ bool Location::checkStringInDirections(std::string directionName) {
     /*
     Checks if the string corresponds to a location name in allowedDirections
     */
-    for (int i = 0; i < allowedDirections.size(); i++) {
+    for (size_t i = 0; i < allowedDirections.size(); i++) {
         if (directionName == allowedDirections.at(i)->getName())
             return true;
     }
@@ -77,7 +77,7 @@ Direction *Location::getDirectionFromString(std::string directionName) {
     /*
     Returns a reference to the direction given by directionName
     */
-    for (int i = 0; i < allowedDirections.size(); i++) {
+    for (size_t i = 0; i < allowedDirections.size(); i++) {
         if (directionName == allowedDirections.at(i)->getName())
             return allowedDirections.at(i);
     }
@@ -113,7 +113,7 @@ bool Location::checkStringInObjects(std::string objectName) {
     /*
     Checks if the string corresponds to an object name in interactableObjects
     */
-    for (int i = 0; i < interactableObjects.size(); i++) {
+    for (size_t i = 0; i < interactableObjects.size(); i++) {
         if (objectName == interactableObjects.at(i)->getName())
             return true;
     }
@@ -124,7 +124,7 @@ InteractableObject *Location::getObjectFromString(std::string objectName) {
     /*
     Returns a reference to the object given by objectName
     */
-    for (int i = 0; i < interactableObjects.size(); i++) {
+    for (size_t i = 0; i < interactableObjects.size(); i++) {
         if (objectName == interactableObjects.at(i)->getName())
             return interactableObjects.at(i);
     }
@@ -160,7 +160,7 @@ bool Location::checkStringInEnemies(std::string enemyName) {
     /*
     Checks if the string corresponds to an enemy name in enemies
     */
-    for (int i = 0; i < enemies.size(); i++) {
+    for (size_t i = 0; i < enemies.size(); i++) {
         if (enemyName == enemies.at(i)->getName())
             return true;
     }
@@ -171,7 +171,7 @@ GenericEnemy *Location::getEnemyFromString(std::string enemyName) {
     /*
     Returns a reference to the enemy given by enemyName
     */
-    for (int i = 0; i < enemies.size(); i++) {
+    for (size_t i = 0; i < enemies.size(); i++) {
         if (enemyName == enemies.at(i)->getName())
             return enemies.at(i);
     }

@@ -17,7 +17,7 @@ std::string stripSpaces(std::string original) {
 std::string correctCase(std::string original) {
     std::string newStr = original;
     newStr[0] = std::toupper(original[0]);
-    for (int i = 1; i < original.length(); i++) {
+    for (size_t i = 1; i < original.length(); i++) {
         newStr[i] = std::tolower(original[i]);
     }
     return newStr;
@@ -255,7 +255,7 @@ void printLocationInfo(Player *player) {
     std::vector<Direction*> directions = location->getDirections();
     if (directions.size() > 0) {
         std::cout << "\nIt appears I can move in these directions:\n";
-        for (int i = 0; i < directions.size(); i++) {
+        for (size_t i = 0; i < directions.size(); i++) {
             std::cout << "    " << directions.at(i)->getName() << "\n";
         }
     }
@@ -265,7 +265,7 @@ void printLocationInfo(Player *player) {
     if (objects.size() > 0) {
         std::cout << "\nI can spot these items that might be of interest to me:\n";
         std::map<InteractableObject*, int> objectsWithCounts = {};
-        for (int i = 0; i < objects.size(); i++) {
+        for (size_t i = 0; i < objects.size(); i++) {
             InteractableObject *object = objects.at(i);
             objectsWithCounts[object]++;
         }
@@ -282,7 +282,7 @@ void printLocationInfo(Player *player) {
     std::vector<GenericEnemy*> enemies = location->getEnemies();
     if (enemies.size() > 0) {
         std::cout << "\nI should tread carefully; there are potential hostiles here:\n";
-        for (int i = 0; i < enemies.size(); i++) {
+        for (size_t i = 0; i < enemies.size(); i++) {
             std::cout << "    " << enemies.at(i)->getName() << "\n";
         }
     }
@@ -294,7 +294,7 @@ void printInventory(Player *player) {
     std::cout << "\nI search my knapsack and find the following items (encumbrance in parentheses): \n";
     std::vector<InteractableObject*> inventory = player->getInventory();
     std::map<InteractableObject*, int> inventoryWithCounts = {};
-    for (int i = 0; i < inventory.size(); i++) {
+    for (size_t i = 0; i < inventory.size(); i++) {
         InteractableObject *object = inventory.at(i);
         inventoryWithCounts[object]++;
     }

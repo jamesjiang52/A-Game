@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <chrono>
+#include <thread>
 #include "Parameters.hpp"
 #include "DirectionClass.hpp"
 #include "InteractableObjectClass.hpp"
@@ -58,6 +60,8 @@ int main() {
     playerData = *player;
     playerCopy = &playerData;
     
+    // next scene in progress
+    /*
     try {
         while(outsideFortress(player)) {
             Player *temp = player;
@@ -73,4 +77,5 @@ int main() {
     } catch (char e) {
         return 0;
     }
+    */
 }

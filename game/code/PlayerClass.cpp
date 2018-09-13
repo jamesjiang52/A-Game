@@ -23,8 +23,8 @@ Player::Player(const Player &player) {
     location = player.location;
     oneHanded = player.oneHanded;
     
-    for (int i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
-    for (int i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
+    for (size_t i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
+    for (size_t i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
 }
 
 Player& Player::operator=(const Player &player) {
@@ -39,16 +39,16 @@ Player& Player::operator=(const Player &player) {
     
     inventory.clear();
     activeEffects.clear();
-    for (int i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
-    for (int i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
+    for (size_t i = 0; i < player.inventory.size(); i++) addToInventory(player.inventory.at(i));
+    for (size_t i = 0; i < player.activeEffects.size(); i++) addToActiveEffects(player.activeEffects.at(i));
 }
 
 Player::~Player() {
     delete weapon;
     delete armor;
     delete shield;
-    for (int i = 0; i < inventory.size(); i++) delete inventory.at(i);
-    for (int i = 0; i < activeEffects.size(); i++) delete activeEffects.at(i);
+    for (size_t i = 0; i < inventory.size(); i++) delete inventory.at(i);
+    for (size_t i = 0; i < activeEffects.size(); i++) delete activeEffects.at(i);
 }
 
 std::string Player::getName() const {
@@ -65,7 +65,7 @@ int Player::getCurrentHealth() const {
 
 int Player::getTotalEncumbrance() const {
     int sum = 0;
-    for (int i = 0; i < inventory.size(); i++) {
+    for (size_t i = 0; i < inventory.size(); i++) {
         InteractableObject *object = inventory.at(i);
         sum += object->getEncumbrance();
     }
@@ -136,7 +136,7 @@ bool Player::checkStringInInventory(std::string objectName) {
     /*
     Checks if the string corresponds to an object name in inventory
     */
-    for (int i = 0; i < inventory.size(); i++) {
+    for (size_t i = 0; i < inventory.size(); i++) {
         if (objectName == inventory.at(i)->getName())
             return true;
     }
@@ -147,7 +147,7 @@ InteractableObject *Player::getObjectFromString(std::string objectName) {
     /*
     Returns a reference to the object given by objectName
     */
-    for (int i = 0; i < inventory.size(); i++) {
+    for (size_t i = 0; i < inventory.size(); i++) {
         if (objectName == inventory.at(i)->getName())
             return inventory.at(i);
     }

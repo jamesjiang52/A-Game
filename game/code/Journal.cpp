@@ -18,17 +18,17 @@ void printStringWriting(std::string str, bool allowLongPauses) {
         for (char& c : str) {
             std::cout << c;
             if ((c == ',') || (c == ';') || (c == ':')) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_ON_PAUSE_SHORT));
+                Sleep(MILLISECONDS_DELAY_ON_PAUSE_SHORT);
             } else if ((c == '.') || (c == '?') || (c == '!')) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_ON_PAUSE_LONG));
+                Sleep(MILLISECONDS_DELAY_ON_PAUSE_LONG);
             } else {
-                std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_BETWEEN_CHARACTERS));
+                Sleep(MILLISECONDS_DELAY_BETWEEN_CHARACTERS);
             }
         }
     } else {
         for (char& c : str) {
             std::cout << c;
-            std::this_thread::sleep_for(std::chrono::milliseconds(MILLISECONDS_DELAY_BETWEEN_CHARACTERS));
+            Sleep(MILLISECONDS_DELAY_BETWEEN_CHARACTERS);
         }
     }
 }
@@ -43,9 +43,9 @@ void printOutsideFortressJournalEntry(bool slow) {
     printJournalHeader();
     
     if (slow) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
+        Sleep(LONG_PAUSE);
         printStringWriting("7:34pm", false);
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
+        Sleep(LONG_PAUSE);
         std::cout << "\n\n";
         printStringWriting("Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten "
                      "years of verbal abuse, ten years of manipulation and deceit. Ten years endured, and for what? "
@@ -57,7 +57,7 @@ void printOutsideFortressJournalEntry(bool slow) {
                      "destroyed, the mighty empire brought to its knees, and I shall be the cause. My name once revered as "
                      "the next imperator will now be spit upon alongside the dregs and scum, but vengeance must have its "
                      "due.");
-        std::this_thread::sleep_for(std::chrono::milliseconds(LONG_PAUSE));
+        Sleep(LONG_PAUSE);
     } else {
         std::cout << "7:34pm\n\n";
         std::cout << "Ten years. Ten years of mindless back-breaking labour, ten years of constant under-appreciation, ten "

@@ -717,7 +717,7 @@ void combat(Player *player, GenericEnemy *enemy) {
                         playerWeaponDisabled, enemyWeaponDisabled, false, false
                     );
                     
-                    std::cout < "The " << enemy->getName() << " pulls back, but I overcompensate and barely manage to remain standing.\n\n";
+                    std::cout << "The " << enemy->getName() << " pulls back, but I overcompensate and barely manage to remain standing.\n\n";
                 } else {
                     resetModifiers(
                         playerMissedModifier, playerCriticalModifier,
